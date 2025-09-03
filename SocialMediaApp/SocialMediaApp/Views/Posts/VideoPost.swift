@@ -6,25 +6,13 @@
 //
 
 import SwiftUI
-import AVKit
 
 struct VideoPost: View {
-    @State private var player: AVPlayer?
     let videoURL: URL
     
     var body: some View {
         VStack {
-            VideoPlayer(player: player)
-                .frame(height: 250)
-                .clipShape(.rect())
-                .overlay(
-                    Rectangle()
-                        .stroke(Color.secondary, lineWidth: 4)
-                )
-                .onAppear {
-                    player = AVPlayer(url: videoURL)
-                    player?.play()
-                }
+            VideoView(videoURL: videoURL)
             HStack {
                 Spacer()
                 CommentButton()

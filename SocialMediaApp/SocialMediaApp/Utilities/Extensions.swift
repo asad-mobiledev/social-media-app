@@ -11,6 +11,7 @@ import SwiftUI
 extension Color {
     static let primary = Color.purple
     static let secondary = Color("Secondary")
+    static let lightGray = Color(hex: "#D3D3D3")
     
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()

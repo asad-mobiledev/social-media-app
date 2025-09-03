@@ -6,26 +6,17 @@
 //
 
 import SwiftUI
-import Zoomable
 
 struct ImagePost: View {
     let imageName: String
     
     var body: some View {
         VStack {
-            Image(imageName)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(maxWidth: .infinity)
-                .frame(height:200)
-                .clipShape(.rect())
+            ImageView(imageName: imageName)
                 .overlay(
                     Rectangle()
                         .stroke(Color.secondary, lineWidth: 4)
                 )
-                .zoomable(minZoomScale: 0.5)
-                
-            
             HStack {
                 Spacer()
                 CommentButton()

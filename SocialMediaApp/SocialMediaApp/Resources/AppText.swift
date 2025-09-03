@@ -7,4 +7,7 @@
 
 struct AppText {
     static let comment = "Comment"
+    static let posts = "Posts"
+    static let reply = "Reply"
+    static let typeHere = "Comment..."
 }
