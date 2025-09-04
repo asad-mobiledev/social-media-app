@@ -12,6 +12,8 @@ enum PostType {
 }
 
 struct HomeScreen: View {
+    @State private var showBottomSheet = false
+    
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -27,8 +29,8 @@ struct HomeScreen: View {
                 }
                 
                 HStack {
-                    Button("Create Post") {
-                        print("Post created")
+                    Button(AppText.createPost) {
+                        showBottomSheet.toggle()
                     }
                     .font(.title)
                     .fontWeight(.bold)
@@ -39,6 +41,11 @@ struct HomeScreen: View {
                 }
             }
             .navigationTitle(AppText.posts)
+            .sheet(isPresented: $showBottomSheet) {
+                UploadMediaBottomSheet()
+                .presentationDetents([.height(200)])
+                .presentationDragIndicator(.visible)
+            }
         }
     }
 }

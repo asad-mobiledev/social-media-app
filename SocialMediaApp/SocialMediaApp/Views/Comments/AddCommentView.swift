@@ -8,13 +8,14 @@
 import SwiftUI
 
 struct AddCommentView: View {
+    @Binding var showBottomSheet: Bool
     
     var body: some View {
         HStack(alignment: .center){
             ResizableTextEditView()
             
             Button(action: {
-                print("Upload")
+                showBottomSheet = true
             }) {
                 Image(systemName: "square.and.arrow.up")
                     .font(.title)
@@ -35,5 +36,10 @@ struct AddCommentView: View {
 }
 
 #Preview {
-    AddCommentView()
+    StatefulPreviewWrapper(false) { binding in
+            AddCommentView(showBottomSheet: binding)
+        }
 }
+
+
+
