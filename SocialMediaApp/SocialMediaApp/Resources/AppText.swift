@@ -13,4 +13,8 @@ struct AppText {
     static let createPost = "Create Post"
     static let selectFromGallery = "Select content from gallery"
     static let selectFromFiles = "Select content from Files"
+    static let error = "Error"
+    static let OK = "OK"
+    static let failPickingFromGallery = "Failed to pick photo/video from gallery"
+    static let failPickingDocument = "Failed to import file:"
 }
