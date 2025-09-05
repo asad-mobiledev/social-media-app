@@ -17,17 +17,15 @@ struct AddCommentView: View {
             Button(action: {
                 showBottomSheet = true
             }) {
-                Image(systemName: "square.and.arrow.up")
+                Image(systemName: Images.upload)
                     .font(.title)
                     .foregroundColor(.black)
             }
             
             Button(action: {
             }) {
-                Image(systemName: "paperplane.fill")
-                    .rotationEffect(.degrees(45))
+                SendImage()
                     .foregroundColor(Color.primary)
-                    .frame(width: 50, height: 50)
             }
         }
         .padding(8)

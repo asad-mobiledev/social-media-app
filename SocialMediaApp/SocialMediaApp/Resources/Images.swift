@@ -11,4 +11,6 @@ struct Images {
     static let postImage = "post-image"
     static let gallery = "photo.on.rectangle.angled"
     static let file = "doc.fill"
+    static let send = "paperplane.fill"
+    static let upload = "square.and.arrow.up"
 }

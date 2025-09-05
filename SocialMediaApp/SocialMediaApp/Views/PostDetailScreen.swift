@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct PostDetailScreen: View {
-    let type: PostType
+    let type: MediaType
     @State private var showBottomSheet = false
-    
+
     var body: some View {
         VStack(spacing: 0) {
             

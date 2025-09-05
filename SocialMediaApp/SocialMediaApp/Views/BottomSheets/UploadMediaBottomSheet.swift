@@ -9,50 +9,60 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct UploadMediaBottomSheet: View {
-    
-    // For Document files items
-    @State private var isImporting = false
-    @State private var selectedFileURL: URL?
-    
-    // Error Alert
-    @State private var showErrorAlert = false
-    @State private var errorMessage = ""
+    @StateObject private var uploadMediaSheetViewModel = UploadMediaSheetViewModel()
     
     var body: some View {
-        VStack(spacing: 10) {
-            GalleryPickerView()
-            
-            UploadMediaListRow(row: ListRowModel(title: AppText.selectFromFiles, imageName: Images.file, action: {
-                isImporting = true
-            }))
-            .fileImporter(
-                isPresented: $isImporting,
-                allowedContentTypes: [
-                    .image,
-                    .movie,
-                    .audio
-                ],
-                allowsMultipleSelection: false
-            ) { result in
-                switch result {
-                case .success(let urls):
-                    if let firstURL = urls.first {
-                        selectedFileURL = firstURL
+        ZStack {
+            if !uploadMediaSheetViewModel.loadState.isURLLoaded && !uploadMediaSheetViewModel.loadState.isImageLoaded {
+                ZStack {
+                    VStack(spacing: 10) {
+                        
+                        GalleryPickerView(viewModel: uploadMediaSheetViewModel, selectedImage: $uploadMediaSheetViewModel.selectedImage, selectedVideoURL: $uploadMediaSheetViewModel.selectedFileURL, loadState: $uploadMediaSheetViewModel.loadState, showErrorAlert: $uploadMediaSheetViewModel.showErrorAlert, errorMessage: $uploadMediaSheetViewModel.errorMessage)
+                        
+                        UploadMediaListRow(row: ListRowModel(title: AppText.selectFromFiles, imageName: Images.file, action: {
+                            uploadMediaSheetViewModel.isImporting = true
+                        }))
+                        .fileImporter(
+                            isPresented: $uploadMediaSheetViewModel.isImporting,
+                            allowedContentTypes: [
+                                .image,
+                                .movie,
+                                .audio
+                            ],
+                            allowsMultipleSelection: false
+                        ) { result in
+                            uploadMediaSheetViewModel.updateData(result)
+                        }
                     }
-                case .failure(let error):
-                    errorMessage = "\(AppText.failPickingDocument) \(error.localizedDescription)"
-                    showErrorAlert = true
+                    if uploadMediaSheetViewModel.isLoading {
+                        Color.black.opacity(0.4)
+                            .ignoresSafeArea()
+                            .transition(.opacity)
+                        
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                            .scaleEffect(1.5)
+                            .transition(.scale)
+                    }
+                }
+            } else {
+                if let type = uploadMediaSheetViewModel.resolvedMediaType {
+                    SendMediaView(mediaType: type, loadState: $uploadMediaSheetViewModel.loadState)
+                } else {
+                    EmptyView().onAppear {
+                        uploadMediaSheetViewModel.loadState = .failed
+                    }
                 }
             }
         }
-        .alert(AppText.error, isPresented: $showErrorAlert) {
+        .alert(AppText.error, isPresented: $uploadMediaSheetViewModel.showErrorAlert) {
             Button(AppText.OK) {
-                showErrorAlert = false
+                uploadMediaSheetViewModel.loadState = .unknown
             }
         } message: {
-            Text(errorMessage)
+            Text(uploadMediaSheetViewModel.errorMessage)
         }
-
+        .animation(.easeInOut, value: uploadMediaSheetViewModel.isLoading)
     }
 }
 

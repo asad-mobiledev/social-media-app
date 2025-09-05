@@ -7,9 +7,7 @@
 
 import SwiftUI
 
-enum PostType {
-    case image, video, audio
-}
+
 
 struct HomeScreen: View {
     @State private var showBottomSheet = false
@@ -43,7 +41,7 @@ struct HomeScreen: View {
             .navigationTitle(AppText.posts)
             .sheet(isPresented: $showBottomSheet) {
                 UploadMediaBottomSheet()
-                .presentationDetents([.height(200)])
+                .presentationDetents([.height(250)])
                 .presentationDragIndicator(.visible)
             }
         }

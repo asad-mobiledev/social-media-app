@@ -9,14 +9,14 @@ import SwiftUI
 import PhotosUI
 
 struct GalleryPickerView: View {
-    
+    @ObservedObject var viewModel: UploadMediaSheetViewModel
     @State private var selectedPickerItem: PhotosPickerItem? = nil
-    @State private var selectedImage: Image? = nil
-    @State private var selectedVideoURL: URL? = nil
     
-    // Error Alert
-    @State private var showErrorAlert = false
-    @State private var errorMessage = ""
+    @Binding var selectedImage: Image?
+    @Binding var selectedVideoURL: URL?
+    @Binding var loadState: LoadState
+    @Binding var showErrorAlert: Bool
+    @Binding var errorMessage: String
     
     var body: some View {
         VStack(spacing: 20) {
@@ -59,17 +59,12 @@ struct GalleryPickerView: View {
         guard let item = item else { return }
         
         Task {
-            if let loaded = try? await item.loadTransferable(type: TransferableAsset.self) {
-                selectedVideoURL = loaded.url
-                selectedImage = loaded.image
-            } else {
-                errorMessage = AppText.failPickingFromGallery
-                showErrorAlert = true
-            }
+            loadState = .loading
+            await viewModel.loadMedia(from: item)
         }
     }
 }
 
 #Preview {
-    GalleryPickerView()
+//    GalleryPickerView()
 }
