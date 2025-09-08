@@ -6,14 +6,13 @@
 //
 
 import Foundation
-import SwiftUI
 
 enum MediaType {
     case image, video, audio
 }
 
 enum LoadState {
-    case unknown, loading, loaded(URL?, Image?), failed
+    case unknown, loading, loaded(URL?, Data?), failed
 }
 
 extension LoadState {

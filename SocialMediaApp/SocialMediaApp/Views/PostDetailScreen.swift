@@ -56,7 +56,7 @@ struct PostDetailScreen: View {
         }
         .sheet(isPresented: $showBottomSheet) {
             UploadMediaBottomSheet()
-            .presentationDetents([.height(200)])
+            .presentationDetents([.height(250)])
             .presentationDragIndicator(.visible)
         }
     }

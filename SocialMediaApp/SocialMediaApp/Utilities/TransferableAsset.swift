@@ -5,11 +5,12 @@
 //  Created by Asad Mehmood on 04/09/2025.
 //
 
-import SwiftUI
+import Foundation
+import CoreTransferable
 
 struct TransferableAsset: Transferable {
     let url: URL?
-    let image: Image?
+    let imageData: Data?
     
     enum TransferError: Error {
         case importFailed
@@ -17,11 +18,7 @@ struct TransferableAsset: Transferable {
     
     static var transferRepresentation: some TransferRepresentation {
         DataRepresentation(importedContentType: .image) { data in
-            guard let uiImage = UIImage(data: data) else {
-                throw TransferError.importFailed
-            }
-            let image = Image(uiImage: uiImage)
-            return TransferableAsset(url: nil, image: image)
+            return TransferableAsset(url: nil, imageData: data)
         }
         FileRepresentation(importedContentType: .movie) { data in
             guard
@@ -43,7 +40,7 @@ struct TransferableAsset: Transferable {
                 print(error)
                 throw TransferError.importFailed
             }
-            return TransferableAsset(url: filePath, image: nil)
+            return TransferableAsset(url: filePath, imageData: nil)
             
         }
     }

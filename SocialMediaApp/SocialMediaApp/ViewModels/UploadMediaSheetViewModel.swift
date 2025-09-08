@@ -6,10 +6,8 @@
 //
 
 import Foundation
-import SwiftUICore
 import UniformTypeIdentifiers
 import Combine
-import _PhotosUI_SwiftUI
 
 class UploadMediaSheetViewModel: ObservableObject {
     
@@ -21,14 +19,14 @@ class UploadMediaSheetViewModel: ObservableObject {
     @Published var isImporting = false
     
     @Published var selectedFileURL: URL?
-    @Published var selectedImage: Image?
+    @Published var imageData: Data?
     
     @Published var isLoading = false
     
     private var cancellables = Set<AnyCancellable>()
     
     var resolvedMediaType: MediaType? {
-        if selectedImage != nil {
+        if imageData != nil {
             return .image
         } else if let url = selectedFileURL {
             return mediaType(url: url)
@@ -59,14 +57,14 @@ class UploadMediaSheetViewModel: ObservableObject {
         case .unknown:
             hideError()
             selectedFileURL = nil
-            selectedImage = nil
+            imageData = nil
             isLoading = false
         case .failed:
             handleError()
             isLoading = false
         case .loaded(let url, let image):
             self.selectedFileURL = url
-            self.selectedImage = image
+            self.imageData = image
             isLoading = false
         case .loading:
             isLoading = true
@@ -108,17 +106,13 @@ class UploadMediaSheetViewModel: ObservableObject {
         return nil
     }
     
-    func loadMedia(from item: PhotosPickerItem) async {
-       guard let loaded = try? await item.loadTransferable(type: TransferableAsset.self) else {
-           await handleGalleryPickingError()
-           return
-        }
-        guard (loaded.image != nil || loaded.url != nil)  else {
+    func validateAndSetMedia(url: URL?, imageData: Data?) async {
+        guard (imageData != nil || url != nil)  else {
             await handleGalleryPickingError()
             return
         }
         await MainActor.run {
-            loadState = .loaded(loaded.url, loaded.image)
+            loadState = .loaded(url, imageData)
         }
     }
 

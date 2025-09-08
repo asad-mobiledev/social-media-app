@@ -10,6 +10,7 @@ import SwiftUI
 
 
 struct HomeScreen: View {
+    @ObservedObject var homeScreenViewModel: HomeScreenViewModel
     @State private var showBottomSheet = false
     
     var body: some View {
@@ -49,5 +50,5 @@ struct HomeScreen: View {
 }
 
 #Preview {
-    HomeScreen()
+    HomeScreen(homeScreenViewModel: HomeScreenViewModel())
 }

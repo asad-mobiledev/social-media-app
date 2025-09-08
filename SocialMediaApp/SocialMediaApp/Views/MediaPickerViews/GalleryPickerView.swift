@@ -12,7 +12,7 @@ struct GalleryPickerView: View {
     @ObservedObject var viewModel: UploadMediaSheetViewModel
     @State private var selectedPickerItem: PhotosPickerItem? = nil
     
-    @Binding var selectedImage: Image?
+    @Binding var imageData: Data?
     @Binding var selectedVideoURL: URL?
     @Binding var loadState: LoadState
     @Binding var showErrorAlert: Bool
@@ -60,7 +60,11 @@ struct GalleryPickerView: View {
         
         Task {
             loadState = .loading
-            await viewModel.loadMedia(from: item)
+            if let loaded = try? await item.loadTransferable(type: TransferableAsset.self) {
+                await viewModel.validateAndSetMedia(url: loaded.url, imageData: loaded.imageData)
+            } else {
+                viewModel.handleGalleryPickingError()
+            }
         }
     }
 }
