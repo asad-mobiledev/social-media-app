@@ -8,9 +8,12 @@
 import SwiftUI
 
 struct CommentButton: View {
+    @EnvironmentObject var router: Router
+    let type: MediaType
+    
     var body: some View {
         Button(AppText.comment) {
-            print("Comment button tapped")
+            router.navigate(to: .detail(type: type))
         }
         .padding(.vertical, 8)
         .padding(.horizontal, 10)
@@ -22,5 +25,5 @@ struct CommentButton: View {
 }
 
 #Preview {
-    CommentButton()
+    CommentButton(type: .image)
 }

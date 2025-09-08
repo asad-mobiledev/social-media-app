@@ -19,7 +19,7 @@ struct ImagePost: View {
                 )
             HStack {
                 Spacer()
-                CommentButton()
+                CommentButton(type: .image)
                     .padding(.trailing, 5)
             }
             Rectangle()

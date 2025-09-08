@@ -15,7 +15,7 @@ struct VideoPost: View {
             VideoView(videoURL: videoURL)
             HStack {
                 Spacer()
-                CommentButton()
+                CommentButton(type: .video)
                     .padding(.trailing, 5)
             }
             Rectangle()

@@ -18,7 +18,7 @@ struct AudioPost: View {
             
             HStack {
                 Spacer()
-                CommentButton()
+                CommentButton(type: .audio)
                     .padding(.trailing, 5)
             }
             Rectangle()
