@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct SendMediaView: View {
-    let mediaType: MediaType
+    
     @Binding var loadState: LoadState
+    let mediaType: MediaType
+    let image: UIImage?
+    let mediaURL: URL?
     
     var body: some View {
         VStack(spacing: 10) {
@@ -18,12 +21,12 @@ struct SendMediaView: View {
                 ZStack(alignment: .topTrailing) {
                     switch mediaType {
                     case .image:
-                        SendImageView(image: Image(Images.postImage))
+                        SendImageView(image: Image(uiImage:image!))
                     case .audio:
-                        SendAudioView(videoURL: Bundle.main.url(forResource: "sample-video", withExtension: "mp4")!)
+                        SendAudioView(audioURL: mediaURL!)
                             .padding(.bottom, 60)
                     case .video:
-                        SendVideoView(videoURL: Bundle.main.url(forResource: "sample-video", withExtension: "mp4")!)
+                        SendVideoView(videoURL: mediaURL!)
                     }
                     Button(action: {
                         loadState = .unknown

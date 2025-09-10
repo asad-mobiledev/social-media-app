@@ -8,6 +8,7 @@
 import Foundation
 import UniformTypeIdentifiers
 import Combine
+import UIKit
 
 class UploadMediaSheetViewModel: ObservableObject {
     
@@ -18,17 +19,28 @@ class UploadMediaSheetViewModel: ObservableObject {
     
     @Published var isImporting = false
     
-    @Published var selectedFileURL: URL?
-    @Published var imageData: Data?
-    
     @Published var isLoading = false
     
     private var cancellables = Set<AnyCancellable>()
     
+    var resolvedUIImage: UIImage? {
+        guard case let .loaded(_, data) = loadState, let data = data, let uiImage = UIImage(data: data) else {
+            return nil
+        }
+        return uiImage
+    }
+    
+    var resolvedMediaURL: URL? {
+        guard case let .loaded(url, _) = loadState, let url = url else {
+            return nil
+        }
+        return url
+    }
+    
     var resolvedMediaType: MediaType? {
-        if imageData != nil {
+        if resolvedUIImage != nil {
             return .image
-        } else if let url = selectedFileURL {
+        } else if let url = resolvedMediaURL {
             return mediaType(url: url)
         }
         return nil
@@ -42,29 +54,28 @@ class UploadMediaSheetViewModel: ObservableObject {
             }
             .store(in: &cancellables)
         
-        // Following code worked fine but the behaviour when manually Files screen get closed without selecting any file need to be handled, and this seems unnecessary right now.
-//        $isImporting
-//            .sink { [weak self] flag in
-//                if flag {
-//                    self?.loadState = .loading
-//                }
-//            }
-//            .store(in: &cancellables)
+        $isImporting
+            .sink { [weak self] flag in
+                if flag {
+                    self?.loadState = .loading
+                } else {
+                    if case .loading = self?.loadState {
+                        self?.loadState = .unknown
+                    }
+                }
+            }
+            .store(in: &cancellables)
     }
     
     private func handleLoadStateChange(_ state: LoadState) {
         switch state {
         case .unknown:
             hideError()
-            selectedFileURL = nil
-            imageData = nil
             isLoading = false
         case .failed:
             handleError()
             isLoading = false
         case .loaded(let url, let image):
-            self.selectedFileURL = url
-            self.imageData = image
             isLoading = false
         case .loading:
             isLoading = true
@@ -75,7 +86,17 @@ class UploadMediaSheetViewModel: ObservableObject {
         switch result {
         case .success(let urls):
             if let firstURL = urls.first {
-                loadState = .loaded(firstURL, nil)
+                if let mediaType = mediaType(url: firstURL), mediaType == .image {
+                    do {
+                        let imageData = try Data(contentsOf: firstURL)
+                        loadState = .loaded(firstURL, imageData)
+                    } catch {
+                        errorMessage = "\(AppText.failToPickImageFromURL) \(error.localizedDescription)"
+                        loadState = .failed
+                    }
+                } else {
+                    loadState = .loaded(firstURL, nil)
+                }
             }
         case .failure(let error):
             errorMessage = "\(AppText.failPickingDocument) \(error.localizedDescription)"

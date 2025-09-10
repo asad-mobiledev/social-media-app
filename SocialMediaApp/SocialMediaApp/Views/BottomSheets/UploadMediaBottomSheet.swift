@@ -17,7 +17,7 @@ struct UploadMediaBottomSheet: View {
                 ZStack {
                     VStack(spacing: 10) {
                         
-                        GalleryPickerView(viewModel: uploadMediaSheetViewModel, imageData: $uploadMediaSheetViewModel.imageData, selectedVideoURL: $uploadMediaSheetViewModel.selectedFileURL, loadState: $uploadMediaSheetViewModel.loadState, showErrorAlert: $uploadMediaSheetViewModel.showErrorAlert, errorMessage: $uploadMediaSheetViewModel.errorMessage)
+                        GalleryPickerView(viewModel: uploadMediaSheetViewModel, loadState: $uploadMediaSheetViewModel.loadState, showErrorAlert: $uploadMediaSheetViewModel.showErrorAlert, errorMessage: $uploadMediaSheetViewModel.errorMessage)
                         
                         UploadMediaListRow(row: ListRowModel(title: AppText.selectFromFiles, imageName: Images.file, action: {
                             uploadMediaSheetViewModel.isImporting = true
@@ -47,7 +47,7 @@ struct UploadMediaBottomSheet: View {
                 }
             } else {
                 if let type = uploadMediaSheetViewModel.resolvedMediaType {
-                    SendMediaView(mediaType: type, loadState: $uploadMediaSheetViewModel.loadState)
+                    SendMediaView(loadState: $uploadMediaSheetViewModel.loadState, mediaType: type, image: uploadMediaSheetViewModel.resolvedUIImage, mediaURL: uploadMediaSheetViewModel.resolvedMediaURL)
                 } else {
                     EmptyView().onAppear {
                         uploadMediaSheetViewModel.loadState = .failed

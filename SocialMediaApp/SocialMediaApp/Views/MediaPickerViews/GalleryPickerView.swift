@@ -12,8 +12,6 @@ struct GalleryPickerView: View {
     @ObservedObject var viewModel: UploadMediaSheetViewModel
     @State private var selectedPickerItem: PhotosPickerItem? = nil
     
-    @Binding var imageData: Data?
-    @Binding var selectedVideoURL: URL?
     @Binding var loadState: LoadState
     @Binding var showErrorAlert: Bool
     @Binding var errorMessage: String
