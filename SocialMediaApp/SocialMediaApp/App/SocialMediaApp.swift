@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct SocialMediaApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject private var router = Router()
     @StateObject private var homeScreenViewModel = HomeScreenViewModel()
     
