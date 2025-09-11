@@ -22,4 +22,8 @@ struct AppText {
     static let send = "Send"
     static let post = "Post"
     static let errorGettingResourceTypeFromURL = "Error getting resource values for URL:"
+    static let failedCreateFolder = "Failed to create folder"
+    static let failedSaveFile = "Failed to save file"
+    static let failedReadFile = "Failed to read file"
+    static let failedListFilesFromFolder = "Failed to list files from folder"
 }
