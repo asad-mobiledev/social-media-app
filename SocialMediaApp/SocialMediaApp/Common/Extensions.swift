@@ -17,7 +17,6 @@ extension Color {
         let hex = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         let scanner = Scanner(string: hex)
 
-        // Remove `#` if present
         if hex.hasPrefix("#") {
             scanner.currentIndex = hex.index(after: hex.startIndex)
         }

@@ -1,0 +1,103 @@
+//
+//  FilesManager.swift
+//  SocialMediaApp
+//
+//  Created by Asad Mehmood on 10/09/2025.
+//
+import Foundation
+import UIKit
+
+enum Directory {
+    case documents
+    case caches
+    case temporary
+
+    var url: URL? {
+        let fileManager = FileManager.default
+
+        switch self {
+        case .documents:
+            return fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+        case .caches:
+            return fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first
+        case .temporary:
+            return fileManager.temporaryDirectory
+        }
+    }
+}
+
+
+class DefaultFileService: FileService {
+    let fileManager = FileManager.default
+    
+    func save(mediaType: MediaType, mediaURL: URL?, directory: Directory) throws -> String {
+        guard mediaURL != nil else {
+            throw RepositoryError.urlNil
+        }
+        return try saveFileFrom(sourceURL: mediaURL!, folder: mediaType.rawValue, directory: directory) ?? ""
+    }
+    
+    func createFolder(name: String, directory: Directory) -> URL? {
+        guard let baseURL = directory.url else { return nil }
+        let folderURL = baseURL.appendingPathComponent(name)
+        
+        if !fileManager.fileExists(atPath: folderURL.path) {
+            do {
+                try fileManager.createDirectory(at: folderURL, withIntermediateDirectories: true)
+            } catch {
+                print("\(AppText.failedCreateFolder) \(name): \(error)")
+                return nil
+            }
+        }
+        return folderURL
+    }
+    
+    func getDataOf(fileName: String, folder: String, directory: Directory) throws -> Data {
+        guard let folderURL = directory.url?.appendingPathComponent(folder) else {
+            throw CustomError.message(AppText.unableToInitializeFolderURL + ": \(folder)")
+        }
+        let fileURL = folderURL.appendingPathComponent(fileName)
+        return try Data(contentsOf: fileURL)
+    }
+    
+    func getFileURL(name: String, folder: String, directory: Directory) -> URL? {
+        var folderURL = directory.url
+        folderURL = folderURL?.appendingPathComponent(folder)
+        return folderURL?.appendingPathComponent(name)
+    }
+    
+    func listFiles(folder: String, directory: Directory) -> [URL] {
+        guard let folderURL = directory.url?.appendingPathComponent(folder) else { return [] }
+
+
+        do {
+            return try fileManager.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil)
+        } catch {
+            print("\(AppText.failedListFilesFromFolder): \(folder) \(error)")
+            return []
+        }
+    }
+    
+    func saveFileFrom(sourceURL: URL, folder: String, directory: Directory) throws -> String? {
+        
+        guard let folderURL = createFolder(name: folder, directory: directory) else { return nil }
+        
+        let sourceFileExtension = sourceURL.pathExtension
+        let newFileName = UUID().uuidString
+        let fullFileName = "\(newFileName).\(sourceFileExtension)"
+        
+        let destinationURL = folderURL.appendingPathComponent(fullFileName)
+        
+        if !fileManager.fileExists(atPath: destinationURL.path) {
+            try fileManager.copyItem(at: sourceURL, to: destinationURL)
+        } else {
+            throw RepositoryError.fileAlreadyExist
+        }
+        return fullFileName
+    }
+    
+    func getData(from url: URL) throws -> Data {
+        return try Data(contentsOf: url)
+    }
+}
+

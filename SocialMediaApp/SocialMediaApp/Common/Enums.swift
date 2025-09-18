@@ -12,21 +12,18 @@ enum MediaType: String, Codable {
 }
 
 enum LoadState {
-    case unknown, loading, loaded(URL?, Data?), failed
+    case unknown, loading, loaded(URL?), failed
 }
 
 extension LoadState {
     var isURLLoaded: Bool {
-        if case .loaded(let url, _) = self, url != nil {
+        if case .loaded(let url) = self, url != nil {
             return true
         }
         return false
     }
+}
 
-    var isImageLoaded: Bool {
-        if case .loaded(_, let image) = self, image != nil {
-            return true
-        }
-        return false
-    }
+enum CustomError: Error {
+    case message(String)
 }

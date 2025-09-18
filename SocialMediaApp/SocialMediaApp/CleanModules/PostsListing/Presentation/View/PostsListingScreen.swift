@@ -1,0 +1,64 @@
+//
+//  HomeScreen.swift
+//  SocialMediaApp
+//
+//  Created by Asad Mehmood on 02/09/2025.
+//
+
+import SwiftUI
+
+struct PostsListingScreen: View {
+    @Environment(\.appDIContainer) private var appDIContainer
+    @ObservedObject var postsListingViewModel: PostsListingViewModel
+    @State private var showBottomSheet = false
+    
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 0) {
+                ScrollView {
+                    LazyVStack(spacing: 10) {
+                        ForEach(postsListingViewModel.posts) { post in
+                            switch post.postType {
+                            case .image:
+                                ImagePost(imageName: post.mediaName)
+                            case .audio:
+                                AudioPost(audioName: post.mediaName)
+                            case .video:
+                                VideoPost(videoName: post.mediaName)
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.bottom, 10)
+                }
+                
+                HStack {
+                    Button(AppText.createPost) {
+                        showBottomSheet.toggle()
+                    }
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundStyle(Color.white)
+                    .padding(.top, 10)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.primary)
+                }
+            }
+            .navigationTitle(AppText.posts)
+            .sheet(isPresented: $showBottomSheet) {
+                appDIContainer.createPostBottomSheet()
+                .presentationDetents([.height(250)])
+                .presentationDragIndicator(.visible)
+            }
+        }
+        .onAppear {
+            Task {
+                await postsListingViewModel.fetchPosts()
+            }
+        }
+    }
+}
+
+#Preview {
+//    PostsListingScreen(homeScreenViewModel: PostsListingViewModel())
+}

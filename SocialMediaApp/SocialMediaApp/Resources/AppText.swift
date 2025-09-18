@@ -26,4 +26,6 @@ struct AppText {
     static let failedSaveFile = "Failed to save file"
     static let failedReadFile = "Failed to read file"
     static let failedListFilesFromFolder = "Failed to list files from folder"
+    static let unableToInitializeFolderURL = "unable to initialize url for folder"
+    static let failLoadResourceURL = "Could not load resource url."
 }

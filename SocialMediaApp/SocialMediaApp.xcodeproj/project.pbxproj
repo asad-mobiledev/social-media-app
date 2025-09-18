@@ -31,6 +31,7 @@
 		690E09762E7039D50015C0E3 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 690E09752E7039D50015C0E3 /* FirebaseRemoteConfig */; };
 		690E09782E7039D50015C0E3 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 690E09772E7039D50015C0E3 /* FirebaseStorage */; };
 		690E097A2E7039D50015C0E3 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 690E09792E7039D50015C0E3 /* FirebaseStorageCombine-Community */; };
+		690E099D2E741E940015C0E3 /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 690E099C2E741E940015C0E3 /* Secrets.xcconfig */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,11 +55,25 @@
 		69090D7E2E66C15300C46725 /* SocialMediaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SocialMediaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69090D8E2E66C15500C46725 /* SocialMediaAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SocialMediaAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		69090D982E66C15500C46725 /* SocialMediaAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SocialMediaAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		690E099C2E741E940015C0E3 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		690E099F2E741EF20015C0E3 /* Exceptions for "SocialMediaApp" folder in "SocialMediaApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Application/Info.plist,
+			);
+			target = 69090D7D2E66C15300C46725 /* SocialMediaApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		69090D802E66C15300C46725 /* SocialMediaApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				690E099F2E741EF20015C0E3 /* Exceptions for "SocialMediaApp" folder in "SocialMediaApp" target */,
+			);
 			path = SocialMediaApp;
 			sourceTree = "<group>";
 		};
@@ -130,6 +145,7 @@
 				69090D912E66C15500C46725 /* SocialMediaAppTests */,
 				69090D9B2E66C15500C46725 /* SocialMediaAppUITests */,
 				69090D7F2E66C15300C46725 /* Products */,
+				690E099C2E741E940015C0E3 /* Secrets.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -291,6 +307,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				690E099D2E741E940015C0E3 /* Secrets.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -350,6 +367,7 @@
 /* Begin XCBuildConfiguration section */
 		69090DA02E66C15500C46725 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 690E099C2E741E940015C0E3 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -413,6 +431,7 @@
 		};
 		69090DA12E66C15500C46725 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 690E099C2E741E940015C0E3 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -469,6 +488,7 @@
 		};
 		69090DA32E66C15500C46725 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 690E099C2E741E940015C0E3 /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -478,12 +498,14 @@
 				DEVELOPMENT_TEAM = KX3K56GXBT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SocialMediaApp/Application/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs access to your photos to allow you to select images or videos to upload them to your posts or comments.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "FIREBASE_BEARER_TOKEN=$(FIREBASE_BEARER_TOKEN)";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -500,6 +522,7 @@
 		};
 		69090DA42E66C15500C46725 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 690E099C2E741E940015C0E3 /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -509,12 +532,14 @@
 				DEVELOPMENT_TEAM = KX3K56GXBT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SocialMediaApp/Application/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs access to your photos to allow you to select images or videos to upload them to your posts or comments.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "FIREBASE_BEARER_TOKEN=$(FIREBASE_BEARER_TOKEN)";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -531,6 +556,7 @@
 		};
 		69090DA62E66C15500C46725 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 690E099C2E741E940015C0E3 /* Secrets.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -550,6 +576,7 @@
 		};
 		69090DA72E66C15500C46725 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 690E099C2E741E940015C0E3 /* Secrets.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -569,6 +596,7 @@
 		};
 		69090DA92E66C15500C46725 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 690E099C2E741E940015C0E3 /* Secrets.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -586,6 +614,7 @@
 		};
 		69090DAA2E66C15500C46725 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 690E099C2E741E940015C0E3 /* Secrets.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

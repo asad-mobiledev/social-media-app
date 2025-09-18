@@ -10,7 +10,6 @@ import CoreTransferable
 
 struct TransferableAsset: Transferable {
     let url: URL?
-    let imageData: Data?
     
     enum TransferError: Error {
         case importFailed
@@ -18,30 +17,35 @@ struct TransferableAsset: Transferable {
     
     static var transferRepresentation: some TransferRepresentation {
         DataRepresentation(importedContentType: .image) { data in
-            return TransferableAsset(url: nil, imageData: data)
+            return TransferableAsset(url: try Utility.saveDataToTempDirectory(data: data, component: "image", fileExtension: "png"))
         }
         FileRepresentation(importedContentType: .movie) { data in
-            guard
-                let directoryPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
-            else {
-                print("Cannot access local file domain")
-                throw TransferError.importFailed
-            }
+            let filePath = try getSavedFileURL(component: "movie", fileExtension: "mp4", data: data)
+            return TransferableAsset(url: filePath)
             
-            let filePath = directoryPath
-                .appendingPathComponent("movie")
-                .appendingPathExtension("mp4")
-            do {
-                if FileManager.default.fileExists(atPath: filePath.path()) {
-                    try FileManager.default.removeItem(at: filePath)
-                }
-                try FileManager.default.copyItem(at: data.file, to: filePath)
-            } catch(let error) {
-                print(error)
-                throw TransferError.importFailed
+        }
+    }
+    
+    static func getSavedFileURL(component: String, fileExtension: String, data: ReceivedTransferredFile) throws -> URL {
+        guard
+            let directoryPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+        else {
+            print("Cannot access local file domain")
+            throw TransferError.importFailed
+        }
+        
+        let filePath = directoryPath
+            .appendingPathComponent(component)
+            .appendingPathExtension(fileExtension)
+        do {
+            if FileManager.default.fileExists(atPath: filePath.path()) {
+                try FileManager.default.removeItem(at: filePath)
             }
-            return TransferableAsset(url: filePath, imageData: nil)
-            
+            try FileManager.default.copyItem(at: data.file, to: filePath)
+            return filePath
+        } catch(let error) {
+            print(error)
+            throw TransferError.importFailed
         }
     }
 }
