@@ -29,19 +29,19 @@ class AudioViewModel: ObservableObject {
         
          $audioURL
             .sink {[weak self] url in
-                guard url == nil else { return }
+                guard url != nil else { return }
                 guard let self = self else { return }
                 
                 if url != nil {
-                    self.setupAudioPlayer()
+                    self.setupAudioPlayer(url: url!)
                 }
             }
             .store(in: &cancellables)
     }
     
-    func setupAudioPlayer() {
+    func setupAudioPlayer(url: URL) {
         do {
-            audioPlayer = try AVAudioPlayer(contentsOf: audioURL!)
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
             audioPlayer?.prepareToPlay()
         } catch {
             print("Failed to load audio: \(error)")
@@ -61,7 +61,7 @@ class AudioViewModel: ObservableObject {
     }
     
     func updateProgress() {
-        guard let player = audioPlayer else { return }
+        guard isPlaying, let player = audioPlayer else { return }
         
         let currentTime = player.currentTime
         let duration = player.duration

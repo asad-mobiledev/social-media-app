@@ -35,6 +35,9 @@ struct AudioPlayerView: View {
         .onAppear {
             audioViewModel.load()
         }
+        .onReceive(audioViewModel.timer) { _ in
+            audioViewModel.updateProgress()
+        }
     }
 }
 
