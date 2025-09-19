@@ -18,19 +18,39 @@ struct PostsListingScreen: View {
                 ScrollView {
                     LazyVStack(spacing: 10) {
                         ForEach(postsListingViewModel.posts) { post in
-                            switch post.postType {
-                            case .image:
-                                ImagePost(imageName: post.mediaName)
-                            case .audio:
-                                AudioPost(audioName: post.mediaName)
-                            case .video:
-                                VideoPost(videoName: post.mediaName)
+                            VStack{
+                                switch post.postType {
+                                case .image:
+                                    ImagePost(imageName: post.mediaName)
+                                case .audio:
+                                    AudioPost(audioName: post.mediaName)
+                                case .video:
+                                    VideoPost(videoName: post.mediaName)
+                                }
+                            }
+                            .onAppear {
+                                if post == postsListingViewModel.posts.last {
+                                    Task {
+                                        await postsListingViewModel.fetchPosts()
+                                    }
+                                }
                             }
                         }
                     }
                     .padding(.horizontal, 10)
                     .padding(.bottom, 10)
+                    
+                    
+                    if postsListingViewModel.isLoading {
+                        ProgressView()
+                            .padding()
+                    }
                 }
+//                .refreshable {
+//                    if !postsListingViewModel.isLoading {
+//                        await postsListingViewModel.refreshPosts()
+//                    }
+//                }
                 
                 HStack {
                     Button(AppText.createPost) {

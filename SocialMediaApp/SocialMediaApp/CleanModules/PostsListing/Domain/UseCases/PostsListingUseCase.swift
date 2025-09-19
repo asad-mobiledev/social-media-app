@@ -6,22 +6,19 @@
 //
 
 protocol PostsListingUseCase {
-    func fetchPosts() async throws -> [PostEntity]
+    func fetchPosts(limit: Int, startAt: String?) async throws -> [PostEntity]
 }
 
 final class DefaultPostsListingUseCase: PostsListingUseCase {
     
     private let repository: PostsListingRepository
-    private let paginationPolicy: PostsPaginationPolicy
-    private let lastCursor: String? = nil // We are using cursor based pagination like in Firebase Firestore.
     
-    init(repository: PostsListingRepository, paginationPolicy: PostsPaginationPolicy) {
+    init(repository: PostsListingRepository) {
         self.repository = repository
-        self.paginationPolicy = paginationPolicy
     }
     
-    func fetchPosts() async throws -> [PostEntity] {
-        let postDTOs = try await repository.getPosts(limit: 5, startAt: nil)
+    func fetchPosts(limit: Int, startAt: String? = nil) async throws -> [PostEntity] {
+        let postDTOs = try await repository.getPosts(limit: limit, startAt: startAt)
         return postDTOs.map { $0.toEntity() }
     }
 }

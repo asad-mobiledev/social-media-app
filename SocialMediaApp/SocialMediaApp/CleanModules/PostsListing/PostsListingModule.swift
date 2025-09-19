@@ -18,11 +18,11 @@ class PostsListingModule {
     }
     
     private func generatePostsListingViewModel() -> PostsListingViewModel {
-        PostsListingViewModel(postsListingUseCase: generatePostsListingUseCase())
+        PostsListingViewModel(postsListingUseCase: generatePostsListingUseCase(), paginationPolicy: DefaultPostsPaginationPolicy(itemsPerPage: 5))
     }
     
     private func generatePostsListingUseCase() -> PostsListingUseCase {
-        DefaultPostsListingUseCase(repository: generatePostsListingRepository(), paginationPolicy: DefaultPostsPaginationPolicy(itemsPerPage: 5))
+        DefaultPostsListingUseCase(repository: generatePostsListingRepository())
     }
     private func generatePostsListingRepository() -> PostsListingRepository {
         DefaultPostsRepository(filesRepository: generateFilesRepository(), networkRepository: generateNetworkRepository())
