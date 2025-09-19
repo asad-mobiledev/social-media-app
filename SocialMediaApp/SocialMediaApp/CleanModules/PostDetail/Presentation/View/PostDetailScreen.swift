@@ -29,7 +29,7 @@ struct PostDetailScreen: View {
                     VideoView(videoName: "")
                 case .audio:
                     let audioURL = Bundle.main.url(forResource: "sample-video", withExtension: "mp4")!
-                    AudioView()
+                    AudioView(resourceName: "sample-video")
                 }
                 CommentsView(comments: [
                     CommentModel(content: "This is the first comment. This is the first comment. This is the first comment.", replies: [

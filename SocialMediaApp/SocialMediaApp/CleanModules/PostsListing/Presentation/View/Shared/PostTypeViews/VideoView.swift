@@ -6,24 +6,19 @@
 //
 
 import SwiftUI
-import AVKit
 
 struct VideoView: View {
-    @State private var player: AVPlayer?
+    @Environment(\.appDIContainer) private var appDIContainer
     let videoName: String
     
     var body: some View {
-        VideoPlayer(player: player)
+        appDIContainer.createVideoPlayerView(resourceName: videoName)
             .frame(height: 250)
             .clipShape(.rect())
             .overlay(
                 Rectangle()
                     .stroke(Color.secondary, lineWidth: 4)
             )
-            .onAppear {
-//                player = AVPlayer(url: videoURL)
-//                player?.play()
-            }
     }
 }
 

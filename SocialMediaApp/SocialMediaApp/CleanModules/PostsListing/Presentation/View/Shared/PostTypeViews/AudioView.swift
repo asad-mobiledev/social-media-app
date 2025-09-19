@@ -9,10 +9,10 @@ import SwiftUI
 
 struct AudioView: View {
     @Environment(\.appDIContainer) private var appDIContainer
-    var resourceName: String?
+    var resourceName: String
     
     var body: some View {
-        appDIContainer.createAudioPlayerView()
+        appDIContainer.createAudioPlayerView(resourceName: resourceName)
             .padding(.horizontal, 10)
     }
 }

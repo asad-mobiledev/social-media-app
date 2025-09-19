@@ -51,12 +51,21 @@ class AppDIContainer {
         return sendImageViewModule.generateNamedImageView(imageName: imageName)
     }
     
-    func createAudioPlayerView(resourceName: String? = nil) -> some View {
+    func createAudioPlayerView(resourceName: String) -> some View {
         let playableModule = PlayableModule()
         return playableModule.generateAudioPlayerView(resourceName: resourceName)
     }
     func createAudioPlayerView(audioURL: URL) -> some View {
         let playableModule = PlayableModule()
         return playableModule.generateAudioPlayerView(audioURL: audioURL)
+    }
+    
+    func createVideoPlayerView(resourceName: String) -> some View {
+        let playableModule = PlayableModule()
+        return playableModule.generateVideoPlayerView(resourceName: resourceName)
+    }
+    func createVideoPlayerView(audioURL: URL) -> some View {
+        let playableModule = PlayableModule()
+        return playableModule.generateVideoPlayerView(videoURL: audioURL)
     }
 }
