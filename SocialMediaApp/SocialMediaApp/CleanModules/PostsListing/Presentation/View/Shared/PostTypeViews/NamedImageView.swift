@@ -13,30 +13,34 @@ struct NamedImageView: View {
     let imageName: String
     
     var body: some View {
-        
-        if let image = viewModel.image {
-            Image(uiImage: image)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .scaledToFill()
-                .frame(maxWidth: .infinity)
-                .frame(height:200)
-                .clipShape(.rect())
-                .zoomable(minZoomScale: 0.5)
-        } else if let error = viewModel.errorMessage {
-            Text("Error: \(error)")
-                .foregroundStyle(.red)
-        } else {
-            ZStack {
-                Image("placeholder")
+        Group {
+            if let image = viewModel.image {
+                Image(uiImage: image)
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .aspectRatio(contentMode: .fill)
+                    .scaledToFill()
                     .frame(maxWidth: .infinity)
-                    .frame(height: 200)
+                    .frame(height:200)
                     .clipShape(.rect())
                     .zoomable(minZoomScale: 0.5)
-                ProgressView()
+            } else if let error = viewModel.errorMessage {
+                Text("Error: \(error)")
+                    .foregroundStyle(.red)
+            } else {
+                ZStack {
+                    Image("placeholder")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 200)
+                        .clipShape(.rect())
+                        .zoomable(minZoomScale: 0.5)
+                    ProgressView()
+                }
             }
+        }
+        .onAppear {
+            viewModel.fetchImage(imageName: imageName)
         }
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 
 protocol ImageUseCase {
     func loadImage(url: URL) throws -> Data
-    func loadImage(name: String, mediaType: MediaType) throws -> Data
+    func loadImage(name: String) throws -> Data
 }
 
 class DefaultLoadImageDataUseCase: ImageUseCase {
@@ -23,7 +23,7 @@ class DefaultLoadImageDataUseCase: ImageUseCase {
         try loadImageRepository.loadImage(url: url)
     }
     
-    func loadImage(name: String, mediaType: MediaType) throws -> Data {
-        try loadImageRepository.loadImage(name: name, mediaType: mediaType)
+    func loadImage(name: String) throws -> Data {
+        try loadImageRepository.loadImage(name: name)
     }
 }

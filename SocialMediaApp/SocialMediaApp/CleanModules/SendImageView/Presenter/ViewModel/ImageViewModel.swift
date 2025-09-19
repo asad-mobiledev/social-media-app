@@ -29,9 +29,9 @@ class ImageViewModel: ObservableObject {
         }
     }
     
-    func fetchImage(imageName: String, mediaType: MediaType = .image) {
+    func fetchImage(imageName: String) {
         do {
-            let data = try loadImageDataUseCase.loadImage(name: imageName, mediaType: mediaType)
+            let data = try loadImageDataUseCase.loadImage(name: imageName)
             if let image = UIImage(data: data) {
                 self.image = image
             } else {

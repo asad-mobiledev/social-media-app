@@ -9,5 +9,5 @@ import Foundation
 
 protocol ImageRepository {
     func loadImage(url: URL) throws -> Data
-    func loadImage(name: String, mediaType: MediaType) throws -> Data
+    func loadImage(name: String) throws -> Data
 }
