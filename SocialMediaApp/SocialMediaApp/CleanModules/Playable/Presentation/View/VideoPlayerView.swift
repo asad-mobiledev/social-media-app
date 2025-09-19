@@ -13,8 +13,12 @@ struct VideoPlayerView: View {
     
     var body: some View {
         VideoPlayer(player: videoViewModel.player)
-            .onAppear{
+            .onAppear {
                 videoViewModel.load()
+                videoViewModel.play()
+            }
+            .onDisappear {
+                videoViewModel.pause()
             }
     }
 }

@@ -35,6 +35,14 @@ class VideoPlayerViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    func play() {
+        player?.play()
+    }
+    
+    func pause() {
+        player?.pause()
+    }
+    
     func load() {
         if let url = self.videoURL {
             self.videoURL = url
