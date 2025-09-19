@@ -14,10 +14,10 @@ struct Utility {
         return formatter.string(from: Date())
     }
     
-    static func saveDataToTempDirectory(data: Data, component: String, fileExtension: String) throws -> URL? {
-        let tempDirectory = FileManager.default.temporaryDirectory
-        let fileName = UUID().uuidString + "/" + component + "." + fileExtension
-        let fileURL = tempDirectory.appendingPathComponent(fileName)
+    static func saveDataToTempDirectory(data: Data, fileExtension: String) throws -> URL? {
+        let tempDirectoryURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+        let fileName = UUID().uuidString + "." + fileExtension
+        let fileURL = tempDirectoryURL.appendingPathComponent(fileName)
         try data.write(to: fileURL)
         return fileURL
     }

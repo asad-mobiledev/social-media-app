@@ -17,7 +17,8 @@ struct TransferableAsset: Transferable {
     
     static var transferRepresentation: some TransferRepresentation {
         DataRepresentation(importedContentType: .image) { data in
-            return TransferableAsset(url: try Utility.saveDataToTempDirectory(data: data, component: "image", fileExtension: "png"))
+            let filePath = try Utility.saveDataToTempDirectory(data: data, fileExtension: "png")
+            return TransferableAsset(url: filePath)
         }
         FileRepresentation(importedContentType: .movie) { data in
             let filePath = try getSavedFileURL(component: "movie", fileExtension: "mp4", data: data)
