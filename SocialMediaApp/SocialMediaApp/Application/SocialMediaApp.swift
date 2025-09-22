@@ -10,23 +10,18 @@ import SwiftUI
 @main
 struct SocialMediaApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @StateObject private var router = Router()
-    private let appDIContainer = AppDIContainer()
+    
+    private let router = Router()
+    private let appDIContainer: AppDIContainer
+    
+    init() {
+        appDIContainer = AppDIContainer()
+        appDIContainer.inject(router: router)
+    }
     
     var body: some Scene {
         WindowGroup {
-            NavigationStack(path: $router.navPath) {
-                appDIContainer.createPostsListingScreen()
-                    .navigationDestination(for: Router.AppRoute.self) { destination in
-                        
-                        switch destination {
-                        case .postsListing: appDIContainer.createPostsListingScreen()
-                        case .detail(let type): appDIContainer.createPostDetailScreen(type: type)
-                        }
-                    }
-            }
-            .environmentObject(router)
-            .environment(\.appDIContainer, appDIContainer)
+            RootView(router: router, appDIContainer: appDIContainer)
         }
     }
 }

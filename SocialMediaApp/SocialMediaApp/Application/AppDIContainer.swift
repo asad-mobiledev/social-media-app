@@ -9,6 +9,13 @@ import SwiftUI
 
 class AppDIContainer {
     
+    private var router: Router?
+    
+    func inject(router: Router) {
+        self.router = router
+    }
+    
+    
     lazy private var apiDataTransferService: DataTransferService = {
         let config = ApiDataNetworkConfig(baseURL: AppConfiguration.baseURL)
         let session = DefaultNetworkSessionManager(session: SharedURLSession.shared)
@@ -16,10 +23,15 @@ class AppDIContainer {
         return DefaultDataTransferService(networkManager: networkManager)
     }()
     
-    func createPostsListingScreen() -> some View {
+    // The screens for which you want that their states must persist whil rerendering their views, For example on listing screen we are presenting a bottom sheet and when bottom sheet present it will recall the whole logic. So this lazy var will make sure to return already initialized instance. And similarly you can use function if you don't want to persist UI state and you must use function becuase it will optimize memory use.
+    
+    // But in some cases when a view renders multiple times and in each iteration we want it's model class should be own by it and don't change you can use @StateObject for it's ViewModel instaed of @ObservedObject
+    
+    // Also we can use lazy closure to pass parameters
+    lazy var postsListingScreen: PostsListingScreen = {
         let postsListingModule = PostsListingModule(apiDataTransferService: apiDataTransferService)
         return postsListingModule.generatePostsListingScreen()
-    }
+    }()
     
     func createPostBottomSheet() -> some View {
         let createPostBottomSheetModule = CreatePostBottomSheetModule(apiDataTransferService: apiDataTransferService)
@@ -28,7 +40,7 @@ class AppDIContainer {
     
     func createSendMediaView(attachement: MediaAttachment, loadState: Binding<LoadState>) -> some View {
         let sendMediaModule = SendMediaModule(apiDataTransferService: apiDataTransferService)
-        return sendMediaModule.generateSendMediaView(attachement: attachement, loadState: loadState)
+        return sendMediaModule.generateSendMediaView(attachement: attachement, loadState: loadState, router: router!)
     }
     
     func createSendAudioView(audioURL: URL) -> some View {

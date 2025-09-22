@@ -14,12 +14,12 @@ class SendMediaModule {
         self.apiDataTransferService = apiDataTransferService
     }
     
-    func generateSendMediaView(attachement: MediaAttachment, loadState: Binding<LoadState>) -> SendMediaView {
-        return SendMediaView(sendMediaViewModel: generateSendMediaViewModel(), loadState: loadState, mediaAttachement: attachement)
+    func generateSendMediaView(attachement: MediaAttachment, loadState: Binding<LoadState>, router: Router) -> SendMediaView {
+        return SendMediaView(sendMediaViewModel: generateSendMediaViewModel(router: router), loadState: loadState, mediaAttachement: attachement)
     }
     
-    private func generateSendMediaViewModel() -> SendMediaViewModel {
-        SendMediaViewModel(sendMediaUseCase: generateSendMediaUseCase())
+    private func generateSendMediaViewModel(router: Router) -> SendMediaViewModel {
+        SendMediaViewModel(sendMediaUseCase: generateSendMediaUseCase(), router: router)
     }
     
     private func generateSendMediaUseCase() -> SendMediaUseCase {

@@ -47,8 +47,8 @@ struct CreatePostBottomSheet: View {
                     }
                 }
             } else {
-                if let type = createPostBottomSheetViewModel.resolvedMediaType {
-                    appDIContainer.createSendMediaView(attachement: createPostBottomSheetViewModel.mediaAttachment!, loadState: $createPostBottomSheetViewModel.loadState)
+                if let attachment = createPostBottomSheetViewModel.mediaAttachment {
+                    appDIContainer.createSendMediaView(attachement: attachment, loadState: $createPostBottomSheetViewModel.loadState)
                 } else {
                     EmptyView().onAppear {
                         createPostBottomSheetViewModel.loadState = .failed

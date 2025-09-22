@@ -9,11 +9,10 @@ import SwiftUI
 
 struct PostsListingScreen: View {
     @Environment(\.appDIContainer) private var appDIContainer
+    @EnvironmentObject var router: Router
     @ObservedObject var postsListingViewModel: PostsListingViewModel
-    @State private var showBottomSheet = false
     
     var body: some View {
-        NavigationStack {
             VStack(spacing: 0) {
                 ScrollView {
                     LazyVStack(spacing: 10) {
@@ -54,7 +53,7 @@ struct PostsListingScreen: View {
                 
                 HStack {
                     Button(AppText.createPost) {
-                        showBottomSheet.toggle()
+                        router.present(sheet: .createPost)
                     }
                     .font(.title)
                     .fontWeight(.bold)
@@ -65,12 +64,14 @@ struct PostsListingScreen: View {
                 }
             }
             .navigationTitle(AppText.posts)
-            .sheet(isPresented: $showBottomSheet) {
-                appDIContainer.createPostBottomSheet()
-                .presentationDetents([.height(250)])
-                .presentationDragIndicator(.visible)
+            .sheet(item: $router.activeSheet) { sheet in
+                switch sheet {
+                case .createPost:
+                    appDIContainer.createPostBottomSheet()
+                    .presentationDetents([.height(250)])
+                    .presentationDragIndicator(.visible)
+                }
             }
-        }
         .onAppear {
             Task {
                 await postsListingViewModel.fetchPosts()

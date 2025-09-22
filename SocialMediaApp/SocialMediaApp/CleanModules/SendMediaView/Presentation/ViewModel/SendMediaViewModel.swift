@@ -11,18 +11,25 @@ import UIKit
 
 class SendMediaViewModel: ObservableObject {
     private let sendMediaUseCase: SendMediaUseCase
+    @Published var errorMessage = ""
+    @Published var isLoading = false
+    private let router: Router
     
-    init(sendMediaUseCase: SendMediaUseCase) {
+    init(sendMediaUseCase: SendMediaUseCase, router: Router) {
         self.sendMediaUseCase = sendMediaUseCase
+        self.router = router
     }
     
     func post(mediaType: MediaType, mediaURL: URL?) {
         Task {
+            await MainActor.run { isLoading = true }
             do {
                 try await sendMediaUseCase.sendMedia(mediaType: mediaType, mediaURL: mediaURL)
+                await self.router.dismissSheet()
             } catch {
-                print(error)
+                await MainActor.run { self.errorMessage = error.localizedDescription }
             }
+            await MainActor.run { isLoading = false }
         }
     }
 }

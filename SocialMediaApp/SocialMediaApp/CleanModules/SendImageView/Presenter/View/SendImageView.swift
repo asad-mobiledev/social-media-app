@@ -9,7 +9,7 @@ import SwiftUI
 import Zoomable
 
 struct SendImageView: View {
-    @ObservedObject var viewModel: ImageViewModel
+    @StateObject var viewModel: ImageViewModel
     let imageURL: URL
     
     var body: some View {
@@ -20,7 +20,8 @@ struct SendImageView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 5))
                     .frame(width: 150, height: 150)
                     .zoomable(minZoomScale: 0.5)
-            } else if let error = viewModel.errorMessage {
+            }
+            else if let error = viewModel.errorMessage {
                 Text("Error: \(error)")
                     .foregroundStyle(.red)
             } else {

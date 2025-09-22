@@ -10,10 +10,22 @@ import SwiftUI
 final class Router: ObservableObject {
     
     @Published var navPath = NavigationPath()
+    @Published var activeSheet: SheetRoute?
     
     enum AppRoute: Hashable {
         case postsListing
         case detail(type: MediaType)
+    }
+    
+    enum SheetRoute: Identifiable {
+        case createPost
+        
+        var id: String {
+            switch self {
+            case .createPost:
+                return "createPost"
+            }
+        }
     }
     
     func navigate(to destination: AppRoute) {
@@ -27,4 +39,15 @@ final class Router: ObservableObject {
     func navigateToRoot() {
         navPath.removeLast(navPath.count)
     }
+    
+    // MARK: - Sheets
+    func present(sheet: SheetRoute) {
+        activeSheet = sheet
+    }
+    
+    @MainActor
+    func dismissSheet() {
+        activeSheet = nil
+    }
+    
 }

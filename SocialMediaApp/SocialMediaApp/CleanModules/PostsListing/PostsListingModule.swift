@@ -14,7 +14,7 @@ class PostsListingModule {
     }
     
     func generatePostsListingScreen() -> PostsListingScreen {
-        PostsListingScreen(postsListingViewModel: generatePostsListingViewModel())
+        PostsListingScreen(postsListingViewModel: self.generatePostsListingViewModel())
     }
     
     private func generatePostsListingViewModel() -> PostsListingViewModel {

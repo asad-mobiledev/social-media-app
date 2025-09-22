@@ -30,7 +30,7 @@ class CreatePostBottomSheetViewModel: ObservableObject {
         return url
     }
     
-    var resolvedMediaType: MediaType? {
+    private var resolvedMediaType: MediaType? {
         if let url = resolvedMediaURL {
             return mediaType(url: url)
         }
