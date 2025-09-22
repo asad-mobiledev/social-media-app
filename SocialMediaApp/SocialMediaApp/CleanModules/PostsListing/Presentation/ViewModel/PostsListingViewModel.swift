@@ -14,21 +14,29 @@ class PostsListingViewModel: ObservableObject {
     @Published var errorMessage: String = ""
     @Published var isLoading = false
     private let pageLimit = 5
+    var refreshing = false
     
     init(postsListingUseCase: PostsListingUseCase, paginationPolicy: PostsPaginationPolicy) {
         self.postsListingUseCase = postsListingUseCase
         self.paginationPolicy = paginationPolicy
     }
     
-    func fetchPosts() async {
+    func fetchPosts(isRefreshing: Bool = false) async {
         guard canHaveMorePosts() else { return }
         guard !isLoading else { return }
         await MainActor.run {
             isLoading = true
         }
         do {
-            let posts = try await postsListingUseCase.fetchPosts(limit: 5, startAt: posts.last?.date)
+            var startIndex = posts.last?.date
+            if isRefreshing {
+                startIndex = nil
+            }
+            let posts = try await postsListingUseCase.fetchPosts(limit: 5, startAt: startIndex)
             await MainActor.run {
+                if isRefreshing {
+                    self.posts = []
+                }
                 self.posts += posts
             }
         } catch {
@@ -43,10 +51,9 @@ class PostsListingViewModel: ObservableObject {
     
     func refreshPosts() async {
         await MainActor.run {
-            posts = [] 
             errorMessage = ""
         }
-        await fetchPosts()
+        await fetchPosts(isRefreshing: true)
     }
     
     private func canHaveMorePosts() -> Bool {

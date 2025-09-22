@@ -45,11 +45,13 @@ struct PostsListingScreen: View {
                             .padding()
                     }
                 }
-//                .refreshable {
-//                    if !postsListingViewModel.isLoading {
-//                        await postsListingViewModel.refreshPosts()
-//                    }
-//                }
+                .refreshable {
+                    if !postsListingViewModel.isLoading {
+                        Task {
+                            await postsListingViewModel.refreshPosts()
+                        }
+                    }
+                }
                 
                 HStack {
                     Button(AppText.createPost) {
