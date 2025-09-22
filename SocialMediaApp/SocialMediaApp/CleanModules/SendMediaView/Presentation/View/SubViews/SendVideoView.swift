@@ -9,18 +9,14 @@ import SwiftUI
 import AVKit
 
 struct SendVideoView: View {
-    @State private var player: AVPlayer?
+    @Environment(\.appDIContainer) private var appDIContainer
     let videoURL: URL
     
     var body: some View {
         
-        VideoPlayer(player: player)
+        appDIContainer.createVideoPlayerView(videoURL: videoURL)
             .frame(width: 150, height: 150)
             .clipShape(RoundedRectangle(cornerRadius: 5))
-            .onAppear {
-                player = AVPlayer(url: videoURL)
-                player?.play()
-            }
     }
 }
 

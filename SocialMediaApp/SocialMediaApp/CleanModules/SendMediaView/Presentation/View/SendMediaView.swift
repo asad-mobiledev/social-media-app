@@ -27,7 +27,7 @@ struct SendMediaView: View {
                             appDIContainer.createSendAudioView(audioURL: mediaAttachement.url!)
                                 .padding(.bottom, 60)
                         case .video:
-                            SendVideoView(videoURL: mediaAttachement.url!)
+                            appDIContainer.createSendVideoView(videoURL: mediaAttachement.url!)
                         }
                         Button(action: {
                             loadState = .unknown

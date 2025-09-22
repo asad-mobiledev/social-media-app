@@ -48,6 +48,9 @@ class AppDIContainer {
         return playableModule.generateSendAudioView(audioURL: audioURL)
     }
     
+    func createSendVideoView(videoURL: URL) -> some View {
+        SendVideoView(videoURL: videoURL)
+    }
     func createPostDetailScreen(type: MediaType) -> some View {
         let postDetailModule = PostDetailModule()
         return postDetailModule.generatePostDetailScreen(type: type)
@@ -76,8 +79,8 @@ class AppDIContainer {
         let playableModule = PlayableModule()
         return playableModule.generateVideoPlayerView(resourceName: resourceName)
     }
-    func createVideoPlayerView(audioURL: URL) -> some View {
+    func createVideoPlayerView(videoURL: URL) -> some View {
         let playableModule = PlayableModule()
-        return playableModule.generateVideoPlayerView(videoURL: audioURL)
+        return playableModule.generateVideoPlayerView(videoURL: videoURL)
     }
 }
