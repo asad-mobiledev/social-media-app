@@ -8,18 +8,17 @@ import Foundation
 import SwiftData
 
 @MainActor
-class DefaultDatabaseRepository: DatabaseRepository {
+class DefaultDatabaseService: DatabaseService {
     
     let container: ModelContainer
     var context: ModelContext {
         container.mainContext
     }
     
-    init(isStoredInMemoryOnly: Bool) throws {
+    init(isStoredInMemoryOnly: Bool = false) throws {
         let schema = Schema([PostModel.self])
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: isStoredInMemoryOnly)
         self.container = try ModelContainer(for: schema, configurations: [config])
-        
     }
     func create<T>(item: T) where T : PersistentModel {
         context.insert(item)

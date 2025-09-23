@@ -7,7 +7,7 @@
 import SwiftData
 
 @MainActor
-protocol DatabaseRepository {
+protocol DatabaseService {
     
     var context: ModelContext { get }
     func create<T: PersistentModel>(item: T)
