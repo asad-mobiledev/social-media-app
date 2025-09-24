@@ -8,6 +8,11 @@
 import Foundation
 
 class ImageViewModule {
+    private let fileService: FileService
+    
+    init(fileService: FileService) {
+        self.fileService = fileService
+    }
     
     func generateSendImageView(imageURL: URL) -> SendImageView {
         SendImageView(viewModel: self.generateImageViewModel(), imageURL: imageURL)
@@ -25,11 +30,6 @@ class ImageViewModule {
         DefaultLoadImageDataUseCase(loadImageRepository: generateImageRepository())
     }
     private func generateImageRepository() -> ImageRepository {
-        DefaultImageRepository(fileService: generateFilesRepository())
-    }
-    
-    // refactor it at end to use only one instance of FilesRepo
-    private func generateFilesRepository() -> FileService {
-        return DefaultFileService()
+        DefaultImageRepository(fileService: fileService)
     }
 }

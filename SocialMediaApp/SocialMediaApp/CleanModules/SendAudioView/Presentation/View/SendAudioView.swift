@@ -23,5 +23,5 @@ struct SendAudioView: View {
 
 #Preview {
     let videoURL = Bundle.main.url(forResource: "sample-video", withExtension: "mp4")!
-//    SendAudioView(audioURL: videoURL)
+    SendAudioView(audioURL: videoURL)
 }

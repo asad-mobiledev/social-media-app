@@ -10,18 +10,11 @@ import SwiftUI
 @main
 struct SocialMediaApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
-    private let router = Router()
-    private let appDIContainer: AppDIContainer
-    
-    init() {
-        appDIContainer = AppDIContainer()
-        appDIContainer.inject(router: router)
-    }
+    let fileService: FileService = DefaultFileService()
     
     var body: some Scene {
         WindowGroup {
-            RootView(router: router, appDIContainer: appDIContainer)
+            RootView(fileService: fileService)
         }
     }
 }

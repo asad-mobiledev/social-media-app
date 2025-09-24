@@ -7,9 +7,13 @@
 
 class CreatePostBottomSheetModule {
     private let apiDataTransferService: DataTransferService
+    private let databaseService: DatabaseService
+    private let fileService: FileService
     
-    init(apiDataTransferService: DataTransferService) {
+    init(apiDataTransferService: DataTransferService, databaseService: DatabaseService, fileService: FileService) {
         self.apiDataTransferService = apiDataTransferService
+        self.databaseService = databaseService
+        self.fileService = fileService
     }
     
     func generateCreatePostBottomSheet() -> CreatePostBottomSheet {
@@ -25,15 +29,9 @@ class CreatePostBottomSheetModule {
     }
     
     private func generateCreatePostBottomSheetRepository() -> PostsListingRepository {
-        DefaultPostsRepository(filesRepository: generateFilesRepository(), networkRepository: generateNetworkRepository())
+        DefaultPostsRepository(filesRepository: fileService, networkRepository: generateNetworkRepository(), databaseService: databaseService)
     }
     
-    // refactor it at end to use only one instance of FilesRepo
-    private func generateFilesRepository() -> FileService {
-        return DefaultFileService()
-    }
-    
-    // refactor it at end to use only one instance of FilesRepo
     private func generateNetworkRepository() -> NetworkRepository {
         return DefaultNetworkRepository(apiDataTransferService: apiDataTransferService)
     }

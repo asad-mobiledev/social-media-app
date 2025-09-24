@@ -8,6 +8,11 @@
 import Foundation
 
 class PlayableModule {
+    private let fileService: FileService
+    
+    init(fileService: FileService) {
+        self.fileService = fileService
+    }
     
     func generateSendAudioView(audioURL: URL) -> SendAudioView {
         return SendAudioView(audioURL: audioURL)
@@ -38,11 +43,6 @@ class PlayableModule {
         DefaultPlayableUseCase(playableRepository: generatePlayableRepository())
     }
     private func generatePlayableRepository() -> PlayableRepository {
-        DefaultPlayableRepository(fileService: generateFilesRepository())
-    }
-    
-    // refactor it at end to use only one instance of FilesRepo
-    private func generateFilesRepository() -> FileService {
-        return DefaultFileService()
+        DefaultPlayableRepository(fileService: fileService)
     }
 }
