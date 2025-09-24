@@ -11,6 +11,7 @@ class PostsListingViewModel: ObservableObject {
     private let postsListingUseCase: PostsListingUseCase
     private let paginationPolicy: PostsPaginationPolicy
     @Published var posts: [PostEntity] = []
+    var lastFetchedPostsCount = -1
     @Published var errorMessage: String = ""
     @Published var isLoading = false
     private let pageLimit = 5
@@ -33,6 +34,7 @@ class PostsListingViewModel: ObservableObject {
                 startIndex = nil
             }
             let posts = try await postsListingUseCase.fetchPosts(limit: 5, startAt: startIndex)
+            lastFetchedPostsCount = posts.count
             await MainActor.run {
                 if isRefreshing {
                     self.posts = []
@@ -57,7 +59,7 @@ class PostsListingViewModel: ObservableObject {
     }
     
     private func canHaveMorePosts() -> Bool {
-        posts.count % paginationPolicy.itemsPerPage == 0
+        lastFetchedPostsCount != 0
     }
     
     @MainActor
