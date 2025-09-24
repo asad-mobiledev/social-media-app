@@ -10,6 +10,8 @@ import SwiftData
 protocol DatabaseService {
     
     var context: ModelContext { get }
-    func create<T: PersistentModel>(item: T)
+    func save<T: PersistentModel>(item: T) throws
+    func batchSave<T: PersistentModel>(items: [T]) throws
     func fetch<T: PersistentModel>(descriptor: FetchDescriptor<T>) throws -> [T]
+    func deleteAll<T: PersistentModel>(of type: T.Type) throws 
 }

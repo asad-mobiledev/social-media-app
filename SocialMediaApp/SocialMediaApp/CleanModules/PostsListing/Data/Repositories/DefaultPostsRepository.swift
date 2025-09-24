@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SwiftData
 
 final class DefaultPostsRepository {
     private let filesRespository: FileService
@@ -27,8 +28,39 @@ extension DefaultPostsRepository: PostsListingRepository {
     }
     
     func getPosts(limit: Int, startAt: String?) async throws -> [PostDTO] {
-        let posts = try await networkRepository.getPosts(limit: limit, startAt: startAt)
-        // save posts to DB
+        var posts: [PostDTO] = []
+        do {
+            posts = try await networkRepository.getPosts(limit: limit, startAt: startAt)
+            do {
+                if startAt == nil {
+                    do {
+                        try await databaseService.deleteAll(of: PostModel.self)
+                    } catch {
+                        print("Failed deleting Database records \(#function)")
+                        return posts
+                    }
+                }
+                try await databaseService.batchSave(items: posts.map { $0.toPostModel() })
+            } catch {
+                print("Failed saving to Database \(#function)")
+            }
+        } catch {
+            var predicate: Predicate<PostModel>? = nil
+            if let dateString = startAt {
+                predicate = #Predicate { $0.date < dateString }
+            }
+            var descriptor = FetchDescriptor<PostModel>(
+                predicate: predicate,
+                sortBy: [SortDescriptor(\PostModel.date, order: .reverse)]
+            )
+            descriptor.fetchLimit = limit
+            do {
+                let postModels = try await databaseService.fetch(descriptor: descriptor)
+                posts = postModels.map { PostDTO(from: $0) }
+            } catch {
+                throw CustomError.message(error.localizedDescription)
+            }
+        }
         return posts
     }
 }

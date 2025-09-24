@@ -37,11 +37,31 @@ struct PostDTO: Codable,Identifiable {
 }
 
 extension PostDTO {
+    init(from model: PostModel) {
+        self.id = model.id
+        self.postType = model.postType
+        self.mediaName = model.mediaName
+        self.date = model.date
+    }
+}
+
+extension PostDTO {
     func toEntity() -> PostEntity {
         return PostEntity(
             id: id ?? UUID().uuidString,
             postType: MediaType(rawValue: postType)!,
             mediaName: mediaName,
+            date: date
+        )
+    }
+}
+
+extension PostDTO {
+    func toPostModel() -> PostModel {
+        PostModel(
+            id: self.id ?? UUID().uuidString,
+            postType: self.postType,
+            mediaName: self.mediaName,
             date: date
         )
     }

@@ -37,11 +37,30 @@ class DefaultDatabaseService: DatabaseService {
         self.container = try ModelContainer(for: schema, configurations: [config])
     }
 
-    func create<T: PersistentModel>(item: T) {
+    func save<T: PersistentModel>(item: T) throws {
         context.insert(item)
+        try context.save()
+    }
+    
+    func batchSave<T: PersistentModel>(items: [T]) throws {
+        for item in items {
+            context.insert(item)
+        }
+        try context.save()
     }
 
     func fetch<T: PersistentModel>(descriptor: FetchDescriptor<T>) throws -> [T] {
         return try context.fetch(descriptor)
+    }
+    
+    func deleteAll<T: PersistentModel>(of type: T.Type) throws {
+        let descriptor = FetchDescriptor<T>()
+        let allItems = try context.fetch(descriptor)
+        
+        for item in allItems {
+            context.delete(item)
+        }
+        
+        try context.save()
     }
 }
