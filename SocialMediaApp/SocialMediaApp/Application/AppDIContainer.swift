@@ -49,9 +49,9 @@ class AppDIContainer {
         return createPostBottomSheetModule.generateCreatePostBottomSheet()
     }
     
-    func createSendMediaView(attachement: MediaAttachment, loadState: Binding<LoadState>) -> some View {
+    func createSendMediaView(attachement: MediaAttachment, loadState: Binding<LoadState>, postsListingViewModel: PostsListingViewModel) -> some View {
         let sendMediaModule = SendMediaModule(apiDataTransferService: apiDataTransferService, databaseService: databaseService!, fileService: fileService!)
-        return sendMediaModule.generateSendMediaView(attachement: attachement, loadState: loadState, router: router!)
+        return sendMediaModule.generateSendMediaView(attachement: attachement, loadState: loadState, router: router!, postsListingViewModel: postsListingViewModel)
     }
     
     func createSendAudioView(audioURL: URL) -> some View {

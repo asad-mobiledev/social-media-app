@@ -58,7 +58,7 @@ class DefaultNetworkRepository: NetworkRepository {
     }
 
     
-    func createPost(mediaType: MediaType, mediaName: String) async throws {
+    func createPost(mediaType: MediaType, mediaName: String) async throws -> PostDTO {
         
         let date = Utility.getISO8601Date()
         self.documentName = UUID().uuidString
@@ -96,5 +96,6 @@ class DefaultNetworkRepository: NetworkRepository {
         } catch {
             throw CustomError.message(error.localizedDescription)
         }
+        return post
     }
 }

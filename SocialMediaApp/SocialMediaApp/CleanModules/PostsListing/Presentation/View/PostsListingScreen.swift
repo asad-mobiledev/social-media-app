@@ -79,6 +79,7 @@ struct PostsListingScreen: View {
                 await postsListingViewModel.fetchPosts()
             }
         }
+        .environmentObject(postsListingViewModel)
     }
 }
 

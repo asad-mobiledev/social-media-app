@@ -14,17 +14,20 @@ class SendMediaViewModel: ObservableObject {
     @Published var errorMessage = ""
     @Published var isLoading = false
     private let router: Router
+    private let postsListingViewModel: PostsListingViewModel
     
-    init(sendMediaUseCase: SendMediaUseCase, router: Router) {
+    init(sendMediaUseCase: SendMediaUseCase, router: Router, postsListingViewModel: PostsListingViewModel) {
         self.sendMediaUseCase = sendMediaUseCase
         self.router = router
+        self.postsListingViewModel = postsListingViewModel
     }
     
     func post(mediaType: MediaType, mediaURL: URL?) {
         Task {
             await MainActor.run { isLoading = true }
             do {
-                try await sendMediaUseCase.sendMedia(mediaType: mediaType, mediaURL: mediaURL)
+                let postEntity = try await sendMediaUseCase.sendMedia(mediaType: mediaType, mediaURL: mediaURL)
+                await postsListingViewModel.addNewPost(post: postEntity)
                 await self.router.dismissSheet()
             } catch {
                 await MainActor.run { self.errorMessage = error.localizedDescription }

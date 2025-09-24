@@ -10,5 +10,5 @@ import UIKit
 
 protocol PostsListingRepository {
     func getPosts(limit: Int, startAt: String?) async throws -> [PostDTO]
-    func createPost(mediaType: MediaType, mediaURL: URL?) async throws
+    func createPost(mediaType: MediaType, mediaURL: URL?) async throws -> PostDTO
 }

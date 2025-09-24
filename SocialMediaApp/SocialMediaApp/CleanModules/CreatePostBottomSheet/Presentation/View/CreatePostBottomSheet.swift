@@ -10,6 +10,7 @@ import UniformTypeIdentifiers
 
 struct CreatePostBottomSheet: View {
     @Environment(\.appDIContainer) private var appDIContainer
+    @EnvironmentObject var postsListingViewModel: PostsListingViewModel
     @ObservedObject var createPostBottomSheetViewModel: CreatePostBottomSheetViewModel
     
     var body: some View {
@@ -48,7 +49,7 @@ struct CreatePostBottomSheet: View {
                 }
             } else {
                 if let attachment = createPostBottomSheetViewModel.mediaAttachment {
-                    appDIContainer.createSendMediaView(attachement: attachment, loadState: $createPostBottomSheetViewModel.loadState)
+                    appDIContainer.createSendMediaView(attachement: attachment, loadState: $createPostBottomSheetViewModel.loadState, postsListingViewModel: postsListingViewModel)
                 } else {
                     EmptyView().onAppear {
                         createPostBottomSheetViewModel.loadState = .failed

@@ -59,4 +59,9 @@ class PostsListingViewModel: ObservableObject {
     private func canHaveMorePosts() -> Bool {
         posts.count % paginationPolicy.itemsPerPage == 0
     }
+    
+    @MainActor
+    func addNewPost(post: PostEntity) {
+        posts.insert(post, at: 0)
+    }
 }

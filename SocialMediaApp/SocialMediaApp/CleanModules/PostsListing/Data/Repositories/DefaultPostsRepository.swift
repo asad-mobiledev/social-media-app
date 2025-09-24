@@ -22,9 +22,15 @@ final class DefaultPostsRepository {
 }
 
 extension DefaultPostsRepository: PostsListingRepository {
-    func createPost(mediaType: MediaType, mediaURL: URL?) async throws {
+    func createPost(mediaType: MediaType, mediaURL: URL?) async throws -> PostDTO {
         let fileName = try filesRespository.save(mediaType: mediaType, mediaURL: mediaURL, directory: .documents)
-        try await networkRepository.createPost(mediaType: mediaType, mediaName: fileName)
+        let post = try await networkRepository.createPost(mediaType: mediaType, mediaName: fileName)
+        do {
+            try await databaseService.save(item: post.toPostModel())
+        } catch {
+            print("Failed saving to Database \(#function)")
+        }
+        return post
     }
     
     func getPosts(limit: Int, startAt: String?) async throws -> [PostDTO] {
@@ -54,12 +60,8 @@ extension DefaultPostsRepository: PostsListingRepository {
                 sortBy: [SortDescriptor(\PostModel.date, order: .reverse)]
             )
             descriptor.fetchLimit = limit
-            do {
-                let postModels = try await databaseService.fetch(descriptor: descriptor)
-                posts = postModels.map { PostDTO(from: $0) }
-            } catch {
-                throw CustomError.message(error.localizedDescription)
-            }
+            let postModels = try await databaseService.fetch(descriptor: descriptor)
+            posts = postModels.map { PostDTO(from: $0) }
         }
         return posts
     }

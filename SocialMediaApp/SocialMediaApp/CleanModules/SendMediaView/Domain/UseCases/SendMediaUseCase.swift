@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol SendMediaUseCase {
-    func sendMedia(mediaType: MediaType, mediaURL: URL?) async throws
+    func sendMedia(mediaType: MediaType, mediaURL: URL?) async throws -> PostEntity
 }
 
 
@@ -20,7 +20,8 @@ class DefaultSendMediaUseCase: SendMediaUseCase {
         self.repository = repository
     }
     
-    func sendMedia(mediaType: MediaType, mediaURL: URL?) async throws {
-        try await repository.createPost(mediaType: mediaType, mediaURL: mediaURL)
+    func sendMedia(mediaType: MediaType, mediaURL: URL?) async throws -> PostEntity {
+        let postDTO = try await repository.createPost(mediaType: mediaType, mediaURL: mediaURL)
+        return postDTO.toEntity()
     }
 }
