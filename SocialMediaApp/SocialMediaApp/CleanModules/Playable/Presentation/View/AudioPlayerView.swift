@@ -33,6 +33,7 @@ struct AudioPlayerView: View {
                 .font(.caption)
         }
         .onAppear {
+            audioViewModel.reset()
             audioViewModel.load()
         }
         .onReceive(audioViewModel.timer) { _ in

@@ -90,6 +90,12 @@ class AudioViewModel: ObservableObject {
         return String(format: "%02d:%02d", minutes, seconds)
     }
     
+    func reset() {
+        isPlaying = false
+        currentTimeString = "00:00"
+        audioProgress = 0
+    }
+    
     func load() {
         if let url = self.audioURL {
             self.audioURL = url
