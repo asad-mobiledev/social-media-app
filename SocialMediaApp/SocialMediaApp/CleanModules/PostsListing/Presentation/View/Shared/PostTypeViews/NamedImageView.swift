@@ -17,12 +17,11 @@ struct NamedImageView: View {
             if let image = viewModel.image {
                 Image(uiImage: image)
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
                     .scaledToFill()
                     .frame(maxWidth: .infinity)
-                    .frame(height:200)
                     .clipShape(.rect())
                     .zoomable(minZoomScale: 0.5)
+                    .clipped()
             } else if let error = viewModel.errorMessage {
                 Text("Error: \(error)")
                     .foregroundStyle(.red)
@@ -35,6 +34,7 @@ struct NamedImageView: View {
                         .frame(height: 200)
                         .clipShape(.rect())
                         .zoomable(minZoomScale: 0.5)
+                        .clipped()
                     ProgressView()
                 }
             }

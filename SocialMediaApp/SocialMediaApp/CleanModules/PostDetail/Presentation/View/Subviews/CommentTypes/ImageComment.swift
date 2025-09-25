@@ -20,6 +20,7 @@ struct ImageComment: View {
                 .frame(maxWidth: 150, minHeight: 10)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .zoomable(minZoomScale: 0.5)
+                .clipped()
             
             if depth < 2 {
                 Button(AppText.reply) {

@@ -14,20 +14,18 @@ struct ImagePost: View {
     var body: some View {
         VStack {
             appDIContainer.createNamedImageView(imageName: imageName)
-                .overlay(
-                    Rectangle()
-                        .stroke(Color.secondary, lineWidth: 4)
-                )
             HStack {
                 Spacer()
                 CommentButton(type: .image)
                     .padding(.trailing, 5)
+                    .padding(.bottom, 5)
             }
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(.gray)
         }
         .background(Color.secondary)
+        .overlay(
+            Rectangle()
+                .stroke(Color.secondary, lineWidth: 4)
+        )
     }
 }
 

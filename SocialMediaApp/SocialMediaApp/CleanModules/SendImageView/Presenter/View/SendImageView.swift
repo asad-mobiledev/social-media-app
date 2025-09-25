@@ -20,6 +20,7 @@ struct SendImageView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 5))
                     .frame(width: 150, height: 150)
                     .zoomable(minZoomScale: 0.5)
+                    .clipped()
             }
             else if let error = viewModel.errorMessage {
                 Text("Error: \(error)")
@@ -33,6 +34,7 @@ struct SendImageView: View {
                         .frame(height: 200)
                         .clipShape(.rect())
                         .zoomable(minZoomScale: 0.5)
+                        .clipped()
                     ProgressView()
                 }
             }
