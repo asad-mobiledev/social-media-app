@@ -10,28 +10,28 @@ import Foundation
 struct PostDTO: Codable,Identifiable {
     var id: String?
     var postType: MediaType.RawValue
-    var mediaName: String
+    var fileURL: URL?
     var date: String
     
     // A custom initializer that maps the verbose Firestore data.
     init?(from firestoreDocument: FirestoreDocument) {
         guard let id = firestoreDocument.name.components(separatedBy: "/").last,
               let postType = firestoreDocument.fields.postType?.stringValue,
-              let mediaName = firestoreDocument.fields.mediaName?.stringValue,
+              let fileURLString = firestoreDocument.fields.fileURLString?.stringValue,
               let date = firestoreDocument.fields.date?.stringValue else {
             return nil
         }
         
         self.id = id
         self.postType = postType
-        self.mediaName = mediaName
+        self.fileURL = URL(string: fileURLString)
         self.date = date
     }
     
-    init(id: String? = UUID().uuidString, postType: String, mediaName: String, date: String) {
+    init(id: String? = UUID().uuidString, postType: String, fileURLString: String, date: String) {
         self.id = id
         self.postType = postType
-        self.mediaName = mediaName
+        self.fileURL = URL(string: fileURLString)
         self.date = date
     }
 }
@@ -40,7 +40,7 @@ extension PostDTO {
     init(from model: PostModel) {
         self.id = model.id
         self.postType = model.postType
-        self.mediaName = model.mediaName
+        self.fileURL = URL(string: model.fileURLString ?? "")
         self.date = model.date
     }
 }
@@ -50,7 +50,7 @@ extension PostDTO {
         return PostEntity(
             id: id ?? UUID().uuidString,
             postType: MediaType(rawValue: postType)!,
-            mediaName: mediaName,
+            fileURL: fileURL,
             date: date
         )
     }
@@ -61,7 +61,7 @@ extension PostDTO {
         PostModel(
             id: self.id ?? UUID().uuidString,
             postType: self.postType,
-            mediaName: self.mediaName,
+            fileURLString: self.fileURL?.absoluteString ?? nil,
             date: date
         )
     }
@@ -90,18 +90,18 @@ struct FirestoreMap: Codable {
 struct FirestoreFields: Codable {
     var id: FirestoreValue?
     var postType: FirestoreValue?
-    var mediaName: FirestoreValue?
+    var fileURLString: FirestoreValue?
     var date: FirestoreValue?
     
     enum CodingKeys: String, CodingKey {
-        case id, postType, mediaName, date
+        case id, postType, fileURLString, date
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decodeIfPresent(FirestoreValue.self, forKey: .id)
         self.postType = try container.decodeIfPresent(FirestoreValue.self, forKey: .postType)
-        self.mediaName = try container.decodeIfPresent(FirestoreValue.self, forKey: .mediaName)
+        self.fileURLString = try container.decodeIfPresent(FirestoreValue.self, forKey: .fileURLString)
         self.date = try container.decodeIfPresent(FirestoreValue.self, forKey: .date)
     }
 }

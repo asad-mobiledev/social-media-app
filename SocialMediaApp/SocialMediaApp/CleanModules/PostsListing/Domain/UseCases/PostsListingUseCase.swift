@@ -19,6 +19,10 @@ final class DefaultPostsListingUseCase: PostsListingUseCase {
     
     func fetchPosts(limit: Int, startAt: String? = nil) async throws -> [PostEntity] {
         let postDTOs = try await repository.getPosts(limit: limit, startAt: startAt)
-        return postDTOs.map { $0.toEntity() }
+        // Skip posts having nil url
+        return postDTOs.compactMap { dto in
+            guard dto.fileURL != nil else { return nil }
+            return dto.toEntity()
+        }
     }
 }

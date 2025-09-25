@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct VideoPost: View {
-    let videoName: String
+    let fileURL: URL
     
     var body: some View {
         VStack {
-            VideoView(videoName: videoName)
+            VideoView(fileURL: fileURL)
             HStack {
                 Spacer()
                 CommentButton(type: .video)

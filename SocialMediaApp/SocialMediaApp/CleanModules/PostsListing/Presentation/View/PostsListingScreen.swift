@@ -20,11 +20,11 @@ struct PostsListingScreen: View {
                             VStack{
                                 switch post.postType {
                                 case .image:
-                                    ImagePost(imageName: post.mediaName)
+                                    ImagePost(fileURL: post.fileURL!)
                                 case .audio:
-                                    AudioPost(audioName: post.mediaName)
+                                    AudioPost(fileURL: post.fileURL!)
                                 case .video:
-                                    VideoPost(videoName: post.mediaName)
+                                    VideoPost(fileURL: post.fileURL!)
                                 }
                             }
                             .onAppear {
@@ -79,7 +79,6 @@ struct PostsListingScreen: View {
                 await postsListingViewModel.fetchPosts()
             }
         }
-        .environmentObject(postsListingViewModel)
     }
 }
 

@@ -10,7 +10,6 @@ import Zoomable
 
 struct SendImageView: View {
     @StateObject var viewModel: ImageViewModel
-    let imageURL: URL
     
     var body: some View {
         Group {
@@ -38,7 +37,7 @@ struct SendImageView: View {
             }
         }
         .onAppear {
-            viewModel.fetchImage(localUrl: imageURL)
+            viewModel.fetchImage()
         }
     }
 }

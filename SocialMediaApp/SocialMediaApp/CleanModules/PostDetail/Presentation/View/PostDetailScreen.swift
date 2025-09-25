@@ -19,14 +19,14 @@ struct PostDetailScreen: View {
             ScrollView {
                 switch type {
                 case .image:
-                    appDIContainer.createNamedImageView(imageName: "post-image")
+                    appDIContainer.createPostImageView(url: URL(string: "")!)
                         .overlay(
                             Rectangle()
                                 .stroke(Color.secondary, lineWidth: 4)
                         )
                 case .video:
                     let videoURL = Bundle.main.url(forResource: "sample-video", withExtension: "mp4")!
-                    VideoView(videoName: "")
+                    VideoView(fileURL: URL(string: "")!)
                 case .audio:
                     let audioURL = Bundle.main.url(forResource: "sample-video", withExtension: "mp4")!
                     AudioView(resourceName: "sample-video")

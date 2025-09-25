@@ -28,4 +28,5 @@ struct AppText {
     static let failedListFilesFromFolder = "Failed to list files from folder"
     static let unableToInitializeFolderURL = "unable to initialize url for folder"
     static let failLoadResourceURL = "Could not load resource url."
+    static let fileURLisNil = "File URL is nil."
 }

@@ -49,7 +49,7 @@ class AppDIContainer {
         return createPostBottomSheetModule.generateCreatePostBottomSheet()
     }
     
-    func createSendMediaView(attachement: MediaAttachment, loadState: Binding<LoadState>, postsListingViewModel: PostsListingViewModel?) -> some View {
+    func createSendMediaView(attachement: MediaAttachment, loadState: Binding<LoadState>) -> some View {
         let sendMediaModule = SendMediaModule(apiDataTransferService: apiDataTransferService, databaseService: databaseService!, fileService: fileService!)
         return sendMediaModule.generateSendMediaView(attachement: attachement, loadState: loadState, router: router!)
     }
@@ -72,9 +72,9 @@ class AppDIContainer {
         return sendImageViewModule.generateSendImageView(imageURL: imageURL)
     }
     
-    func createNamedImageView(imageName: String) -> some View {
+    func createPostImageView(url: URL) -> some View {
         let sendImageViewModule = ImageViewModule(fileService: fileService!)
-        return sendImageViewModule.generateNamedImageView(imageName: imageName)
+        return sendImageViewModule.generatePostImageView(url: url)
     }
     
     func createAudioPlayerView(resourceName: String) -> some View {

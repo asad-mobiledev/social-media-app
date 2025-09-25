@@ -9,10 +9,10 @@ import SwiftUI
 
 struct VideoView: View {
     @Environment(\.appDIContainer) private var appDIContainer
-    let videoName: String
+    let fileURL: URL
     
     var body: some View {
-        appDIContainer.createVideoPlayerView(resourceName: videoName)
+        appDIContainer.createVideoPlayerView(videoURL: fileURL)
             .frame(height: 250)
             .clipShape(.rect())
             .overlay(
