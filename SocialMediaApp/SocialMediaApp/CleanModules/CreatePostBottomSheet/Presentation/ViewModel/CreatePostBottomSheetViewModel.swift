@@ -45,7 +45,9 @@ class CreatePostBottomSheetViewModel: ObservableObject {
     init() {
         $loadState
             .sink { [weak self] newState in
-                self?.handleLoadStateChange(newState)
+                Task { @MainActor in
+                    self?.handleLoadStateChange(newState)
+                }
             }
             .store(in: &cancellables)
         
@@ -61,7 +63,7 @@ class CreatePostBottomSheetViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-    
+    @MainActor
     private func handleLoadStateChange(_ state: LoadState) {
         switch state {
         case .unknown:
@@ -90,24 +92,34 @@ class CreatePostBottomSheetViewModel: ObservableObject {
     }
     
     func mediaType(url: URL) -> MediaType? {
-        do {
-            let resourceValues = try url.resourceValues(forKeys: [.typeIdentifierKey])
-            guard let typeIdentifier = resourceValues.typeIdentifier else {
-                return nil
-            }
-            
-            if let utType = UTType(typeIdentifier) {
-                if utType.conforms(to: .image) {
-                    return .image
-                } else if utType.conforms(to: .audio) {
-                    return .audio
-                } else if utType.conforms(to: .movie) {
-                    return .video
+        if url.startAccessingSecurityScopedResource() {
+            defer { url.stopAccessingSecurityScopedResource() }
+            do {
+                let resourceValues = try url.resourceValues(forKeys: [.typeIdentifierKey])
+                guard let typeIdentifier = resourceValues.typeIdentifier else {
+                    return nil
+                }
+                
+                if let utType = UTType(typeIdentifier) {
+                    if utType.conforms(to: .image) {
+                        return .image
+                    } else if utType.conforms(to: .audio) {
+                        return .audio
+                    } else if utType.conforms(to: .movie) {
+                        return .video
+                    }
+                }
+            } catch {
+                Task { @MainActor in
+                    errorMessage = "\(AppText.errorGettingResourceTypeFromURL)\(error)"
+                    loadState = .failed
                 }
             }
-        } catch {
-            errorMessage = "\(AppText.errorGettingResourceTypeFromURL)\(error)"
-            loadState = .failed
+        } else {
+            Task { @MainActor in
+                errorMessage = AppText.filesPermissionIssue
+                loadState = .failed
+            }
         }
         return nil
     }
@@ -128,6 +140,7 @@ class CreatePostBottomSheetViewModel: ObservableObject {
         loadState = .failed
     }
     
+    @MainActor
     func handleError() {
         if errorMessage.isEmpty || errorMessage.count == 0 {
             errorMessage = AppText.mediaTypeUnknown
