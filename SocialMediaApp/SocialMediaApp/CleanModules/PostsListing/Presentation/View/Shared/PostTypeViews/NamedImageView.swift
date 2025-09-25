@@ -8,8 +8,9 @@
 import SwiftUI
 import Zoomable
 
-struct PostImageView: View {
+struct NamedImageView: View {
     @ObservedObject var viewModel: ImageViewModel
+    let imageName: String
     
     var body: some View {
         Group {
@@ -39,7 +40,7 @@ struct PostImageView: View {
             }
         }
         .onAppear {
-            viewModel.fetchImage()
+            viewModel.fetchImage(imageName: imageName)
         }
     }
 }

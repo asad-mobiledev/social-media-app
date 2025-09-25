@@ -16,7 +16,7 @@ struct CommentRow: View {
                 case .text:
                     TextComment(text: comment.content, depth: comment.depth)
                 case .image:
-                    ImageComment(imageName: Images.Preview.postImage, depth: comment.depth)
+                    ImageComment(imageName: Images.postImage, depth: comment.depth)
                 case .audio:
                     AudioComment(videoURL: Bundle.main.url(forResource: "sample-video", withExtension: "mp4")!, depth: comment.depth)
                 case .video:

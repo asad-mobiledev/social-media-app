@@ -11,16 +11,27 @@ class ImageViewModel: ObservableObject {
     @Published var image: UIImage?
     @Published var errorMessage: String?
     let loadImageDataUseCase: ImageUseCase
-    let url: URL
     
-    init(loadImageDataUseCase: ImageUseCase, url: URL) {
+    init(loadImageDataUseCase: ImageUseCase) {
         self.loadImageDataUseCase = loadImageDataUseCase
-        self.url = url
     }
     
-    func fetchImage() {
+    func fetchImage(localUrl: URL) {
         do {
-            let data = try loadImageDataUseCase.loadImage(url: url)
+            let data = try loadImageDataUseCase.loadImage(url: localUrl)
+            if let image = UIImage(data: data) {
+                self.image = image
+            } else {
+                self.errorMessage = "Unable to covert Data to image"
+            }
+        } catch {
+            self.errorMessage = error.localizedDescription
+        }
+    }
+    
+    func fetchImage(imageName: String) {
+        do {
+            let data = try loadImageDataUseCase.loadImage(name: imageName)
             if let image = UIImage(data: data) {
                 self.image = image
             } else {

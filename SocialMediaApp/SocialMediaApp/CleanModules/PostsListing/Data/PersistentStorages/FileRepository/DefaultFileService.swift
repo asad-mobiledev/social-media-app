@@ -30,11 +30,11 @@ enum Directory {
 class DefaultFileService: FileService {
     let fileManager = FileManager.default
     
-    func save(mediaType: MediaType, mediaURL: URL?, directory: Directory) throws -> URL? {
+    func save(mediaType: MediaType, mediaURL: URL?, directory: Directory) throws -> String {
         guard mediaURL != nil else {
             throw RepositoryError.urlNil
         }
-        return try saveFileFrom(sourceURL: mediaURL!, folder: mediaType.rawValue, directory: directory) ?? nil
+        return try saveFileFrom(sourceURL: mediaURL!, folder: mediaType.rawValue, directory: directory) ?? ""
     }
     
     func createFolder(name: String, directory: Directory) -> URL? {
@@ -78,7 +78,7 @@ class DefaultFileService: FileService {
         }
     }
     
-    func saveFileFrom(sourceURL: URL, folder: String, directory: Directory) throws -> URL? {
+    func saveFileFrom(sourceURL: URL, folder: String, directory: Directory) throws -> String? {
         
         guard let folderURL = createFolder(name: folder, directory: directory) else { return nil }
         
@@ -93,7 +93,7 @@ class DefaultFileService: FileService {
         } else {
             throw RepositoryError.fileAlreadyExist
         }
-        return destinationURL
+        return fullFileName
     }
     
     func getData(from url: URL) throws -> Data {

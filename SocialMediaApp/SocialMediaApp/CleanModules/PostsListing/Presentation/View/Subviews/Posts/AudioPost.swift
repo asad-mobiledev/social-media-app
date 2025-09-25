@@ -10,11 +10,11 @@ import AVKit
 
 struct AudioPost: View {
     @Environment(\.appDIContainer) private var appDIContainer
-    let fileURL: URL
+    let audioName: String
     
     var body: some View {
         VStack {
-            appDIContainer.createAudioPlayerView(audioURL: fileURL)
+            appDIContainer.createAudioPlayerView(resourceName: audioName)
                 .padding()
             
             HStack {

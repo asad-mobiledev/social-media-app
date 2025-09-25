@@ -15,15 +15,15 @@ class ImageViewModule {
     }
     
     func generateSendImageView(imageURL: URL) -> SendImageView {
-        SendImageView(viewModel: self.generateImageViewModel(url: imageURL))
+        SendImageView(viewModel: self.generateImageViewModel(), imageURL: imageURL)
     }
     
-    func generatePostImageView(url: URL) -> PostImageView {
-        PostImageView(viewModel: self.generateImageViewModel(url: url))
+    func generateNamedImageView(imageName: String) -> NamedImageView {
+        NamedImageView(viewModel: self.generateImageViewModel(), imageName: imageName)
     }
     
-    private func generateImageViewModel(url: URL) -> ImageViewModel {
-        ImageViewModel(loadImageDataUseCase: generateImageUseCase(), url: url)
+    private func generateImageViewModel() -> ImageViewModel {
+        ImageViewModel(loadImageDataUseCase: generateImageUseCase())
     }
     
     private func generateImageUseCase() -> ImageUseCase {

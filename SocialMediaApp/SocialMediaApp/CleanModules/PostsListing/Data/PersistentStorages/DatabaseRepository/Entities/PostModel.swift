@@ -11,13 +11,13 @@ import Foundation
 final class PostModel {
     var id: String
     var postType: MediaType.RawValue
-    var fileURLString: String?
+    var mediaName: String
     var date: String
     
-    init(id: String, postType: MediaType.RawValue, fileURLString: String?, date: String) {
+    init(id: String, postType: MediaType.RawValue, mediaName: String, date: String) {
         self.id = id
         self.postType = postType
-        self.fileURLString = fileURLString
+        self.mediaName = mediaName
         self.date = date
     }
 }

@@ -9,11 +9,11 @@ import SwiftUI
 
 struct ImagePost: View {
     @Environment(\.appDIContainer) private var appDIContainer
-    let fileURL: URL
+    let imageName: String
     
     var body: some View {
         VStack {
-            appDIContainer.createPostImageView(url: fileURL)
+            appDIContainer.createNamedImageView(imageName: imageName)
                 .overlay(
                     Rectangle()
                         .stroke(Color.secondary, lineWidth: 4)
@@ -32,5 +32,5 @@ struct ImagePost: View {
 }
 
 #Preview {
-//    ImagePost(url: url)
+    ImagePost(imageName: "post-image")
 }
