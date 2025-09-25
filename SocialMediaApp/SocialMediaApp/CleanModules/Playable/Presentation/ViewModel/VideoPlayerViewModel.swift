@@ -29,7 +29,12 @@ class VideoPlayerViewModel: ObservableObject {
                 guard let self = self else { return }
                 
                 if url != nil {
-                    player = AVPlayer(url: url!)
+                    if url!.startAccessingSecurityScopedResource() {
+                        defer { url!.stopAccessingSecurityScopedResource() }
+                        player = AVPlayer(url: url!)
+                    } else {
+                        player = AVPlayer(url: url!)
+                    }
                 }
             }
             .store(in: &cancellables)

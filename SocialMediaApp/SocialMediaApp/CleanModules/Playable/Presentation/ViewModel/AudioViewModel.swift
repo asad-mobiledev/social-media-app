@@ -41,8 +41,14 @@ class AudioViewModel: ObservableObject {
     
     func setupAudioPlayer(url: URL) {
         do {
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.prepareToPlay()
+            if url.startAccessingSecurityScopedResource() {
+                defer { url.stopAccessingSecurityScopedResource() }
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                audioPlayer?.prepareToPlay()
+            } else {
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                audioPlayer?.prepareToPlay()
+            }
         } catch {
             print("Failed to load audio: \(error)")
         }
