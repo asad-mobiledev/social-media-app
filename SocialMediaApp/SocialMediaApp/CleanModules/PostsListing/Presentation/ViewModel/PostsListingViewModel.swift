@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 class PostsListingViewModel: ObservableObject {
     private let postsListingUseCase: PostsListingUseCase
@@ -16,10 +17,19 @@ class PostsListingViewModel: ObservableObject {
     @Published var isLoading = false
     private let pageLimit = 5
     var refreshing = false
+    private var cancellables = Set<AnyCancellable>()
     
     init(postsListingUseCase: PostsListingUseCase, paginationPolicy: PostsPaginationPolicy) {
         self.postsListingUseCase = postsListingUseCase
         self.paginationPolicy = paginationPolicy
+        
+        NotificationCenter.default.publisher(for: .didCreatePost)
+            .compactMap { $0.object as? PostEntity }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] newPost in
+                self?.posts.insert(newPost, at: 0)
+            }
+            .store(in: &cancellables)
     }
     
     func fetchPosts(isRefreshing: Bool = false) async {
@@ -60,10 +70,5 @@ class PostsListingViewModel: ObservableObject {
     
     private func canHaveMorePosts() -> Bool {
         lastFetchedPostsCount != 0
-    }
-    
-    @MainActor
-    func addNewPost(post: PostEntity) {
-        posts.insert(post, at: 0)
     }
 }

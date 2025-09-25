@@ -18,12 +18,12 @@ class SendMediaModule {
         self.fileService = fileService
     }
     
-    func generateSendMediaView(attachement: MediaAttachment, loadState: Binding<LoadState>, router: Router, postsListingViewModel: PostsListingViewModel) -> SendMediaView {
-        return SendMediaView(sendMediaViewModel: generateSendMediaViewModel(router: router, postsListingViewModel: postsListingViewModel), loadState: loadState, mediaAttachement: attachement)
+    func generateSendMediaView(attachement: MediaAttachment, loadState: Binding<LoadState>, router: Router) -> SendMediaView {
+        return SendMediaView(sendMediaViewModel: generateSendMediaViewModel(router: router), loadState: loadState, mediaAttachement: attachement)
     }
     
-    private func generateSendMediaViewModel(router: Router, postsListingViewModel: PostsListingViewModel) -> SendMediaViewModel {
-        SendMediaViewModel(sendMediaUseCase: generateSendMediaUseCase(), router: router, postsListingViewModel: postsListingViewModel)
+    private func generateSendMediaViewModel(router: Router) -> SendMediaViewModel {
+        SendMediaViewModel(sendMediaUseCase: generateSendMediaUseCase(), router: router)
     }
     
     private func generateSendMediaUseCase() -> SendMediaUseCase {

@@ -31,3 +31,7 @@ extension Color {
         self.init(red: r, green: g, blue: b)
     }
 }
+
+extension Notification.Name {
+    static let didCreatePost = Notification.Name("didCreatePost")
+}

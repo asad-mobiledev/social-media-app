@@ -14,12 +14,10 @@ class SendMediaViewModel: ObservableObject {
     @Published var errorMessage = ""
     @Published var isLoading = false
     private let router: Router
-    private let postsListingViewModel: PostsListingViewModel
     
-    init(sendMediaUseCase: SendMediaUseCase, router: Router, postsListingViewModel: PostsListingViewModel) {
+    init(sendMediaUseCase: SendMediaUseCase, router: Router) {
         self.sendMediaUseCase = sendMediaUseCase
         self.router = router
-        self.postsListingViewModel = postsListingViewModel
     }
     
     func post(mediaType: MediaType, mediaURL: URL?) {
@@ -27,7 +25,7 @@ class SendMediaViewModel: ObservableObject {
             await MainActor.run { isLoading = true }
             do {
                 let postEntity = try await sendMediaUseCase.sendMedia(mediaType: mediaType, mediaURL: mediaURL)
-                await postsListingViewModel.addNewPost(post: postEntity)
+                NotificationCenter.default.post(name: .didCreatePost, object: postEntity)
                 await self.router.dismissSheet()
             } catch {
                 await MainActor.run { self.errorMessage = error.localizedDescription }
