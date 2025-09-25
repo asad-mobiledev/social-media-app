@@ -89,7 +89,16 @@ class DefaultFileService: FileService {
         let destinationURL = folderURL.appendingPathComponent(fullFileName)
         
         if !fileManager.fileExists(atPath: destinationURL.path) {
-            try fileManager.copyItem(at: sourceURL, to: destinationURL)
+            do {
+                try fileManager.copyItem(at: sourceURL, to: destinationURL)
+            } catch {
+                if sourceURL.startAccessingSecurityScopedResource() {
+                    defer { sourceURL.stopAccessingSecurityScopedResource() }
+                    try fileManager.copyItem(at: sourceURL, to: destinationURL)
+                } else {
+                    throw CustomError.message(AppText.filesPermissionIssue)
+                }
+            }
         } else {
             throw RepositoryError.fileAlreadyExist
         }
@@ -97,7 +106,17 @@ class DefaultFileService: FileService {
     }
     
     func getData(from url: URL) throws -> Data {
-        return try Data(contentsOf: url)
+        do {
+            return try Data(contentsOf: url)
+        } catch {
+            if url.startAccessingSecurityScopedResource() {
+                defer { url.stopAccessingSecurityScopedResource() }
+                return try Data(contentsOf: url)
+            } else {
+                throw CustomError.message(AppText.failLoadDataAtGivenURL)
+            }
+        }
+        
     }
 }
 

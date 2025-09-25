@@ -90,38 +90,46 @@ class CreatePostBottomSheetViewModel: ObservableObject {
             loadState = .failed
         }
     }
-    
-    func mediaType(url: URL) -> MediaType? {
-        if url.startAccessingSecurityScopedResource() {
-            defer { url.stopAccessingSecurityScopedResource() }
-            do {
-                let resourceValues = try url.resourceValues(forKeys: [.typeIdentifierKey])
-                guard let typeIdentifier = resourceValues.typeIdentifier else {
-                    return nil
-                }
-                
-                if let utType = UTType(typeIdentifier) {
-                    if utType.conforms(to: .image) {
-                        return .image
-                    } else if utType.conforms(to: .audio) {
-                        return .audio
-                    } else if utType.conforms(to: .movie) {
-                        return .video
-                    }
-                }
-            } catch {
-                Task { @MainActor in
-                    errorMessage = "\(AppText.errorGettingResourceTypeFromURL)\(error)"
-                    loadState = .failed
-                }
-            }
-        } else {
-            Task { @MainActor in
-                errorMessage = AppText.filesPermissionIssue
-                loadState = .failed
+    func getMediaTypeFrom(url: URL) throws -> MediaType? {
+        let resourceValues = try url.resourceValues(forKeys: [.typeIdentifierKey])
+        guard let typeIdentifier = resourceValues.typeIdentifier else {
+            return nil
+        }
+        
+        if let utType = UTType(typeIdentifier) {
+            if utType.conforms(to: .image) {
+                return .image
+            } else if utType.conforms(to: .audio) {
+                return .audio
+            } else if utType.conforms(to: .movie) {
+                return .video
             }
         }
         return nil
+    }
+    func mediaType(url: URL) -> MediaType? {
+            do {
+                return try getMediaTypeFrom(url: url)
+            } catch {
+                do {
+                    return try mediaTypeForAccessingSecurityScopedResource(url: url)
+                } catch {
+                    Task { @MainActor in
+                        errorMessage = "\(error)"
+                        loadState = .failed
+                    }
+                }
+            }
+        return nil
+    }
+    
+    func mediaTypeForAccessingSecurityScopedResource(url: URL) throws -> MediaType? {
+        if url.startAccessingSecurityScopedResource() {
+            defer { url.stopAccessingSecurityScopedResource() }
+            return try getMediaTypeFrom(url: url)
+        } else {
+            throw CustomError.message(AppText.filesPermissionIssue)
+        }
     }
     
     func validateAndSetMedia(url: URL?) async {

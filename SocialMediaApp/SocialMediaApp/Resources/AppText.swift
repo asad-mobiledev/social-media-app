@@ -29,4 +29,5 @@ struct AppText {
     static let unableToInitializeFolderURL = "unable to initialize url for folder"
     static let failLoadResourceURL = "Could not load resource url."
     static let filesPermissionIssue = "Failed to access file: permission denied."
+    static let failLoadDataAtGivenURL = "Could not load data for given resource url."
 }
