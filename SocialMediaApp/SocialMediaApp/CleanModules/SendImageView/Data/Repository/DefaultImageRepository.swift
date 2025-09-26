@@ -19,6 +19,6 @@ class DefaultImageRepository: ImageRepository {
     }
     
     func loadImage(name: String) throws -> Data {
-        try fileService.getDataOf(fileName:name, folder: MediaType.image.rawValue, directory: .documents)
+        try fileService.getDataOf(fileName:name, folder: MediaType.image.rawValue)
     }
 }

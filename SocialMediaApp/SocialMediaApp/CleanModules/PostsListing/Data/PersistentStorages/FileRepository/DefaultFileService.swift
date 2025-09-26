@@ -29,15 +29,20 @@ enum Directory {
 
 class DefaultFileService: FileService {
     let fileManager = FileManager.default
+    let directory: Directory
     
-    func save(mediaType: MediaType, mediaURL: URL?, directory: Directory) throws -> String {
+    init(directory: Directory) {
+        self.directory = directory
+    }
+    
+    func save(mediaType: MediaType, mediaURL: URL?) throws -> String {
         guard mediaURL != nil else {
             throw RepositoryError.urlNil
         }
-        return try saveFileFrom(sourceURL: mediaURL!, folder: mediaType.rawValue, directory: directory) ?? ""
+        return try saveFileFrom(sourceURL: mediaURL!, folder: mediaType.rawValue) ?? ""
     }
     
-    func createFolder(name: String, directory: Directory) -> URL? {
+    func createFolder(name: String) -> URL? {
         guard let baseURL = directory.url else { return nil }
         let folderURL = baseURL.appendingPathComponent(name)
         
@@ -52,7 +57,7 @@ class DefaultFileService: FileService {
         return folderURL
     }
     
-    func getDataOf(fileName: String, folder: String, directory: Directory) throws -> Data {
+    func getDataOf(fileName: String, folder: String) throws -> Data {
         guard let folderURL = directory.url?.appendingPathComponent(folder) else {
             throw CustomError.message(AppText.unableToInitializeFolderURL + ": \(folder)")
         }
@@ -60,13 +65,13 @@ class DefaultFileService: FileService {
         return try Data(contentsOf: fileURL)
     }
     
-    func getFileURL(name: String, folder: String, directory: Directory) -> URL? {
+    func getFileURL(name: String, folder: String) -> URL? {
         var folderURL = directory.url
         folderURL = folderURL?.appendingPathComponent(folder)
         return folderURL?.appendingPathComponent(name)
     }
     
-    func listFiles(folder: String, directory: Directory) -> [URL] {
+    func listFiles(folder: String) -> [URL] {
         guard let folderURL = directory.url?.appendingPathComponent(folder) else { return [] }
 
 
@@ -78,9 +83,9 @@ class DefaultFileService: FileService {
         }
     }
     
-    func saveFileFrom(sourceURL: URL, folder: String, directory: Directory) throws -> String? {
+    func saveFileFrom(sourceURL: URL, folder: String) throws -> String? {
         
-        guard let folderURL = createFolder(name: folder, directory: directory) else { return nil }
+        guard let folderURL = createFolder(name: folder) else { return nil }
         
         let sourceFileExtension = sourceURL.pathExtension
         let newFileName = UUID().uuidString

@@ -16,6 +16,6 @@ class DefaultPlayableRepository: PlayableRepository {
     }
     
     func load(name: String, mediaType: MediaType) -> URL? {
-        fileService.getFileURL(name: name, folder: mediaType.rawValue, directory: .documents)
+        fileService.getFileURL(name: name, folder: mediaType.rawValue)
     }
 }

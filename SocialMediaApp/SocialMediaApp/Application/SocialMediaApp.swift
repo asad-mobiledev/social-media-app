@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct SocialMediaApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    let fileService: FileService = DefaultFileService()
+    let fileService: FileService = DefaultFileService(directory: .documents)
     
     var body: some Scene {
         WindowGroup {

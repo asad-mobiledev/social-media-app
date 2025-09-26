@@ -23,7 +23,7 @@ final class DefaultPostsRepository {
 
 extension DefaultPostsRepository: PostsListingRepository {
     func createPost(mediaType: MediaType, mediaURL: URL?) async throws -> PostDTO {
-        let fileName = try filesRespository.save(mediaType: mediaType, mediaURL: mediaURL, directory: .documents)
+        let fileName = try filesRespository.save(mediaType: mediaType, mediaURL: mediaURL)
         let post = try await networkRepository.createPost(mediaType: mediaType, mediaName: fileName)
         do {
             try await databaseService.save(item: post.toPostModel())
