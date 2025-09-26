@@ -9,11 +9,11 @@ import SwiftUI
 
 struct CommentButton: View {
     @EnvironmentObject var router: Router
-    let type: MediaType
+    let post: PostEntity
     
     var body: some View {
         Button(AppText.comment) {
-            router.navigate(to: .detail(type: type))
+            router.navigate(to: .detail(post: post))
         }
         .padding(.vertical, 8)
         .padding(.horizontal, 10)
@@ -25,5 +25,5 @@ struct CommentButton: View {
 }
 
 #Preview {
-    CommentButton(type: .image)
+//    CommentButton(post: post)
 }

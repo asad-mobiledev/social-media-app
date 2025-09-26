@@ -20,11 +20,11 @@ struct PostsListingScreen: View {
                             VStack{
                                 switch post.postType {
                                 case .image:
-                                    ImagePost(imageName: post.mediaName)
+                                    ImagePost(post: post)
                                 case .audio:
-                                    AudioPost(audioName: post.mediaName)
+                                    AudioPost(post: post)
                                 case .video:
-                                    VideoPost(videoName: post.mediaName)
+                                    VideoPost(post: post)
                                 }
                             }
                             .onAppear {

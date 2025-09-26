@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct VideoPost: View {
-    let videoName: String
+    let post: PostEntity
     
     var body: some View {
         VStack {
-            VideoView(videoName: videoName)
+            VideoView(videoName: post.mediaName)
             HStack {
                 Spacer()
-                CommentButton(type: .video)
+                CommentButton(post: post)
                     .padding(.trailing, 5)
             }
             Rectangle()

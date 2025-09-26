@@ -10,26 +10,26 @@ import AVKit
 
 struct PostDetailScreen: View {
     @Environment(\.appDIContainer) private var appDIContainer
-    let type: MediaType
+    @StateObject var postDetailViewModel: PostDetailViewModel
     @State private var showBottomSheet = false
 
     var body: some View {
         VStack(spacing: 0) {
             
             ScrollView {
-                switch type {
+                switch postDetailViewModel.post.postType {
                 case .image:
-                    appDIContainer.createNamedImageView(imageName: "post-image")
+                    appDIContainer.createNamedImageView(imageName: postDetailViewModel.post.mediaName)
                         .overlay(
                             Rectangle()
                                 .stroke(Color.secondary, lineWidth: 4)
                         )
                 case .video:
                     let videoURL = Bundle.main.url(forResource: "sample-video", withExtension: "mp4")!
-                    VideoView(videoName: "")
+                    VideoView(videoName: postDetailViewModel.post.mediaName)
                 case .audio:
                     let audioURL = Bundle.main.url(forResource: "sample-video", withExtension: "mp4")!
-                    AudioView(resourceName: "sample-video")
+                    AudioView(resourceName: postDetailViewModel.post.mediaName)
                 }
                 CommentsView(comments: [
                     CommentModel(content: "This is the first comment. This is the first comment. This is the first comment.", replies: [
@@ -65,5 +65,5 @@ struct PostDetailScreen: View {
 }
 
 #Preview {
-    PostDetailScreen(type: .video)
+//    PostDetailScreen(type: .video)
 }

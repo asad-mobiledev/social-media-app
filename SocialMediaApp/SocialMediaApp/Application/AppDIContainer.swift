@@ -62,9 +62,9 @@ class AppDIContainer {
     func createSendVideoView(videoURL: URL) -> some View {
         SendVideoView(videoURL: videoURL)
     }
-    func createPostDetailScreen(type: MediaType) -> some View {
+    func createPostDetailScreen(post: PostEntity) -> some View {
         let postDetailModule = PostDetailModule()
-        return postDetailModule.generatePostDetailScreen(type: type)
+        return postDetailModule.generatePostDetailScreen(post: post)
     }
     
     func createSendImageView(imageURL: URL) -> some View {

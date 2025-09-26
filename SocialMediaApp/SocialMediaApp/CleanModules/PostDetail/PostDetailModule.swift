@@ -7,7 +7,11 @@
 
 class PostDetailModule {
     
-    func generatePostDetailScreen(type: MediaType) -> PostDetailScreen {
-        PostDetailScreen(type: type)
+    func generatePostDetailScreen(post: PostEntity) -> PostDetailScreen {
+        PostDetailScreen(postDetailViewModel: self.generatePostDetailViewModel(post: post))
+    }
+    
+    private func generatePostDetailViewModel(post: PostEntity) -> PostDetailViewModel {
+        PostDetailViewModel(post: post)
     }
 }

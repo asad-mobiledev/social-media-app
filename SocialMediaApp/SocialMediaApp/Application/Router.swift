@@ -14,7 +14,7 @@ final class Router: ObservableObject {
     
     enum AppRoute: Hashable {
         case postsListing
-        case detail(type: MediaType)
+        case detail(post: PostEntity)
     }
     
     enum SheetRoute: Identifiable {

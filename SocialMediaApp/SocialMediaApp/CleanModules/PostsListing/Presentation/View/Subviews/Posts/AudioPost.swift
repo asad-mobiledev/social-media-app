@@ -10,16 +10,16 @@ import AVKit
 
 struct AudioPost: View {
     @Environment(\.appDIContainer) private var appDIContainer
-    let audioName: String
+    let post: PostEntity
     
     var body: some View {
         VStack {
-            appDIContainer.createAudioPlayerView(resourceName: audioName)
+            appDIContainer.createAudioPlayerView(resourceName: post.mediaName)
                 .padding()
             
             HStack {
                 Spacer()
-                CommentButton(type: .audio)
+                CommentButton(post: post)
                     .padding(.trailing, 5)
             }
             Rectangle()

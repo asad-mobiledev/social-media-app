@@ -9,14 +9,14 @@ import SwiftUI
 
 struct ImagePost: View {
     @Environment(\.appDIContainer) private var appDIContainer
-    let imageName: String
+    let post: PostEntity
     
     var body: some View {
         VStack {
-            appDIContainer.createNamedImageView(imageName: imageName)
+            appDIContainer.createNamedImageView(imageName: post.mediaName)
             HStack {
                 Spacer()
-                CommentButton(type: .image)
+                CommentButton(post: post)
                     .padding(.trailing, 5)
                     .padding(.bottom, 5)
             }
@@ -30,5 +30,5 @@ struct ImagePost: View {
 }
 
 #Preview {
-    ImagePost(imageName: "post-image")
+//    ImagePost(imageName: "post-image")
 }
