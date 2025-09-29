@@ -118,7 +118,7 @@ class DefaultNetworkRepository: NetworkRepository {
         
         let firstoreComments: [FirestoreCommentssDocumentWrapper] = try await apiDataTransferService.request(request: fetchCommentsNetworkRequest)
         let comments = firstoreComments.compactMap { comment in
-            if comment.document.fields.postId?.stringValue == postId {
+            if comment.document.fields.postId?.stringValue == postId && comment.document.fields.parentCommentId == nil{
                 return CommentDTO(from: comment.document)
             }
             return nil
