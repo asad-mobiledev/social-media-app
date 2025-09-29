@@ -39,7 +39,7 @@ class DefaultNetworkRepository: NetworkRepository {
         
         let postsListNetworkRequest = DefaultNetworkRequest(path: AppConfiguration.APIEndPoint.fetchPosts, method: .post, headerParameters: ["Authorization": "Bearer \(AppConfiguration.token)", "Content-Type": "application/json"], bodyParameters: body)
         
-        let firstorePosts: [FirestoreDocumentWrapper] = try await apiDataTransferService.request(request: postsListNetworkRequest)
+        let firstorePosts: [FirestorePostsDocumentWrapper] = try await apiDataTransferService.request(request: postsListNetworkRequest)
         let posts = firstorePosts.compactMap { post in
             PostDTO(from: post.document)
         }

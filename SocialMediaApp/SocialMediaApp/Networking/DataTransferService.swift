@@ -47,7 +47,7 @@ final class DefaultDataTransferService: DataTransferService {
     func decodeFirestoreResponse<T>(data: Data) throws -> T {
         do {
             // We now decode into an array of our new wrapper struct.
-            let documentWrappers = try JSONDecoder().decode([FirestoreDocumentWrapper].self, from: data)
+            let documentWrappers = try JSONDecoder().decode([FirestorePostsDocumentWrapper].self, from: data)
             
             // Then, we map the documents from the wrappers to our clean PostDTO model.
             let posts = documentWrappers.compactMap { wrapper in
