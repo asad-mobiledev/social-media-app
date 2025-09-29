@@ -53,7 +53,7 @@ class DefaultPostCommentRepository: PostCommentRepository {
             )
             descriptor.fetchLimit = limit
             let commentModels = try await databaseService.fetch(descriptor: descriptor)
-            comments = commentModels.map { CommentDTO(from: $0)! }
+            comments = commentModels.map { CommentDTO(from: $0) }
         }
         return comments
     }

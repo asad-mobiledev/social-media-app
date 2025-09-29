@@ -16,17 +16,22 @@ struct CommentDTO: Codable, Identifiable {
     var mediaName: String? // Media Name could be nil if comment is of text type.
     let createdAt: String
     
-    init?(from commentModel: PostCommentModel) {
+    init?(from firestoreDocument: FirestoreCommentDocument) {
+        guard let id = firestoreDocument.name.components(separatedBy: "/").last,
+              let postId = firestoreDocument.fields.postId?.stringValue,
+              let type = firestoreDocument.fields.type?.stringValue,
+              let createdAt = firestoreDocument.fields.createdAt?.stringValue else {
+            return nil
+        }
         
+        self.id = id
+        self.postId = postId
+        self.type = type
+        self.createdAt = createdAt
         
-        self.id = commentModel.id
-        self.type = commentModel.type
-        self.mediaName = commentModel.mediaName
-        self.createdAt = commentModel.createdAt
-        
-        self.postId = commentModel.postId
-        self.parentCommentId = commentModel.parentCommentId
-        self.text = commentModel.text
+        self.mediaName = firestoreDocument.fields.mediaName?.stringValue
+        self.parentCommentId = firestoreDocument.fields.parentCommentId?.stringValue
+        self.text = firestoreDocument.fields.text?.stringValue
     }
     
     init(id: String?, postId: String, parentCommentId: String?, text: String?, type: String, mediaName: String?, createdAt: String) {
@@ -50,5 +55,17 @@ extension CommentDTO {
 extension CommentDTO {
     func toCommentModel() -> PostCommentModel {
         PostCommentModel(id: id ?? UUID().uuidString, postId: postId, parentCommentId: parentCommentId, text: text, type: type, mediaName: mediaName, createdAt: createdAt)
+    }
+}
+
+extension CommentDTO {
+    init(from model: PostCommentModel) {
+        self.id = model.id
+        self.postId = model.postId
+        self.parentCommentId = model.parentCommentId
+        self.text = model.text
+        self.type = model.type
+        self.mediaName = model.mediaName
+        self.createdAt = model.createdAt
     }
 }

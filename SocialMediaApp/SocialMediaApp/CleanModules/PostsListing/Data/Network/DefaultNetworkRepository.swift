@@ -116,6 +116,10 @@ class DefaultNetworkRepository: NetworkRepository {
         
         let fetchCommentsNetworkRequest = DefaultNetworkRequest(path: AppConfiguration.APIEndPoint.fetchComments, method: .post, headerParameters: ["Authorization": "Bearer \(AppConfiguration.token)", "Content-Type": "application/json"], bodyParameters: body)
         
-        return try await apiDataTransferService.request(request: fetchCommentsNetworkRequest)
+        let firstoreComments: [FirestoreCommentssDocumentWrapper] = try await apiDataTransferService.request(request: fetchCommentsNetworkRequest)
+        let comments = firstoreComments.compactMap { comment in
+            CommentDTO(from: comment.document)
+        }
+        return comments
     }
 }
