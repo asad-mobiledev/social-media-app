@@ -25,7 +25,7 @@ final class DefaultDataTransferService: DataTransferService {
     /// - Returns: Decodable type object
     func request<T>(request: NetworkRequest) async throws -> T where T : Decodable {
         let data = try await networkManager.fetch(request: request)
-        return request.server == .firebase ? try decodeFirestoreResponse(data: data) : try decode(data: data)
+        return try decode(data: data)
     }
     
     func request(request: NetworkRequest) async throws {

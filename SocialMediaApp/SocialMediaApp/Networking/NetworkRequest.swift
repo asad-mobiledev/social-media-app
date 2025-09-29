@@ -16,18 +16,12 @@ enum HTTPMethod: String {
     case delete  = "DELETE"
 }
 
-enum ServerType: String {
-    case firebase
-    case custom
-}
-
 protocol NetworkRequest {
     var path: String {get set}
     var method: HTTPMethod {get set}
     var headerParameters: [String: String] {get set}
     var queryParameters: [String: Any] {get set}
     var bodyParameters: [String: Any] {get set}
-    var server: ServerType {get set}
 }
 
 final class DefaultNetworkRequest: NetworkRequest {
@@ -37,18 +31,15 @@ final class DefaultNetworkRequest: NetworkRequest {
     var headerParameters: [String: String]
     var queryParameters: [String: Any]
     var bodyParameters: [String: Any]
-    var server: ServerType
     init(path: String,
          method: HTTPMethod = .get,
          headerParameters: [String: String] = [:],
          queryParameters: [String: Any] = [:],
-         bodyParameters: [String: Any] = [:],
-         server: ServerType = .firebase) {
+         bodyParameters: [String: Any] = [:]) {
         self.path = path
         self.method = method
         self.headerParameters = headerParameters
         self.queryParameters = queryParameters
         self.bodyParameters = bodyParameters
-        self.server = server
     }
 }
