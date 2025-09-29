@@ -23,8 +23,8 @@ struct RootView: View {
                             switch destination {
                             case .postsListing:
                                 container.postsListingScreen
-                            case .detail(let post):
-                                container.createPostDetailScreen(post: post)
+                            case .postCommments(let post):
+                                container.createPostCommentScreen(post: post)
                             }
                         }
                 }

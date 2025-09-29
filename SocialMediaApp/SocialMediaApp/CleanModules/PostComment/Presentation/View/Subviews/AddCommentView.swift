@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct AddCommentView: View {
+    @ObservedObject var postCommentsViewModel: PostCommentsViewModel
     @Binding var showBottomSheet: Bool
     
     var body: some View {
         HStack(alignment: .center){
-            ResizableTextEditView()
+            CommentTextEditView(postCommentsViewModel: postCommentsViewModel)
             
             Button(action: {
                 showBottomSheet = true
@@ -23,6 +24,9 @@ struct AddCommentView: View {
             }
             
             Button(action: {
+                Task {
+                    await postCommentsViewModel.addComment()
+                }
             }) {
                 SendImage()
                     .foregroundColor(Color.primary)
@@ -34,9 +38,9 @@ struct AddCommentView: View {
 }
 
 #Preview {
-    StatefulPreviewWrapper(false) { binding in
-            AddCommentView(showBottomSheet: binding)
-        }
+//    StatefulPreviewWrapper(false) { binding in
+//            AddCommentView(showBottomSheet: binding)
+//        }
 }
 
 

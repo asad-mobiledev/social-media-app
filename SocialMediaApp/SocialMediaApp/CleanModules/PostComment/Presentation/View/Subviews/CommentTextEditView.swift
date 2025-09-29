@@ -7,20 +7,19 @@
 
 import SwiftUI
 
-struct ResizableTextEditView: View {
-    @State private var text: String = AppText.typeHere
-    
+struct CommentTextEditView: View {
+    @ObservedObject var postCommentsViewModel: PostCommentsViewModel 
     @FocusState private var isFocused: Bool
     
     var body: some View {
         
-        TextEditor(text: $text)
+        TextEditor(text: $postCommentsViewModel.commentText)
             .focused($isFocused)
             .onChange(of: isFocused) { _, isNowFocused in
-                if isNowFocused && text == AppText.typeHere {
-                    text = ""
-                } else if !isNowFocused && text == "" {
-                    text = AppText.typeHere
+                if isNowFocused && postCommentsViewModel.commentText == AppText.typeHere {
+                    postCommentsViewModel.commentText = ""
+                } else if !isNowFocused && postCommentsViewModel.commentText == "" {
+                    postCommentsViewModel.commentText = AppText.typeHere
                 }
             }
             .frame(maxHeight: 50)
@@ -33,5 +32,5 @@ struct ResizableTextEditView: View {
 }
 
 #Preview {
-    ResizableTextEditView()
+//    CommentTextEditView()
 }

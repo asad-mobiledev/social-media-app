@@ -13,7 +13,7 @@ struct CommentButton: View {
     
     var body: some View {
         Button(AppText.comment) {
-            router.navigate(to: .detail(post: post))
+            router.navigate(to: .postCommments(post: post))
         }
         .padding(.vertical, 8)
         .padding(.horizontal, 10)

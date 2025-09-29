@@ -10,6 +10,7 @@ import Foundation
 
 protocol DataTransferService {
     func request<T: Decodable>(request: NetworkRequest) async throws -> T
+    func request(request: NetworkRequest) async throws
 }
 
 final class DefaultDataTransferService: DataTransferService {
@@ -25,6 +26,10 @@ final class DefaultDataTransferService: DataTransferService {
     func request<T>(request: NetworkRequest) async throws -> T where T : Decodable {
         let data = try await networkManager.fetch(request: request)
         return request.server == .firebase ? try decodeFirestoreResponse(data: data) : try decode(data: data)
+    }
+    
+    func request(request: NetworkRequest) async throws {
+        _ = try await networkManager.fetch(request: request)
     }
     
     /// Method to decode data using JSONDecoder

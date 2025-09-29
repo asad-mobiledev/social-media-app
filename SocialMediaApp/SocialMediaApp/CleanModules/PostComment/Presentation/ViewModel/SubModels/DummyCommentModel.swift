@@ -6,13 +6,10 @@
 //
 import Foundation
 
-enum CommentType {
-    case text, image, audio, video
-}
-struct CommentModel: Identifiable {
+struct DummyCommentModel: Identifiable {
     let id = UUID()
     let content: String
-    var replies: [CommentModel] = []
+    var replies: [DummyCommentModel] = []
     var depth = 0
     let type: CommentType
 }

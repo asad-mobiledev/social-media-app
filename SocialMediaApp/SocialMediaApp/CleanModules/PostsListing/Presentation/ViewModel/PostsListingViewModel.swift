@@ -10,7 +10,7 @@ import Combine
 
 class PostsListingViewModel: ObservableObject {
     private let postsListingUseCase: PostsListingUseCase
-    private let paginationPolicy: PostsPaginationPolicy
+    private let paginationPolicy: PaginationPolicy
     @Published var posts: [PostEntity] = []
     var lastFetchedPostsCount = -1
     @Published var errorMessage: String = ""
@@ -19,7 +19,7 @@ class PostsListingViewModel: ObservableObject {
     var refreshing = false
     private var cancellables = Set<AnyCancellable>()
     
-    init(postsListingUseCase: PostsListingUseCase, paginationPolicy: PostsPaginationPolicy) {
+    init(postsListingUseCase: PostsListingUseCase, paginationPolicy: PaginationPolicy) {
         self.postsListingUseCase = postsListingUseCase
         self.paginationPolicy = paginationPolicy
         

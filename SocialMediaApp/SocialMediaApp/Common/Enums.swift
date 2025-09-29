@@ -11,6 +11,10 @@ enum MediaType: String, Codable {
     case image, video, audio
 }
 
+enum CommentType: String, Codable {
+    case text, image, video, audio
+}
+
 enum LoadState {
     case unknown, loading, loaded(URL?), failed
 }

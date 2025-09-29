@@ -14,7 +14,7 @@ final class Router: ObservableObject {
     
     enum AppRoute: Hashable {
         case postsListing
-        case detail(post: PostEntity)
+        case postCommments(post: PostEntity)
     }
     
     enum SheetRoute: Identifiable {

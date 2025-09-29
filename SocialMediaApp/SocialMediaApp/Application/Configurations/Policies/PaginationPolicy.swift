@@ -5,10 +5,10 @@
 //  Created by Asad Mehmood on 15/09/2025.
 //
 
-protocol PostsPaginationPolicy {
+protocol PaginationPolicy {
     var itemsPerPage: Int { get }
 }
 
-struct DefaultPostsPaginationPolicy: PostsPaginationPolicy {
+struct DefaultPaginationPolicy: PaginationPolicy {
     var itemsPerPage: Int = 5
 }

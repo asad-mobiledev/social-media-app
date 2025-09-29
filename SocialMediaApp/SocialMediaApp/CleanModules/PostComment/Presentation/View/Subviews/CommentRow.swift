@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CommentRow: View {
-    let comment: CommentModel
+    let comment: DummyCommentModel
     var body: some View {
         VStack {
             HStack {
@@ -36,10 +36,10 @@ struct CommentRow: View {
 }
 
 #Preview {
-    CommentRow(comment: CommentModel(content: "This is the first comment. This is the first comment. This is the first comment.", replies: [
-        CommentModel(content: "Reply to first comment. Reply to first comment. Reply to first comment.", replies: [
-            CommentModel(content: "Reply to reply. Reply to reply. Reply to reply. Reply to reply.", depth: 2, type: CommentType.video)
+    CommentRow(comment: DummyCommentModel(content: "This is the first comment. This is the first comment. This is the first comment.", replies: [
+        DummyCommentModel(content: "Reply to first comment. Reply to first comment. Reply to first comment.", replies: [
+            DummyCommentModel(content: "Reply to reply. Reply to reply. Reply to reply. Reply to reply.", depth: 2, type: CommentType.video)
         ], depth: 1, type: CommentType.image),
-        CommentModel(content: "Another reply to first comment. Another reply to first comment. Another reply to first comment. Another reply to first comment.", depth: 1, type: CommentType.audio)
+        DummyCommentModel(content: "Another reply to first comment. Another reply to first comment. Another reply to first comment. Another reply to first comment.", depth: 1, type: CommentType.audio)
     ], type: CommentType.text))
 }

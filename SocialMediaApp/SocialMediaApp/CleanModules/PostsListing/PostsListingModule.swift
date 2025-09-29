@@ -22,7 +22,7 @@ class PostsListingModule {
     }
     
     private func generatePostsListingViewModel() -> PostsListingViewModel {
-        PostsListingViewModel(postsListingUseCase: generatePostsListingUseCase(), paginationPolicy: DefaultPostsPaginationPolicy(itemsPerPage: 5))
+        PostsListingViewModel(postsListingUseCase: generatePostsListingUseCase(), paginationPolicy: DefaultPaginationPolicy(itemsPerPage: 5))
     }
     
     private func generatePostsListingUseCase() -> PostsListingUseCase {
