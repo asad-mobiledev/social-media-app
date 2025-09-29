@@ -7,5 +7,5 @@
 
 protocol PostCommentRepository {
     func addComment(commentEntity: CommentEntity) async throws -> CommentDTO
-    func getComments(limit: Int, startAt: String?) async throws -> [CommentDTO]
+    func getComments(postId: String, limit: Int, startAt: String?) async throws -> [CommentDTO]
 }

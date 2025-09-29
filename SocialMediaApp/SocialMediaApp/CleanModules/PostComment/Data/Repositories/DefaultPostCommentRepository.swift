@@ -25,10 +25,10 @@ class DefaultPostCommentRepository: PostCommentRepository {
         return try await networkRepository.addComment(commentEntity: commentEntity)
     }
     
-    func getComments(limit: Int, startAt: String?) async throws -> [CommentDTO] {
+    func getComments(postId: String, limit: Int, startAt: String?) async throws -> [CommentDTO] {
         var comments: [CommentDTO] = []
         do {
-            comments = try await networkRepository.getComments(limit: limit, startAt: startAt)
+            comments = try await networkRepository.getComments(postId: postId, limit: limit, startAt: startAt)
             do {
                 if startAt == nil {
                     do {

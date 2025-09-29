@@ -62,7 +62,7 @@ class PostCommentsViewModel: ObservableObject {
             if isRefreshing {
                 startIndex = nil
             }
-            let comments = try await postCommentUseCase.fetchComments(limit: 5, startAt: startIndex)
+            let comments = try await postCommentUseCase.fetchComments(postId: post.id, limit: 5, startAt: startIndex)
             lastFetchedCommentsCount = comments.count
             await MainActor.run {
                 if isRefreshing {

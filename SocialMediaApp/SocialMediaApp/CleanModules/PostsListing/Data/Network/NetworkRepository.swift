@@ -9,5 +9,5 @@ protocol NetworkRepository {
     func createPost(mediaType: MediaType, mediaName: String) async throws -> PostDTO
     func getPosts(limit: Int, startAt: String?) async throws -> [PostDTO]
     func addComment(commentEntity: CommentEntity) async throws -> CommentDTO
-    func getComments(limit: Int, startAt: String?) async throws -> [CommentDTO]
+    func getComments(postId: String, limit: Int, startAt: String?) async throws -> [CommentDTO]
 }

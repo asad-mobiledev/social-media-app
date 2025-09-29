@@ -92,7 +92,7 @@ class DefaultNetworkRepository: NetworkRepository {
         return CommentDTO(id: commentEntity.id, postId: commentEntity.postId, parentCommentId: commentEntity.parentCommentId, text: commentEntity.text, type: commentEntity.type, mediaName: commentEntity.mediaName, createdAt: commentEntity.createdAt)
     }
     
-    func getComments(limit: Int, startAt: String?) async throws -> [CommentDTO] {
+    func getComments(postId: String, limit: Int, startAt: String?) async throws -> [CommentDTO] {
         
         // Firebase Needs following Query Params
         var structuredQuery: [String: Any] = [
@@ -118,7 +118,10 @@ class DefaultNetworkRepository: NetworkRepository {
         
         let firstoreComments: [FirestoreCommentssDocumentWrapper] = try await apiDataTransferService.request(request: fetchCommentsNetworkRequest)
         let comments = firstoreComments.compactMap { comment in
-            CommentDTO(from: comment.document)
+            if comment.document.fields.postId?.stringValue == postId {
+                return CommentDTO(from: comment.document)
+            }
+            return nil
         }
         return comments
     }
