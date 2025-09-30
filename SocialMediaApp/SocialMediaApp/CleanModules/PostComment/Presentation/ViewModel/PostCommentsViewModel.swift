@@ -29,10 +29,10 @@ class PostCommentsViewModel: ObservableObject {
         self.paginationPolicy = paginationPolicy
     }
     
-    func addComment() async {
+    func addComment(parentCommentId: String? = nil) async {
         let id = UUID().uuidString
         let postID = post.id
-        let parentCommentId: String? = nil
+        let parentCommentId: String? = parentCommentId
         let commentText = commentText
         let mediaType = CommentType.text.rawValue
         let createdAt = Utility.getISO8601Date()
@@ -42,7 +42,7 @@ class PostCommentsViewModel: ObservableObject {
             return
         }
         
-        let commentEntity = CommentEntity(id: id, postId: postID, parentCommentId: parentCommentId, text: commentText, type: mediaType, mediaName: mediaName, createdAt: createdAt)
+        let commentEntity = CommentEntity(id: id, postId: postID, parentCommentId: parentCommentId, text: commentText, type: mediaType, mediaName: mediaName, createdAt: createdAt, replyCount: "0")
         do {
             let comment = try await postCommentUseCase.addComment(comment: commentEntity)
             print(comment)

@@ -14,5 +14,7 @@ struct AppConfiguration {
         static let createPost = baseURL + "/posts"
         static let addComment = baseURL + "/comments"
         static let fetchComments = baseURL + ":runQuery"
+        static let fetchAComment = baseURL + "/comments/"
+        static let updateComment = baseURL + "/comments/"
     }
 }

@@ -15,5 +15,6 @@ struct CommentEntity: Identifiable {
     let type: CommentType.RawValue
     var mediaName: String? // Media Name could be nil if comment is of text type.
     let createdAt: String
+    let replyCount: String?
 }
 
