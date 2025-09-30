@@ -27,13 +27,10 @@ struct SendImageView: View {
                     .foregroundStyle(.red)
             } else {
                 ZStack {
-                    Image("placeholder")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
+                    Rectangle()
+                        .fill(Color.gray)
                         .frame(maxWidth: .infinity)
                         .frame(height: 200)
-                        .clipShape(.rect())
-                        .zoomable(minZoomScale: 0.5)
                         .clipped()
                     ProgressView()
                 }
