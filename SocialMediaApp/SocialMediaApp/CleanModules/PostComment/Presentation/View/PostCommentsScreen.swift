@@ -25,34 +25,18 @@ struct PostCommentsScreen: View {
                                 .stroke(Color.secondary, lineWidth: 4)
                         )
                 case .video:
-                    let videoURL = Bundle.main.url(forResource: "sample-video", withExtension: "mp4")!
-                    VideoView(videoName: postCommentsViewModel.post.mediaName)
+                    appDIContainer.createVideoPlayerView(resourceName: postCommentsViewModel.post.mediaName)
+                        .overlay(
+                            Rectangle()
+                                .stroke(Color.secondary, lineWidth: 4)
+                        )
                 case .audio:
-                    let audioURL = Bundle.main.url(forResource: "sample-video", withExtension: "mp4")!
-                    AudioView(resourceName: postCommentsViewModel.post.mediaName)
+                    appDIContainer.createAudioPlayerView(resourceName: postCommentsViewModel.post.mediaName)
+                        .overlay(
+                            Rectangle()
+                                .stroke(Color.secondary, lineWidth: 4)
+                        )
                 }
-                CommentsView(comments: [
-                    DummyCommentModel(content: "This is the first comment. This is the first comment. This is the first comment.", replies: [
-                        DummyCommentModel(content: "Reply to first comment. Reply to first comment. Reply to first comment.", replies: [
-                            DummyCommentModel(content: "Reply to reply. Reply to reply. Reply to reply. Reply to reply.", depth: 2, type: CommentType.video)
-                        ], depth: 1, type: CommentType.image),
-                        DummyCommentModel(content: "Another reply to first comment. Another reply to first comment. Another reply to first comment. Another reply to first comment.", depth: 1, type: CommentType.audio)
-                    ], type: CommentType.text),
-                    
-                    DummyCommentModel(content: "This is the first comment. This is the first comment. This is the first comment.", replies: [
-                        DummyCommentModel(content: "Reply to first comment. Reply to first comment. Reply to first comment.", replies: [
-                            DummyCommentModel(content: "Reply to reply. Reply to reply. Reply to reply. Reply to reply.", depth: 2, type: CommentType.video)
-                        ], depth: 1, type: CommentType.image),
-                        DummyCommentModel(content: "Another reply to first comment. Another reply to first comment. Another reply to first comment. Another reply to first comment.", depth: 1, type: CommentType.audio)
-                    ], type: CommentType.text),
-                    
-                    DummyCommentModel(content: "This is the first comment. This is the first comment. This is the first comment.", replies: [
-                        DummyCommentModel(content: "Reply to first comment. Reply to first comment. Reply to first comment.", replies: [
-                            DummyCommentModel(content: "Reply to reply. Reply to reply. Reply to reply. Reply to reply.", depth: 2, type: CommentType.video)
-                        ], depth: 1, type: CommentType.image),
-                        DummyCommentModel(content: "Another reply to first comment. Another reply to first comment. Another reply to first comment. Another reply to first comment.", depth: 1, type: CommentType.audio)
-                    ], type: CommentType.text)]
-                )
             }
             AddCommentView(postCommentsViewModel: postCommentsViewModel, showBottomSheet: $showBottomSheet)
         }
