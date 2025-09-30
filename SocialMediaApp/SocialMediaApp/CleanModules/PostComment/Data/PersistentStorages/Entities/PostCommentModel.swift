@@ -18,8 +18,10 @@ final class PostCommentModel {
     var mediaName: String?
     var createdAt: String
     var replyCount: String?
+    var depth: String?
+    var parentCommentDepth: String?
     
-    init(id: String, postId: String, parentCommentId: String?, text: String?, type: CommentType.RawValue, mediaName: String?, createdAt: String, replyCount: String?) {
+    init(id: String, postId: String, parentCommentId: String?, text: String?, type: CommentType.RawValue, mediaName: String?, createdAt: String, replyCount: String?, depth: String?, parentCommentDepth: String?) {
         self.id = id
         self.postId = postId
         self.parentCommentId = parentCommentId
@@ -28,5 +30,7 @@ final class PostCommentModel {
         self.mediaName = mediaName
         self.createdAt = createdAt
         self.replyCount = replyCount
+        self.depth = depth
+        self.parentCommentDepth = parentCommentDepth
     }
 }

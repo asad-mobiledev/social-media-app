@@ -15,9 +15,11 @@ struct FirestoreCommentFields: Codable {
     var mediaName: FirestoreValue?
     var createdAt: FirestoreValue?
     var replyCount: FirestoreValue?
+    var depth: FirestoreValue?
+    var parentCommentDepth: FirestoreValue?
    
     enum CodingKeys: String, CodingKey {
-        case id, postId, parentCommentId, text, type, mediaName, createdAt, replyCount
+        case id, postId, parentCommentId, text, type, mediaName, createdAt, replyCount, depth, parentCommentDepth
     }
     
     init(from decoder: Decoder) throws {
@@ -30,6 +32,8 @@ struct FirestoreCommentFields: Codable {
         self.mediaName = try container.decodeIfPresent(FirestoreValue.self, forKey: .mediaName)
         self.createdAt = try container.decodeIfPresent(FirestoreValue.self, forKey: .createdAt)
         self.replyCount = try container.decodeIfPresent(FirestoreValue.self, forKey: .replyCount)
+        self.parentCommentDepth = try container.decodeIfPresent(FirestoreValue.self, forKey: .parentCommentDepth)
+        self.depth = try container.decodeIfPresent(FirestoreValue.self, forKey: .depth)
     }
 }
 

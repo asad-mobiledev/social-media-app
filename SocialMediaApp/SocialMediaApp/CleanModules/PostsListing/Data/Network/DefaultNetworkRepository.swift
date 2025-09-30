@@ -124,7 +124,7 @@ class DefaultNetworkRepository: NetworkRepository {
             print(error.localizedDescription)
         }
         
-        return CommentDTO(id: commentEntity.id, postId: commentEntity.postId, parentCommentId: commentEntity.parentCommentId, text: commentEntity.text, type: commentEntity.type, mediaName: commentEntity.mediaName, createdAt: commentEntity.createdAt, replyCount: commentEntity.replyCount)
+        return CommentDTO(id: commentEntity.id, postId: commentEntity.postId, parentCommentId: commentEntity.parentCommentId, text: commentEntity.text, type: commentEntity.type, mediaName: commentEntity.mediaName, createdAt: commentEntity.createdAt, replyCount: commentEntity.replyCount, depth: commentEntity.depth, parentCommentDepth: commentEntity.parentCommentDepth)
     }
     
     func fetchComment(commentId: String) async throws -> CommentDTO {

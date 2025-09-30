@@ -16,6 +16,8 @@ struct CommentDTO: Codable, Identifiable {
     var mediaName: String? // Media Name could be nil if comment is of text type.
     let createdAt: String
     let replyCount: String?
+    let depth: String?
+    let parentCommentDepth: String?
     
     init?(from firestoreDocument: FirestoreCommentDocument) {
         guard let id = firestoreDocument.name.components(separatedBy: "/").last,
@@ -34,10 +36,12 @@ struct CommentDTO: Codable, Identifiable {
         self.parentCommentId = firestoreDocument.fields.parentCommentId?.stringValue
         self.text = firestoreDocument.fields.text?.stringValue
         self.replyCount = firestoreDocument.fields.replyCount?.integerValue
+        self.depth = firestoreDocument.fields.depth?.integerValue
+        self.parentCommentDepth = firestoreDocument.fields.parentCommentDepth?.integerValue
     }
     
     
-    init(id: String?, postId: String, parentCommentId: String?, text: String?, type: String, mediaName: String?, createdAt: String, replyCount: String?) {
+    init(id: String?, postId: String, parentCommentId: String?, text: String?, type: String, mediaName: String?, createdAt: String, replyCount: String?, depth: String?, parentCommentDepth: String?) {
         self.id = id
         self.postId = postId
         self.parentCommentId = parentCommentId
@@ -46,19 +50,21 @@ struct CommentDTO: Codable, Identifiable {
         self.mediaName = mediaName
         self.replyCount = replyCount
         self.createdAt = createdAt
+        self.depth = depth
+        self.parentCommentDepth = parentCommentDepth
     }
 }
 
 extension CommentDTO {
     func toEntity() -> CommentEntity {
         
-        return CommentEntity(id: id ?? UUID().uuidString, postId: postId, parentCommentId: parentCommentId, text: text, type: type, mediaName: mediaName, createdAt: createdAt, replyCount: replyCount)
+        return CommentEntity(id: id ?? UUID().uuidString, postId: postId, parentCommentId: parentCommentId, text: text, type: type, mediaName: mediaName, createdAt: createdAt, replyCount: replyCount, parentCommentDepth: parentCommentDepth, depth: depth)
     }
 }
 
 extension CommentDTO {
     func toCommentModel() -> PostCommentModel {
-        PostCommentModel(id: id ?? UUID().uuidString, postId: postId, parentCommentId: parentCommentId, text: text, type: type, mediaName: mediaName, createdAt: createdAt, replyCount: replyCount)
+        PostCommentModel(id: id ?? UUID().uuidString, postId: postId, parentCommentId: parentCommentId, text: text, type: type, mediaName: mediaName, createdAt: createdAt, replyCount: replyCount, depth: depth, parentCommentDepth: parentCommentDepth)
     }
 }
 
@@ -72,5 +78,7 @@ extension CommentDTO {
         self.mediaName = model.mediaName
         self.createdAt = model.createdAt
         self.replyCount = model.replyCount
+        self.depth = model.depth
+        self.parentCommentDepth = model.parentCommentDepth
     }
 }
