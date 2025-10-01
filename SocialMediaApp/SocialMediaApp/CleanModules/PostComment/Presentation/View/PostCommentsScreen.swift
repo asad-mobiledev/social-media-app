@@ -11,7 +11,6 @@ import AVKit
 struct PostCommentsScreen: View {
     @Environment(\.appDIContainer) private var appDIContainer
     @StateObject var postCommentsViewModel: PostCommentsViewModel
-    @State private var showBottomSheet = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -38,9 +37,9 @@ struct PostCommentsScreen: View {
                         )
                 }
             }
-            AddCommentView(postCommentsViewModel: postCommentsViewModel, showBottomSheet: $showBottomSheet)
+            AddCommentView(postCommentsViewModel: postCommentsViewModel)
         }
-        .sheet(isPresented: $showBottomSheet) {
+        .sheet(isPresented: $postCommentsViewModel.showBottomSheet) {
             appDIContainer.createPostBottomSheet()
             .presentationDetents([.height(250)])
             .presentationDragIndicator(.visible)

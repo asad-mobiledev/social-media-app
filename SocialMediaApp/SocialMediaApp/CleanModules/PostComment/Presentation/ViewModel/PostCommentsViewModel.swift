@@ -16,6 +16,7 @@ class PostCommentsViewModel: ObservableObject {
     @Published var errorMessage: String = ""
     @Published var comments: [CommentEntity] = []
     @Published var isLoading = false
+    @Published var showBottomSheet = false
     
     private let paginationPolicy: PaginationPolicy
     var lastFetchedCommentsCount = -1

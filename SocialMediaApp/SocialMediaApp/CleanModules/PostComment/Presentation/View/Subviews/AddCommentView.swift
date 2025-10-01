@@ -9,14 +9,13 @@ import SwiftUI
 
 struct AddCommentView: View {
     @ObservedObject var postCommentsViewModel: PostCommentsViewModel
-    @Binding var showBottomSheet: Bool
     
     var body: some View {
         HStack(alignment: .center){
             CommentTextEditView(postCommentsViewModel: postCommentsViewModel)
             
             Button(action: {
-                showBottomSheet = true
+                postCommentsViewModel.showBottomSheet = true
             }) {
                 Image(systemName: Images.upload)
                     .font(.title)
