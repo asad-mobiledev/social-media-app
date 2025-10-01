@@ -45,8 +45,12 @@ class AppDIContainer {
     }()
     
     func createPostBottomSheet() -> some View {
-        let createPostBottomSheetModule = CreatePostBottomSheetModule(apiDataTransferService: apiDataTransferService, databaseService: databaseService!, fileService: fileService!)
+        let createPostBottomSheetModule = CreatePostBottomSheetModule()
         return createPostBottomSheetModule.generateCreatePostBottomSheet()
+    }
+    func importMediaBottomSheet(importMediaBottomSheetViewModel: ImportMediaBottomSheetViewModel) -> some View {
+        let importMediaBottomSheetModule = ImportMediaBottomSheetModule()
+        return importMediaBottomSheetModule.generateImportMediaBottomSheet(importMediaBottomSheetViewModel: importMediaBottomSheetViewModel)
     }
     
     func createSendMediaView(attachement: MediaAttachment, loadState: Binding<LoadState>) -> some View {

@@ -40,7 +40,8 @@ struct PostCommentsScreen: View {
             AddCommentView(postCommentsViewModel: postCommentsViewModel)
         }
         .sheet(isPresented: $postCommentsViewModel.showBottomSheet) {
-            appDIContainer.createPostBottomSheet()
+            // Create a Separate View For Import Media Comments and initialize view model from DI container instead of here.
+            appDIContainer.importMediaBottomSheet(importMediaBottomSheetViewModel: ImportMediaBottomSheetViewModel())
             .presentationDetents([.height(250)])
             .presentationDragIndicator(.visible)
         }

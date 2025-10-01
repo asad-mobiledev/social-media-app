@@ -9,11 +9,10 @@ import SwiftUI
 import PhotosUI
 
 struct GalleryPickerView: View {
-    @ObservedObject var viewModel: CreatePostBottomSheetViewModel
+//    @ObservedObject var viewModel: CreatePostBottomSheetViewModel
     @State private var selectedPickerItem: PhotosPickerItem? = nil
     
     @Binding var loadState: LoadState
-    @Binding var showErrorAlert: Bool
     @Binding var errorMessage: String
     
     var body: some View {
@@ -44,13 +43,13 @@ struct GalleryPickerView: View {
         .onChange(of: selectedPickerItem) { _, newItem in
             handlePickerChange(newItem)
         }
-        .alert(AppText.error, isPresented: $showErrorAlert) {
-            Button(AppText.OK) {
-                showErrorAlert = false
-            }
-        } message: {
-            Text(errorMessage)
-        }
+//        .alert(AppText.error, isPresented: $showErrorAlert) {
+//            Button(AppText.OK) {
+//                showErrorAlert = false
+//            }
+//        } message: {
+//            Text(errorMessage)
+//        }
     }
     
     func handlePickerChange(_ item: PhotosPickerItem?) {
@@ -59,9 +58,15 @@ struct GalleryPickerView: View {
         Task {
             loadState = .loading
             if let loaded = try? await item.loadTransferable(type: TransferableAsset.self) {
-                await viewModel.validateAndSetMedia(url: loaded.url)
+                if let url = loaded.url {
+                    loadState = .loaded(url)
+                } else {
+                    errorMessage = AppText.failedToLoadAsset
+                    loadState = .failed
+                }
             } else {
-                viewModel.handleGalleryPickingError()
+                errorMessage = AppText.failPickingFromGallery
+                loadState = .failed
             }
         }
     }

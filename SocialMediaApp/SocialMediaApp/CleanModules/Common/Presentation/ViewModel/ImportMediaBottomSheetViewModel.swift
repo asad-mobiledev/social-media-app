@@ -10,7 +10,7 @@ import UniformTypeIdentifiers
 import Combine
 import UIKit
 
-class CreatePostBottomSheetViewModel: ObservableObject {
+class ImportMediaBottomSheetViewModel: ObservableObject {
     
     @Published var loadState: LoadState = .unknown
     
@@ -90,29 +90,13 @@ class CreatePostBottomSheetViewModel: ObservableObject {
             loadState = .failed
         }
     }
-    func getMediaTypeFrom(url: URL) throws -> MediaType? {
-        let resourceValues = try url.resourceValues(forKeys: [.typeIdentifierKey])
-        guard let typeIdentifier = resourceValues.typeIdentifier else {
-            return nil
-        }
-        
-        if let utType = UTType(typeIdentifier) {
-            if utType.conforms(to: .image) {
-                return .image
-            } else if utType.conforms(to: .audio) {
-                return .audio
-            } else if utType.conforms(to: .movie) {
-                return .video
-            }
-        }
-        return nil
-    }
+    
     func mediaType(url: URL) -> MediaType? {
             do {
-                return try getMediaTypeFrom(url: url)
+                return try Utility.getMediaTypeFrom(url: url)
             } catch {
                 do {
-                    return try mediaTypeForAccessingSecurityScopedResource(url: url)
+                    return try Utility.mediaTypeForAccessingSecurityScopedResource(url: url)
                 } catch {
                     Task { @MainActor in
                         errorMessage = "\(error)"
@@ -123,25 +107,6 @@ class CreatePostBottomSheetViewModel: ObservableObject {
         return nil
     }
     
-    func mediaTypeForAccessingSecurityScopedResource(url: URL) throws -> MediaType? {
-        if url.startAccessingSecurityScopedResource() {
-            defer { url.stopAccessingSecurityScopedResource() }
-            return try getMediaTypeFrom(url: url)
-        } else {
-            throw CustomError.message(AppText.filesPermissionIssue)
-        }
-    }
-    
-    func validateAndSetMedia(url: URL?) async {
-        guard url != nil  else {
-            await handleGalleryPickingError()
-            return
-        }
-        await MainActor.run {
-            loadState = .loaded(url)
-        }
-    }
-
     @MainActor
     func handleGalleryPickingError() {
         errorMessage = AppText.failPickingFromGallery

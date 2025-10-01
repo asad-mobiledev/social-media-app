@@ -16,6 +16,7 @@ struct AppText {
     static let error = "Error"
     static let OK = "OK"
     static let failPickingFromGallery = "Failed to pick photo/video from gallery"
+    static let failedToLoadAsset = "Failed to load asset"
     static let failPickingDocument = "Failed to import file:"
     static let failToPickImageFromURL = "Failed to pick image from url:"
     static let mediaTypeUnknown = "Unable to figure out media type."
