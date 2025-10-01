@@ -25,7 +25,11 @@ struct AddCommentView: View {
             
             Button(action: {
                 Task {
+                    // commenting on a post
                     await postCommentsViewModel.addComment()
+                    // Replying to specific comment, add specific comment's id and it's depth will be treated as parentCommentDepth.
+//                    await postCommentsViewModel.addComment(parentCommentId: "C0C0C98C-F1DF-4696-B89C-B1BE956595A6", parentCommentDepth: "0")
+                     
                 }
             }) {
                 SendImage()

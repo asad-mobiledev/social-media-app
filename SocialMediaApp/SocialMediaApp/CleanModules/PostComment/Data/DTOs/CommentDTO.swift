@@ -36,8 +36,8 @@ struct CommentDTO: Codable, Identifiable {
         self.parentCommentId = firestoreDocument.fields.parentCommentId?.stringValue
         self.text = firestoreDocument.fields.text?.stringValue
         self.replyCount = firestoreDocument.fields.replyCount?.integerValue
-        self.depth = firestoreDocument.fields.depth?.integerValue
-        self.parentCommentDepth = firestoreDocument.fields.parentCommentDepth?.integerValue
+        self.depth = firestoreDocument.fields.depth?.stringValue
+        self.parentCommentDepth = firestoreDocument.fields.parentCommentDepth?.stringValue
     }
     
     
