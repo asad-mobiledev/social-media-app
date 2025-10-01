@@ -16,7 +16,27 @@ class PostCommentsViewModel: ObservableObject {
     @Published var errorMessage: String = ""
     @Published var comments: [CommentEntity] = []
     @Published var isLoading = false
+    @Published var isSendCommentLoading = false
     @Published var showBottomSheet = false
+    @Published var commentMediaLoadState: LoadState = .unknown
+    var resolvedMediaURL: URL? {
+        guard case let .loaded(url) = commentMediaLoadState, let url = url else {
+            return nil
+        }
+        return url
+    }
+    
+    private var resolvedMediaType: MediaType? {
+        if let url = resolvedMediaURL {
+            return mediaType(url: url)
+        }
+        return nil
+    }
+    
+    var mediaAttachment: MediaAttachment? {
+        guard let type = resolvedMediaType else { return nil }
+        return MediaAttachment(mediaType: type, url: resolvedMediaURL)
+    }
     
     private let paginationPolicy: PaginationPolicy
     var lastFetchedCommentsCount = -1
@@ -94,5 +114,21 @@ class PostCommentsViewModel: ObservableObject {
     
     private func canHaveMoreComments() -> Bool {
         lastFetchedCommentsCount != 0
+    }
+    
+    func mediaType(url: URL) -> MediaType? {
+            do {
+                return try Utility.getMediaTypeFrom(url: url)
+            } catch {
+                do {
+                    return try Utility.mediaTypeForAccessingSecurityScopedResource(url: url)
+                } catch {
+                    Task { @MainActor in
+                        errorMessage = "\(error)"
+                        commentMediaLoadState = .failed
+                    }
+                }
+            }
+        return nil
     }
 }

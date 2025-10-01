@@ -15,7 +15,7 @@ struct CreatePostBottomSheet: View {
     var body: some View {
         ZStack {
             if !createPostBottomSheetViewModel.loadState.isURLLoaded {
-                appDIContainer.importMediaBottomSheet(importMediaBottomSheetViewModel: createPostBottomSheetViewModel)
+                appDIContainer.createImportMediaBottomSheet(importMediaBottomSheetViewModel: createPostBottomSheetViewModel)
             } else {
                 if let attachment = createPostBottomSheetViewModel.mediaAttachment {
                     appDIContainer.createSendMediaView(attachement: attachment, loadState: $createPostBottomSheetViewModel.loadState)

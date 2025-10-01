@@ -66,13 +66,13 @@ struct PostsListingScreen: View {
                 }
             }
             .navigationTitle(AppText.posts)
-            .sheet(item: $router.activeSheet) { sheet in
-                switch sheet {
-                case .createPost:
-                    appDIContainer.createPostBottomSheet()
+            .sheet(isPresented: Binding<Bool>(
+                get: { router.activeSheet == .createPost },
+                set: { if !$0 { router.activeSheet = nil } }
+            )) {
+                appDIContainer.createPostBottomSheet()
                     .presentationDetents([.height(250)])
                     .presentationDragIndicator(.visible)
-                }
             }
         .onAppear {
             Task {

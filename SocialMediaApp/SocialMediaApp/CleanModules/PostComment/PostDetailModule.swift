@@ -18,7 +18,11 @@ class PostCommentModule {
     }
     
     func generatePostCommentScreen(post: PostEntity) -> PostCommentsScreen {
-        PostCommentsScreen(postCommentsViewModel: self.generatePostCommentViewModel(post: post))
+        PostCommentsScreen(postCommentsViewModel: self.generatePostCommentViewModel(post: post), commentMediaBottomSheetViewModel: generateImportMediaBottomSheetViewModel())
+    }
+    
+    private func generateImportMediaBottomSheetViewModel() -> ImportMediaBottomSheetViewModel {
+        ImportMediaBottomSheetViewModel()
     }
     
     private func generatePostCommentViewModel(post: PostEntity) -> PostCommentsViewModel {

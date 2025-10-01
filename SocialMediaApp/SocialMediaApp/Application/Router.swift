@@ -19,11 +19,14 @@ final class Router: ObservableObject {
     
     enum SheetRoute: Identifiable {
         case createPost
+        case importMediaComment
         
         var id: String {
             switch self {
             case .createPost:
                 return "createPost"
+            case .importMediaComment:
+                return "importMediaComment"
             }
         }
     }

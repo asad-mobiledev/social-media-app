@@ -48,7 +48,12 @@ class AppDIContainer {
         let createPostBottomSheetModule = CreatePostBottomSheetModule()
         return createPostBottomSheetModule.generateCreatePostBottomSheet()
     }
-    func importMediaBottomSheet(importMediaBottomSheetViewModel: ImportMediaBottomSheetViewModel) -> some View {
+    
+    func createAddCommentView(postCommentsViewModel: PostCommentsViewModel, commentMediaBottomSheetViewModel: ImportMediaBottomSheetViewModel) -> some View {
+        AddCommentView(postCommentsViewModel: postCommentsViewModel, commentMediaBottomSheetViewModel: commentMediaBottomSheetViewModel)
+    }
+    
+    func createImportMediaBottomSheet(importMediaBottomSheetViewModel: ImportMediaBottomSheetViewModel) -> some View {
         let importMediaBottomSheetModule = ImportMediaBottomSheetModule()
         return importMediaBottomSheetModule.generateImportMediaBottomSheet(importMediaBottomSheetViewModel: importMediaBottomSheetViewModel)
     }

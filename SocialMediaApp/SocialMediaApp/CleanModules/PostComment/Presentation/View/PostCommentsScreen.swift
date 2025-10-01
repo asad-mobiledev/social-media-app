@@ -10,8 +10,11 @@ import AVKit
 
 struct PostCommentsScreen: View {
     @Environment(\.appDIContainer) private var appDIContainer
+    @EnvironmentObject var router: Router
     @StateObject var postCommentsViewModel: PostCommentsViewModel
-
+    @ObservedObject var commentMediaBottomSheetViewModel: ImportMediaBottomSheetViewModel
+    
+    
     var body: some View {
         VStack(spacing: 0) {
             
@@ -37,13 +40,15 @@ struct PostCommentsScreen: View {
                         )
                 }
             }
-            AddCommentView(postCommentsViewModel: postCommentsViewModel)
+            appDIContainer.createAddCommentView(postCommentsViewModel: postCommentsViewModel, commentMediaBottomSheetViewModel: commentMediaBottomSheetViewModel)
         }
-        .sheet(isPresented: $postCommentsViewModel.showBottomSheet) {
-            // Create a Separate View For Import Media Comments and initialize view model from DI container instead of here.
-            appDIContainer.importMediaBottomSheet(importMediaBottomSheetViewModel: ImportMediaBottomSheetViewModel())
-            .presentationDetents([.height(250)])
-            .presentationDragIndicator(.visible)
+        .sheet(isPresented: Binding<Bool>(
+            get: { router.activeSheet == .importMediaComment },
+            set: { if !$0 { router.activeSheet = nil } }
+        )) {
+            appDIContainer.createImportMediaBottomSheet(importMediaBottomSheetViewModel: commentMediaBottomSheetViewModel)
+                .presentationDetents([.height(250)])
+                .presentationDragIndicator(.visible)
         }
         .onAppear {
             Task {

@@ -15,7 +15,7 @@ enum CommentType: String, Codable {
     case text, image, video, audio
 }
 
-enum LoadState {
+enum LoadState: Equatable {
     case unknown, loading, loaded(URL?), failed
 }
 
