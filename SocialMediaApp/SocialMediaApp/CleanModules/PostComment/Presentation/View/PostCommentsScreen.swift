@@ -40,6 +40,10 @@ struct PostCommentsScreen: View {
                         )
                 }
             }
+            
+            CommentsView(comments: postCommentsViewModel.comments)
+            
+            
             appDIContainer.createAddCommentView(postCommentsViewModel: postCommentsViewModel, commentMediaBottomSheetViewModel: commentMediaBottomSheetViewModel)
         }
         .sheet(isPresented: Binding<Bool>(

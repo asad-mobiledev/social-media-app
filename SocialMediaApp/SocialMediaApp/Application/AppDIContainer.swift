@@ -86,6 +86,11 @@ class AppDIContainer {
         return sendImageViewModule.generateNamedImageView(imageName: imageName)
     }
     
+    func createImageCommentView(imageName: String, depth: Int) -> some View {
+        let imageViewModule = ImageViewModule(fileService: fileService!)
+        return imageViewModule.generateImageCommentView(imageName: imageName, depth: depth)
+    }
+    
     func createAudioPlayerView(resourceName: String) -> some View {
         let playableModule = PlayableModule(fileService: fileService!)
         return playableModule.generateAudioPlayerView(resourceName: resourceName)

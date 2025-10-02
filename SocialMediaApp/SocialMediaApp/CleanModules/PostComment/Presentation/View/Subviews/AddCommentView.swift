@@ -14,11 +14,11 @@ struct AddCommentView: View {
     @ObservedObject var commentMediaBottomSheetViewModel: ImportMediaBottomSheetViewModel
     
     var body: some View {
-        VStack {
-            Group {
-                if commentMediaBottomSheetViewModel.loadState.isURLLoaded {
-                    if let attachment = commentMediaBottomSheetViewModel.mediaAttachment {
-                        ZStack {
+        ZStack {
+            VStack {
+                Group {
+                    if commentMediaBottomSheetViewModel.loadState.isURLLoaded {
+                        if let attachment = commentMediaBottomSheetViewModel.mediaAttachment {
                             VStack(spacing: 10) {
                                 Spacer()
                                 HStack(alignment: .bottom) {
@@ -51,54 +51,56 @@ struct AddCommentView: View {
                             }
                             .frame(maxWidth: .infinity)
                             
-                            if postCommentsViewModel.isSendCommentLoading {
-                                Color.black.opacity(0.4)
-                                    .ignoresSafeArea()
-                                    .transition(.opacity)
-                                
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                                    .scaleEffect(1.5)
-                                    .transition(.scale)
+                            
+                            
+                        } else {
+                            EmptyView().onAppear {
+                                commentMediaBottomSheetViewModel.loadState = .failed
                             }
                         }
-                        
-                    } else {
-                        EmptyView().onAppear {
-                            commentMediaBottomSheetViewModel.loadState = .failed
+                    }
+                }
+                .frame(height: commentMediaBottomSheetViewModel.mediaAttachment?.mediaType == .audio ? 90 : 170)
+                
+                HStack(alignment: .center){
+                    CommentTextEditView(postCommentsViewModel: postCommentsViewModel)
+                    
+                    Button(action: {
+                        router.present(sheet: .importMediaComment)
+                        //                    postCommentsViewModel.showBottomSheet = true
+                    }) {
+                        Image(systemName: Images.upload)
+                            .font(.title)
+                            .foregroundColor(.black)
+                    }
+                    
+                    Button(action: {
+                        Task {
+                            // commenting on a post
+                            await postCommentsViewModel.addComment(mediaAttachement: commentMediaBottomSheetViewModel.mediaAttachment)
+                            // Replying to specific comment, add specific comment's id and it's depth will be treated as parentCommentDepth.
+                            //                    await postCommentsViewModel.addComment(parentCommentId: "C0C0C98C-F1DF-4696-B89C-B1BE956595A6", parentCommentDepth: "0")
+                            
                         }
+                    }) {
+                        SendImage()
+                            .foregroundColor(Color.primary)
                     }
                 }
-            }
-            .frame(height: commentMediaBottomSheetViewModel.mediaAttachment?.mediaType == .audio ? 90 : 170)
-            
-            HStack(alignment: .center){
-                CommentTextEditView(postCommentsViewModel: postCommentsViewModel)
+                .padding(8)
                 
-                Button(action: {
-                    router.present(sheet: .importMediaComment)
-//                    postCommentsViewModel.showBottomSheet = true
-                }) {
-                    Image(systemName: Images.upload)
-                        .font(.title)
-                        .foregroundColor(.black)
-                }
-                
-                Button(action: {
-                    Task {
-                        // commenting on a post
-                        await postCommentsViewModel.addComment(mediaAttachement: commentMediaBottomSheetViewModel.mediaAttachment)
-                        // Replying to specific comment, add specific comment's id and it's depth will be treated as parentCommentDepth.
-                        //                    await postCommentsViewModel.addComment(parentCommentId: "C0C0C98C-F1DF-4696-B89C-B1BE956595A6", parentCommentDepth: "0")
-                        
-                    }
-                }) {
-                    SendImage()
-                        .foregroundColor(Color.primary)
-                }
             }
-            .padding(8)
             
+            if postCommentsViewModel.isSendCommentLoading {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .transition(.opacity)
+                
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    .scaleEffect(1.5)
+                    .transition(.scale)
+            }
         }
         .background(Color.gray.opacity(0.1))
         .onChange(of: commentMediaBottomSheetViewModel.loadState) { _, newState in
@@ -106,6 +108,12 @@ struct AddCommentView: View {
                 router.dismissSheet()
             }
         }
+        .onChange(of: postCommentsViewModel.isSendCommentLoading) { _, newState in
+            if commentMediaBottomSheetViewModel.loadState.isURLLoaded && newState == false && postCommentsViewModel.errorMessage.isEmpty{
+                commentMediaBottomSheetViewModel.loadState = .unknown
+            }
+        }
+        .animation(.easeInOut, value: postCommentsViewModel.isSendCommentLoading)
     }
 }
 

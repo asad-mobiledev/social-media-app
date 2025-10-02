@@ -30,17 +30,34 @@ class PostCommentsViewModel: ObservableObject {
         self.post = post
         self.postCommentUseCase = postCommentUseCase
         self.paginationPolicy = paginationPolicy
+        
+        NotificationCenter.default.publisher(for: .newCommentAdded)
+            .compactMap { $0.object as? CommentEntity }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] newComment in
+                self?.comments.insert(newComment, at: 0)
+            }
+            .store(in: &cancellables)
     }
     
     func addComment(mediaAttachement: MediaAttachment?, parentCommentId: String? = nil, parentCommentDepth: String? = nil) async {
         guard !commentText.isEmpty || mediaAttachement?.url != nil else {
             return
         }
+        await MainActor.run {
+            isSendCommentLoading = true
+        }
         do {
-            let comment = try await postCommentUseCase.addComment(postId: post.id, mediaAttachement: mediaAttachement, commentText: self.commentText, parentCommentId: "E715BB25-7132-4DB2-A9D4-CD789355B83F", parentCommentDepth: "0")
-            print(comment)
+            let comment = try await postCommentUseCase.addComment(postId: self.post.id, mediaAttachement: mediaAttachement, commentText: self.commentText, parentCommentId: parentCommentId, parentCommentDepth: parentCommentDepth)
+            NotificationCenter.default.post(name: .newCommentAdded, object: comment)
+            await MainActor.run {
+                isSendCommentLoading = false
+            }
         } catch {
-            self.errorMessage = error.localizedDescription
+            await MainActor.run {
+                isSendCommentLoading = false
+                self.errorMessage = error.localizedDescription
+            }
         }
     }
     

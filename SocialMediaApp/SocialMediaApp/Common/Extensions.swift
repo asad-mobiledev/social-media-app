@@ -34,4 +34,5 @@ extension Color {
 
 extension Notification.Name {
     static let didCreatePost = Notification.Name("didCreatePost")
+    static let newCommentAdded = Notification.Name("newCommentAdded")
 }

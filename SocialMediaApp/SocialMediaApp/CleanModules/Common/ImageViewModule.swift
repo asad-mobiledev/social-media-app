@@ -22,6 +22,10 @@ class ImageViewModule {
         NamedImageView(viewModel: self.generateImageViewModel(), imageName: imageName)
     }
     
+    func generateImageCommentView(imageName: String, depth: Int) -> ImageComment {
+        ImageComment(viewModel: self.generateImageViewModel(), imageName: imageName, depth: depth)
+    }
+    
     private func generateImageViewModel() -> ImageViewModel {
         ImageViewModel(loadImageDataUseCase: generateImageUseCase())
     }

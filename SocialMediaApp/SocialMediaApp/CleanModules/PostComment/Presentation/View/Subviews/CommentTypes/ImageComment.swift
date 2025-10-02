@@ -9,18 +9,36 @@ import SwiftUI
 import Zoomable
 
 struct ImageComment: View {
+    @StateObject var viewModel: ImageViewModel
     let imageName: String
     let depth: Int
     
     var body: some View {
         VStack(alignment: .trailing) {
-            Image(imageName)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: 150, minHeight: 10)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .zoomable(minZoomScale: 0.5)
-                .clipped()
+            Group {
+                if let image = viewModel.image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: 150, minHeight: 10)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .zoomable(minZoomScale: 0.5)
+                        .clipped()
+                }
+                else if let error = viewModel.errorMessage {
+                    Text("Error: \(error)")
+                        .foregroundStyle(.red)
+                } else {
+                    ZStack {
+                        Rectangle()
+                            .fill(Color.gray)
+                            .frame(maxWidth: 150, minHeight: 120)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .clipped()
+                        ProgressView()
+                    }
+                }
+            }
             
             if depth < 2 {
                 Button(AppText.reply) {
@@ -31,12 +49,14 @@ struct ImageComment: View {
                 .padding(.trailing, 5)
             }
         }
-        
         .padding(.horizontal, 10)
         .padding(.vertical, 5)
+        .onAppear {
+            viewModel.fetchImage(imageName: imageName)
+        }
     }
 }
 
 #Preview {
-    ImageComment(imageName: "post-image", depth: 1)
+//    ImageComment(imageName: "post-image", depth: 1)
 }
