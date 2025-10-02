@@ -41,7 +41,7 @@ struct PostCommentsScreen: View {
                 }
             }
             
-            CommentsView(comments: postCommentsViewModel.comments)
+            CommentsView(postCommentsViewModel: postCommentsViewModel)
             
             
             appDIContainer.createAddCommentView(postCommentsViewModel: postCommentsViewModel, commentMediaBottomSheetViewModel: commentMediaBottomSheetViewModel)

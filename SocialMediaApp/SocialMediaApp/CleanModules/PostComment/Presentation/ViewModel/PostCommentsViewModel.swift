@@ -116,4 +116,11 @@ class PostCommentsViewModel: ObservableObject {
             }
         return nil
     }
+    
+    func refreshPosts() async {
+        await MainActor.run {
+            errorMessage = ""
+        }
+        await fetchComments(isRefreshing: true)
+    }
 }

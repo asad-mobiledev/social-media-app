@@ -8,13 +8,27 @@
 import SwiftUI
 
 struct CommentsView: View {
-    let comments: [CommentEntity]
+    @ObservedObject var postCommentsViewModel: PostCommentsViewModel
     
     var body: some View {
         ScrollView {
             LazyVStack {
-                ForEach(comments) { comment in
+                ForEach(postCommentsViewModel.comments) { comment in
                     CommentRow(comment: comment)
+                        .onAppear {
+                            if comment == postCommentsViewModel.comments.last {
+                                Task {
+                                    await postCommentsViewModel.fetchComments()
+                                }
+                            }
+                        }
+                }
+            }
+        }
+        .refreshable {
+            if !postCommentsViewModel.isLoading {
+                Task {
+                    await postCommentsViewModel.refreshPosts()
                 }
             }
         }
@@ -22,5 +36,5 @@ struct CommentsView: View {
 }
 
 #Preview {
-    CommentsView(comments: [])
+    //    CommentsView(comments: [])
 }

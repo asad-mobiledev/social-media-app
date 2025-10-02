@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CommentEntity: Identifiable {
+struct CommentEntity: Identifiable, Equatable {
     let id: String
     let postId: String
     let parentCommentId: String? // Comment replies will have non-nil value for this field.
