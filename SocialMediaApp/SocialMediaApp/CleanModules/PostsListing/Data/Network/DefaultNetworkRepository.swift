@@ -105,12 +105,43 @@ class DefaultNetworkRepository: NetworkRepository {
             try await apiDataTransferService.request(request: updateCommentNetworkRequest)
         }
     }
+    private func getCommentEntity(postId: String, mediaAttachement: MediaAttachment?, fileName: String?, commentText: String?, parentCommentId: String?, parentCommentDepth: String?) -> CommentEntity? {
+                        // Give precedence to media comments over text comments if both are there.
+        var commentText: String? = commentText
+        var mediaType: CommentType = CommentType.text
+        if mediaAttachement?.url != nil {
+            switch mediaAttachement!.mediaType {
+            case .image:
+                mediaType = CommentType.image
+            case .audio:
+                mediaType = CommentType.audio
+            case .video:
+                mediaType = CommentType.video
+            }
+            commentText = nil
+        }
+        let parentCommentDepth = parentCommentDepth ?? "0"
+        
+        var replyCommentDepth = 0
+        if parentCommentId != nil {
+            replyCommentDepth = Int(parentCommentDepth)! + 1
+        }
+        
+        let commentEntity = CommentEntity(id: UUID().uuidString, postId: postId, parentCommentId: parentCommentId, text: commentText, type: mediaType.rawValue, mediaName: fileName, createdAt: Utility.getISO8601Date(), replyCount: "0", parentCommentDepth: parentCommentDepth, depth: "\(replyCommentDepth)")
+        return commentEntity
+    }
     
-    func addComment(commentEntity: CommentEntity) async throws -> CommentDTO {
+    func addComment(postId: String, mediaAttachement: MediaAttachment?, fileName: String?, commentText: String?, parentCommentId: String? = nil, parentCommentDepth: String? = nil) async throws -> CommentDTO {
+        let comment = getCommentEntity(postId: postId, mediaAttachement: mediaAttachement, fileName: fileName, commentText: commentText, parentCommentId: parentCommentId, parentCommentDepth: parentCommentDepth)
+        guard let commentEntity = comment else {
+            throw CustomError.message(AppText.invalidComment)
+        }
+        
         var fields: [String: Any] = [
             "type": ["stringValue": commentEntity.type],
             "createdAt": ["stringValue": commentEntity.createdAt],
-            "postId": ["stringValue": commentEntity.postId]
+            "postId": ["stringValue": commentEntity.postId],
+            "replyCount": ["integerValue": commentEntity.replyCount]
         ]
         if let parentCommentId = commentEntity.parentCommentId {
             fields["parentCommentId"] = ["stringValue": parentCommentId]
@@ -129,8 +160,6 @@ class DefaultNetworkRepository: NetworkRepository {
         if let depth = commentEntity.depth {
             fields["depth"] = ["stringValue": depth]
         }
-        
-        
         
         let body: [String: Any] = [ "fields": fields ]
         

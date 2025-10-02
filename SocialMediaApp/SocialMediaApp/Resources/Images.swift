@@ -13,4 +13,5 @@ struct Images {
     static let file = "doc.fill"
     static let send = "paperplane.fill"
     static let upload = "square.and.arrow.up"
+    static let xmark = "xmark"
 }

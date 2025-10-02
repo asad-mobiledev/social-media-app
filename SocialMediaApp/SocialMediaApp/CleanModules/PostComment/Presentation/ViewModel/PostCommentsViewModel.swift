@@ -19,24 +19,6 @@ class PostCommentsViewModel: ObservableObject {
     @Published var isSendCommentLoading = false
     @Published var showBottomSheet = false
     @Published var commentMediaLoadState: LoadState = .unknown
-    var resolvedMediaURL: URL? {
-        guard case let .loaded(url) = commentMediaLoadState, let url = url else {
-            return nil
-        }
-        return url
-    }
-    
-    private var resolvedMediaType: MediaType? {
-        if let url = resolvedMediaURL {
-            return mediaType(url: url)
-        }
-        return nil
-    }
-    
-    var mediaAttachment: MediaAttachment? {
-        guard let type = resolvedMediaType else { return nil }
-        return MediaAttachment(mediaType: type, url: resolvedMediaURL)
-    }
     
     private let paginationPolicy: PaginationPolicy
     var lastFetchedCommentsCount = -1
@@ -50,26 +32,12 @@ class PostCommentsViewModel: ObservableObject {
         self.paginationPolicy = paginationPolicy
     }
     
-    func addComment(parentCommentId: String? = nil, parentCommentDepth: String? = nil) async {
-        let id = UUID().uuidString
-        let postID = post.id
-        let parentCommentId: String? = parentCommentId
-        let commentText = commentText
-        let mediaType = CommentType.text.rawValue
-        let createdAt = Utility.getISO8601Date()
-        let mediaName: String? = nil
-        let parentCommentDepth = parentCommentDepth ?? "0"
-        if commentText.isEmpty && mediaName == nil {
+    func addComment(mediaAttachement: MediaAttachment?, parentCommentId: String? = nil, parentCommentDepth: String? = nil) async {
+        guard !commentText.isEmpty || mediaAttachement?.url != nil else {
             return
         }
-        var replyCommentDepth = 0
-        if parentCommentId != nil {
-            replyCommentDepth = Int(parentCommentDepth)! + 1
-        }
-        
-        let commentEntity = CommentEntity(id: id, postId: postID, parentCommentId: parentCommentId, text: commentText, type: mediaType, mediaName: mediaName, createdAt: createdAt, replyCount: "0", parentCommentDepth: parentCommentDepth, depth: "\(replyCommentDepth)")
         do {
-            let comment = try await postCommentUseCase.addComment(comment: commentEntity)
+            let comment = try await postCommentUseCase.addComment(postId: post.id, mediaAttachement: mediaAttachement, commentText: self.commentText, parentCommentId: "E715BB25-7132-4DB2-A9D4-CD789355B83F", parentCommentDepth: "0")
             print(comment)
         } catch {
             self.errorMessage = error.localizedDescription

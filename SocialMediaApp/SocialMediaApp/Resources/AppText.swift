@@ -31,4 +31,5 @@ struct AppText {
     static let failLoadResourceURL = "Could not load resource url."
     static let filesPermissionIssue = "Failed to access file: permission denied."
     static let failLoadDataAtGivenURL = "Could not load data for given resource url."
+    static let invalidComment = "Invalid comment data."
 }

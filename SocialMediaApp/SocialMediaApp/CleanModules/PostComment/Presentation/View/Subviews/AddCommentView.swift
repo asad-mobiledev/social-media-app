@@ -34,7 +34,7 @@ struct AddCommentView: View {
                                         Button(action: {
                                             commentMediaBottomSheetViewModel.loadState = .unknown
                                         }) {
-                                            Image(systemName: "xmark")
+                                            Image(systemName: Images.xmark)
                                                 .font(.system(size: 14, weight: .bold))
                                                 .foregroundColor(.black)
                                                 .frame(width: 30, height: 30)
@@ -87,7 +87,7 @@ struct AddCommentView: View {
                 Button(action: {
                     Task {
                         // commenting on a post
-                        await postCommentsViewModel.addComment()
+                        await postCommentsViewModel.addComment(mediaAttachement: commentMediaBottomSheetViewModel.mediaAttachment)
                         // Replying to specific comment, add specific comment's id and it's depth will be treated as parentCommentDepth.
                         //                    await postCommentsViewModel.addComment(parentCommentId: "C0C0C98C-F1DF-4696-B89C-B1BE956595A6", parentCommentDepth: "0")
                         
