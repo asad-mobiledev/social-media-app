@@ -19,6 +19,7 @@ class PostCommentsViewModel: ObservableObject {
     @Published var isSendCommentLoading = false
     @Published var showBottomSheet = false
     @Published var commentMediaLoadState: LoadState = .unknown
+    @Published var replyToComment: CommentEntity?
     
     private let paginationPolicy: PaginationPolicy
     var lastFetchedCommentsCount = -1
@@ -35,14 +36,26 @@ class PostCommentsViewModel: ObservableObject {
             .compactMap { $0.object as? CommentEntity }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] newComment in
-                self?.comments.insert(newComment, at: 0)
+                if let parentCommentId = self?.replyToComment?.id {
+                    if let index = self?.comments.firstIndex(where: { $0.id == parentCommentId }) {
+                        self?.comments.insert(newComment, at: index + 1)
+                    }
+                } else {
+                    self?.comments.insert(newComment, at: 0)
+                }
             }
             .store(in: &cancellables)
     }
     
-    func addComment(mediaAttachement: MediaAttachment?, parentCommentId: String? = nil, parentCommentDepth: String? = nil) async {
+    func addComment(mediaAttachement: MediaAttachment?) async {
         guard !commentText.isEmpty || mediaAttachement?.url != nil else {
             return
+        }
+        var parentCommentId: String? = nil
+        var parentCommentDepth: String? = nil
+        if let replyToComment = replyToComment {
+            parentCommentId = replyToComment.id
+            parentCommentDepth = String(replyToComment.depth ?? 0)
         }
         await MainActor.run {
             isSendCommentLoading = true
@@ -65,7 +78,9 @@ class PostCommentsViewModel: ObservableObject {
         guard canHaveMoreComments() else { return }
         guard !isLoading else { return }
         await MainActor.run {
-            isLoading = true
+            if !isRefreshing {
+                isLoading = true
+            }
         }
         do {
             var startIndex = comments.last?.createdAt

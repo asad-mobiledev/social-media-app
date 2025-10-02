@@ -95,7 +95,7 @@ class DefaultNetworkRepository: NetworkRepository {
         }
         
         if let depth = commentEntity.depth {
-            fields["depth"] = ["stringValue": depth]
+            fields["depth"] = ["stringValue": String(depth)]
         }
         
         let body: [String: Any] = [ "fields": fields ]
@@ -110,7 +110,7 @@ class DefaultNetworkRepository: NetworkRepository {
                 print(error.localizedDescription)
             }
         }
-        return CommentDTO(id: commentEntity.id, postId: commentEntity.postId, parentCommentId: commentEntity.parentCommentId, text: commentEntity.text, type: commentEntity.type, mediaName: commentEntity.mediaName, createdAt: commentEntity.createdAt, replyCount: commentEntity.replyCount, depth: commentEntity.depth, parentCommentDepth: commentEntity.parentCommentDepth)
+        return CommentDTO(id: commentEntity.id, postId: commentEntity.postId, parentCommentId: commentEntity.parentCommentId, text: commentEntity.text, type: commentEntity.type, mediaName: commentEntity.mediaName, createdAt: commentEntity.createdAt, replyCount: commentEntity.replyCount, depth: String(commentEntity.depth ?? 0), parentCommentDepth: commentEntity.parentCommentDepth)
     }
     
     func getComments(postId: String, limit: Int, startAt: String?) async throws -> [CommentDTO] {
@@ -216,7 +216,7 @@ class DefaultNetworkRepository: NetworkRepository {
             replyCommentDepth = Int(parentCommentDepth)! + 1
         }
         
-        let commentEntity = CommentEntity(id: UUID().uuidString, postId: postId, parentCommentId: parentCommentId, text: commentText, type: mediaType.rawValue, mediaName: fileName, createdAt: Utility.getISO8601Date(), replyCount: "0", parentCommentDepth: parentCommentDepth, depth: "\(replyCommentDepth)")
+        let commentEntity = CommentEntity(id: UUID().uuidString, postId: postId, parentCommentId: parentCommentId, text: commentText, type: mediaType.rawValue, mediaName: fileName, createdAt: Utility.getISO8601Date(), replyCount: "0", parentCommentDepth: parentCommentDepth, depth: replyCommentDepth)
         return commentEntity
     }
 }

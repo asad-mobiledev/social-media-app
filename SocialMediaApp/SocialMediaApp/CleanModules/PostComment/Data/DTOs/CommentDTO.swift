@@ -58,7 +58,7 @@ struct CommentDTO: Codable, Identifiable {
 extension CommentDTO {
     func toEntity() -> CommentEntity {
         
-        return CommentEntity(id: id ?? UUID().uuidString, postId: postId, parentCommentId: parentCommentId, text: text, type: type, mediaName: mediaName, createdAt: createdAt, replyCount: replyCount, parentCommentDepth: parentCommentDepth, depth: depth)
+        return CommentEntity(id: id ?? UUID().uuidString, postId: postId, parentCommentId: parentCommentId, text: text, type: type, mediaName: mediaName, createdAt: createdAt, replyCount: replyCount, parentCommentDepth: parentCommentDepth, depth: Int(depth ?? "0"))
     }
 }
 

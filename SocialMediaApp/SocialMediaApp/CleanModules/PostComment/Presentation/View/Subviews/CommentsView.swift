@@ -14,7 +14,7 @@ struct CommentsView: View {
         ScrollView {
             LazyVStack {
                 ForEach(postCommentsViewModel.comments) { comment in
-                    CommentRow(comment: comment)
+                    CommentRow(postCommentsViewModel: postCommentsViewModel, comment: comment)
                         .onAppear {
                             if comment == postCommentsViewModel.comments.last {
                                 Task {

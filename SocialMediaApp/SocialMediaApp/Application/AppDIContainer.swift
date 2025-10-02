@@ -86,9 +86,9 @@ class AppDIContainer {
         return sendImageViewModule.generateNamedImageView(imageName: imageName)
     }
     
-    func createImageCommentView(imageName: String, depth: Int) -> some View {
+    func createImageCommentView(comment: CommentEntity, postCommentsViewModel: PostCommentsViewModel) -> some View {
         let imageViewModule = ImageViewModule(fileService: fileService!)
-        return imageViewModule.generateImageCommentView(imageName: imageName, depth: depth)
+        return imageViewModule.generateImageCommentView(comment: comment, postCommentsViewModel: postCommentsViewModel)
     }
     
     func createAudioCommentView(resourceName: String, depth: Int) -> some View {

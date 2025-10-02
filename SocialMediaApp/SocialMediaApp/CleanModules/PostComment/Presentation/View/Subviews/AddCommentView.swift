@@ -17,6 +17,30 @@ struct AddCommentView: View {
         ZStack {
             VStack {
                 Group {
+                    if let replyToComment = postCommentsViewModel.replyToComment {
+                        HStack {
+                            Text("Replying to comment \(replyToComment.id)")
+                                .padding(.trailing, 20)
+                                .multilineTextAlignment(.leading)
+                            Button(action: {
+                                postCommentsViewModel.replyToComment = nil
+                            }) {
+                                Image(systemName: "xmark")
+                                    .font(.system(size: 14, weight: .bold))
+                                    .foregroundColor(.black)
+                                    .frame(width: 30, height: 30)
+                                    .background(Color.gray)
+                                    .clipShape(Circle())
+                            }
+                            .buttonStyle(.plain)
+                            .padding(.trailing, -10)
+                            .padding(.top, -10)
+                        }
+                    }
+                }
+                .frame(maxHeight: 70)
+                .padding(.trailing, 20)
+                Group {
                     if commentMediaBottomSheetViewModel.loadState.isURLLoaded {
                         if let attachment = commentMediaBottomSheetViewModel.mediaAttachment {
                             VStack(spacing: 10) {
@@ -76,11 +100,7 @@ struct AddCommentView: View {
                     
                     Button(action: {
                         Task {
-                            // commenting on a post
                             await postCommentsViewModel.addComment(mediaAttachement: commentMediaBottomSheetViewModel.mediaAttachment)
-                            // Replying to specific comment, add specific comment's id and it's depth will be treated as parentCommentDepth.
-                            //                    await postCommentsViewModel.addComment(parentCommentId: "C0C0C98C-F1DF-4696-B89C-B1BE956595A6", parentCommentDepth: "0")
-                            
                         }
                     }) {
                         SendImage()

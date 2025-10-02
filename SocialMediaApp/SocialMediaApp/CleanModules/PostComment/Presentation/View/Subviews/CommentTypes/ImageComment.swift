@@ -10,8 +10,8 @@ import Zoomable
 
 struct ImageComment: View {
     @StateObject var viewModel: ImageViewModel
-    let imageName: String
-    let depth: Int
+    @StateObject var postCommentsViewModel: PostCommentsViewModel
+    let comment: CommentEntity
     
     var body: some View {
         VStack(alignment: .trailing) {
@@ -40,9 +40,9 @@ struct ImageComment: View {
                 }
             }
             
-            if depth < 2 {
+            if comment.depth! < 2 {
                 Button(AppText.reply) {
-                    print("Reply Pressed")
+                    postCommentsViewModel.replyToComment = comment
                 }
                 .font(.system(size: 12))
                 .foregroundStyle(Color.black)
@@ -52,7 +52,7 @@ struct ImageComment: View {
         .padding(.horizontal, 10)
         .padding(.vertical, 5)
         .onAppear {
-            viewModel.fetchImage(imageName: imageName)
+            viewModel.fetchImage(imageName: comment.mediaName!)
         }
     }
 }

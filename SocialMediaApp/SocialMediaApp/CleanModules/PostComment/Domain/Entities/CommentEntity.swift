@@ -17,6 +17,6 @@ struct CommentEntity: Identifiable, Equatable {
     let createdAt: String
     let replyCount: String?
     let parentCommentDepth: String?
-    let depth: String?
+    let depth: Int?
 }
 

@@ -18,7 +18,7 @@ struct PostCommentsScreen: View {
     var body: some View {
         VStack(spacing: 0) {
             
-            ScrollView {
+            Group {
                 switch postCommentsViewModel.post.postType {
                 case .image:
                     appDIContainer.createNamedImageView(imageName: postCommentsViewModel.post.mediaName)
@@ -40,11 +40,19 @@ struct PostCommentsScreen: View {
                         )
                 }
             }
-            
-            CommentsView(postCommentsViewModel: postCommentsViewModel)
-            
-            
-            appDIContainer.createAddCommentView(postCommentsViewModel: postCommentsViewModel, commentMediaBottomSheetViewModel: commentMediaBottomSheetViewModel)
+            .padding(.bottom, 20)
+                
+            ZStack {
+                CommentsView(postCommentsViewModel: postCommentsViewModel)
+                if postCommentsViewModel.isLoading {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .black))
+                        .scaleEffect(1.5)
+                        .transition(.scale)
+                }
+            }
+                appDIContainer.createAddCommentView(postCommentsViewModel: postCommentsViewModel, commentMediaBottomSheetViewModel: commentMediaBottomSheetViewModel)
+                    .layoutPriority(1)
         }
         .sheet(isPresented: Binding<Bool>(
             get: { router.activeSheet == .importMediaComment },
