@@ -68,69 +68,6 @@ class DefaultNetworkRepository: NetworkRepository {
         return post
     }
     
-    private func updateParentCommentsReplyCounts(_ parentCommentId: String?) async throws {
-        if let id = parentCommentId {
-            let comment = try await fetchComment(commentId: id)
-            var replyCount = Int(comment.replyCount ?? "0") ?? 0
-            replyCount += 1
-            
-            var fields: [String: Any] = [
-                "type": ["stringValue": comment.type],
-                "createdAt": ["stringValue": comment.createdAt],
-                "postId": ["stringValue": comment.postId],
-                "replyCount": ["integerValue": "\(replyCount)"]
-            ]
-            
-            if let parentCommentId = comment.parentCommentId {
-                fields["parentCommentId"] = ["stringValue": parentCommentId]
-                if let parentCommentDepth = comment.parentCommentDepth {
-                    fields["parentCommentDepth"] = ["stringValue": parentCommentDepth]
-                }
-            }
-            if let text = comment.text {
-                fields["text"] = ["stringValue": text]
-            }
-            
-            if let mediaName = comment.mediaName {
-                fields["mediaName"] = ["stringValue": mediaName]
-            }
-            
-            if let depth = comment.depth {
-                fields["depth"] = ["stringValue": depth]
-            }
-            
-            let body: [String: Any] = [ "fields": fields ]
-            
-            let updateCommentNetworkRequest = DefaultNetworkRequest(path: AppConfiguration.APIEndPoint.updateComment + "\(id)", method: .patch, headerParameters: ["Authorization": "Bearer \(AppConfiguration.token)", "Content-Type": "application/json"], bodyParameters: body)
-            try await apiDataTransferService.request(request: updateCommentNetworkRequest)
-        }
-    }
-    private func getCommentEntity(postId: String, mediaAttachement: MediaAttachment?, fileName: String?, commentText: String?, parentCommentId: String?, parentCommentDepth: String?) -> CommentEntity? {
-                        // Give precedence to media comments over text comments if both are there.
-        var commentText: String? = commentText
-        var mediaType: CommentType = CommentType.text
-        if mediaAttachement?.url != nil {
-            switch mediaAttachement!.mediaType {
-            case .image:
-                mediaType = CommentType.image
-            case .audio:
-                mediaType = CommentType.audio
-            case .video:
-                mediaType = CommentType.video
-            }
-            commentText = nil
-        }
-        let parentCommentDepth = parentCommentDepth ?? "0"
-        
-        var replyCommentDepth = 0
-        if parentCommentId != nil {
-            replyCommentDepth = Int(parentCommentDepth)! + 1
-        }
-        
-        let commentEntity = CommentEntity(id: UUID().uuidString, postId: postId, parentCommentId: parentCommentId, text: commentText, type: mediaType.rawValue, mediaName: fileName, createdAt: Utility.getISO8601Date(), replyCount: "0", parentCommentDepth: parentCommentDepth, depth: "\(replyCommentDepth)")
-        return commentEntity
-    }
-    
     func addComment(postId: String, mediaAttachement: MediaAttachment?, fileName: String?, commentText: String?, parentCommentId: String? = nil, parentCommentDepth: String? = nil) async throws -> CommentDTO {
         let comment = getCommentEntity(postId: postId, mediaAttachement: mediaAttachement, fileName: fileName, commentText: commentText, parentCommentId: parentCommentId, parentCommentDepth: parentCommentDepth)
         guard let commentEntity = comment else {
@@ -173,24 +110,10 @@ class DefaultNetworkRepository: NetworkRepository {
                 print(error.localizedDescription)
             }
         }
-        
         return CommentDTO(id: commentEntity.id, postId: commentEntity.postId, parentCommentId: commentEntity.parentCommentId, text: commentEntity.text, type: commentEntity.type, mediaName: commentEntity.mediaName, createdAt: commentEntity.createdAt, replyCount: commentEntity.replyCount, depth: commentEntity.depth, parentCommentDepth: commentEntity.parentCommentDepth)
     }
     
-    func fetchComment(commentId: String) async throws -> CommentDTO {
-        let fetchCommentNetworkRequest = DefaultNetworkRequest(path: AppConfiguration.APIEndPoint.fetchAComment + "\(commentId)", method: .get, headerParameters: ["Authorization": "Bearer \(AppConfiguration.token)", "Content-Type": "application/json"])
-        
-        let firestoreComment: FirestoreCommentDocument = try await apiDataTransferService.request(request: fetchCommentNetworkRequest)
-        let commentDTO = CommentDTO(from: firestoreComment)
-        if let comment = commentDTO {
-            return comment
-        }
-        throw CustomError.message("Failed to fetch comment by comment ID")
-    }
-    
     func getComments(postId: String, limit: Int, startAt: String?) async throws -> [CommentDTO] {
-        
-        // Firebase Needs following Query Params
         var structuredQuery: [String: Any] = [
             "from": [["collectionId": "comments"]],
             "orderBy": [[
@@ -220,5 +143,80 @@ class DefaultNetworkRepository: NetworkRepository {
             return nil
         }
         return comments
+    }
+    
+    private func updateParentCommentsReplyCounts(_ parentCommentId: String?) async throws {
+        if let id = parentCommentId {
+            let comment = try await fetchComment(commentId: id)
+            var replyCount = Int(comment.replyCount ?? "0") ?? 0
+            replyCount += 1
+            
+            var fields: [String: Any] = [
+                "type": ["stringValue": comment.type],
+                "createdAt": ["stringValue": comment.createdAt],
+                "postId": ["stringValue": comment.postId],
+                "replyCount": ["integerValue": "\(replyCount)"]
+            ]
+            
+            if let parentCommentId = comment.parentCommentId {
+                fields["parentCommentId"] = ["stringValue": parentCommentId]
+                if let parentCommentDepth = comment.parentCommentDepth {
+                    fields["parentCommentDepth"] = ["stringValue": parentCommentDepth]
+                }
+            }
+            if let text = comment.text {
+                fields["text"] = ["stringValue": text]
+            }
+            
+            if let mediaName = comment.mediaName {
+                fields["mediaName"] = ["stringValue": mediaName]
+            }
+            
+            if let depth = comment.depth {
+                fields["depth"] = ["stringValue": depth]
+            }
+            
+            let body: [String: Any] = [ "fields": fields ]
+            
+            let updateCommentNetworkRequest = DefaultNetworkRequest(path: AppConfiguration.APIEndPoint.updateComment + "\(id)", method: .patch, headerParameters: ["Authorization": "Bearer \(AppConfiguration.token)", "Content-Type": "application/json"], bodyParameters: body)
+            try await apiDataTransferService.request(request: updateCommentNetworkRequest)
+        }
+    }
+    
+    private func fetchComment(commentId: String) async throws -> CommentDTO {
+        let fetchCommentNetworkRequest = DefaultNetworkRequest(path: AppConfiguration.APIEndPoint.fetchAComment + "\(commentId)", method: .get, headerParameters: ["Authorization": "Bearer \(AppConfiguration.token)", "Content-Type": "application/json"])
+        
+        let firestoreComment: FirestoreCommentDocument = try await apiDataTransferService.request(request: fetchCommentNetworkRequest)
+        let commentDTO = CommentDTO(from: firestoreComment)
+        if let comment = commentDTO {
+            return comment
+        }
+        throw CustomError.message("Failed to fetch comment by comment ID")
+    }
+    
+    private func getCommentEntity(postId: String, mediaAttachement: MediaAttachment?, fileName: String?, commentText: String?, parentCommentId: String?, parentCommentDepth: String?) -> CommentEntity? {
+                        // Give precedence to media comments over text comments if both are there.
+        var commentText: String? = commentText
+        var mediaType: CommentType = CommentType.text
+        if mediaAttachement?.url != nil {
+            switch mediaAttachement!.mediaType {
+            case .image:
+                mediaType = CommentType.image
+            case .audio:
+                mediaType = CommentType.audio
+            case .video:
+                mediaType = CommentType.video
+            }
+            commentText = nil
+        }
+        let parentCommentDepth = parentCommentDepth ?? "0"
+        
+        var replyCommentDepth = 0
+        if parentCommentId != nil {
+            replyCommentDepth = Int(parentCommentDepth)! + 1
+        }
+        
+        let commentEntity = CommentEntity(id: UUID().uuidString, postId: postId, parentCommentId: parentCommentId, text: commentText, type: mediaType.rawValue, mediaName: fileName, createdAt: Utility.getISO8601Date(), replyCount: "0", parentCommentDepth: parentCommentDepth, depth: "\(replyCommentDepth)")
+        return commentEntity
     }
 }
