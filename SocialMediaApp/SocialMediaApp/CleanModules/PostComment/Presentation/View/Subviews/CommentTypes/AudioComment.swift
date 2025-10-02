@@ -9,28 +9,18 @@ import SwiftUI
 import AVKit
 
 struct AudioComment: View {
-    @State private var audioProgress = 0.3
-    let videoURL: URL
+    @Environment(\.appDIContainer) private var appDIContainer
+    let mediaName: String
     let depth: Int
     
     var body: some View {
+        
         VStack(alignment: .trailing) {
-            HStack {
-                Button(action: {
-                    print("Play Audio")
-                }) {
-                    Image(systemName: false ? Images.pause : Images.play)
-                        .resizable()
-                        .frame(width: 35, height: 35)
-                        .foregroundColor(.purple)
-                }
-                Slider(value: $audioProgress, in: 0...1)
-                    .accentColor(Color.primary)
-                    .frame(width: 130)
-                Text("01:00")
-                    .foregroundStyle(Color.primary)
-                    .font(.body)
-            }
+            appDIContainer.createAudioPlayerView(resourceName: mediaName)
+                .frame(width: 170)
+                .padding()
+                .background(Color.secondary)
+                .clipShape(RoundedRectangle(cornerRadius: 5))
             
             if depth < 2 {
                 Button(AppText.reply) {
@@ -41,7 +31,6 @@ struct AudioComment: View {
                 .padding(.trailing, 5)
             }
         }
-        
         .padding(.horizontal, 10)
         .padding(.vertical, 5)
     }
@@ -49,5 +38,5 @@ struct AudioComment: View {
 
 #Preview {
     let videoURL = Bundle.main.url(forResource: "sample-video", withExtension: "mp4")!
-    AudioComment(videoURL: videoURL, depth: 1)
+//    AudioComment(videoURL: videoURL, depth: 1)
 }

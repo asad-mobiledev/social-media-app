@@ -21,6 +21,14 @@ class PlayableModule {
         AudioPlayerView(audioViewModel: generateAudioViewModel(resourceName: resourceName, audioURL: audioURL))
     }
     
+    func generateVideoCommentView(resourceName: String, depth: Int) -> VideoComment {
+        VideoComment(mediaName: resourceName, depth: depth)
+    }
+    
+    func generateAudioCommentView(resourceName: String, depth: Int) -> AudioComment {
+        AudioComment(mediaName: resourceName, depth: depth)
+    }
+    
     func generateVideoPlayerView(resourceName: String? = nil, videoURL: URL? = nil) -> VideoPlayerView {
         VideoPlayerView(videoViewModel: generateVideoPlayerViewModel(resourceName: resourceName, videoURL: videoURL, playableUseCase: generatePlayableUseCase()))
     }

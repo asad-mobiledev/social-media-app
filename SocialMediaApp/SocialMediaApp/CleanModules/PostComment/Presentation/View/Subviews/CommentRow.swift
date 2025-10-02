@@ -20,9 +20,9 @@ struct CommentRow: View {
                 case CommentType.image.rawValue:
                     appDIContainer.createImageCommentView(imageName: comment.mediaName!, depth: Int(comment.depth ?? "0")!)
                 case CommentType.audio.rawValue:
-                    AudioComment(videoURL: Bundle.main.url(forResource: "sample-video", withExtension: "mp4")!, depth: Int(comment.depth ?? "0")!)
+                    appDIContainer.createAudioCommentView(resourceName: comment.mediaName!, depth: Int(comment.depth ?? "0")!)
                 case CommentType.video.rawValue:
-                    VideoComment(videoURL: Bundle.main.url(forResource: "sample-video", withExtension: "mp4")!, depth: Int(comment.depth ?? "0")!)
+                    appDIContainer.createVideoCommentView(resourceName: comment.mediaName!, depth: Int(comment.depth ?? "0")!)
                 default:
                     EmptyView()
                 }

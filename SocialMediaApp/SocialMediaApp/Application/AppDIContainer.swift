@@ -91,6 +91,16 @@ class AppDIContainer {
         return imageViewModule.generateImageCommentView(imageName: imageName, depth: depth)
     }
     
+    func createAudioCommentView(resourceName: String, depth: Int) -> some View {
+        let playableModule = PlayableModule(fileService: fileService!)
+        return playableModule.generateAudioCommentView(resourceName: resourceName, depth: depth)
+    }
+    
+    func createVideoCommentView(resourceName: String, depth: Int) -> some View {
+        let playableModule = PlayableModule(fileService: fileService!)
+        return playableModule.generateVideoCommentView(resourceName: resourceName, depth: depth)
+    }
+    
     func createAudioPlayerView(resourceName: String) -> some View {
         let playableModule = PlayableModule(fileService: fileService!)
         return playableModule.generateAudioPlayerView(resourceName: resourceName)
