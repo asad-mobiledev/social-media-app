@@ -86,7 +86,7 @@ struct AddCommentView: View {
             .frame(height: commentMediaBottomSheetViewModel.mediaAttachment?.mediaType == .audio ? 90 : 170)
             
             HStack(alignment: .center){
-                CommentTextEditView(postCommentsViewModel: postCommentsViewModel)
+                TextFieldView(postCommentsViewModel: postCommentsViewModel)
                 
                 Button(action: {
                     router.present(sheet: .importMediaComment)

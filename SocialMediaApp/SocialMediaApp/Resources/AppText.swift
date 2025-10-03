@@ -9,7 +9,7 @@ struct AppText {
     static let comment = "Comment"
     static let posts = "Posts"
     static let reply = "Reply"
-    static let typeHere = "Comment..."
+    static let typeHere = "Enter your comment..."
     static let createPost = "Create Post"
     static let selectFromGallery = "Select content from gallery"
     static let selectFromFiles = "Select content from Files"

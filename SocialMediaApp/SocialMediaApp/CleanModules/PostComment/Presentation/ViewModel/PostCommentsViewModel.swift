@@ -12,7 +12,7 @@ class PostCommentsViewModel: ObservableObject {
     let post: PostEntity
     let postCommentUseCase: PostCommentUseCase
     
-    @Published var commentText: String = AppText.typeHere
+    @Published var commentText: String = ""
     @Published var errorMessage: String = ""
     @Published var comments: [CommentEntity] = []
     @Published var isLoading = false

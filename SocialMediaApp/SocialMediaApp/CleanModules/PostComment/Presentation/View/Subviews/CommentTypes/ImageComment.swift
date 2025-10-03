@@ -58,8 +58,8 @@ struct ImageComment: View {
                         postCommentsViewModel.replyToComment = comment
                     }
                     .font(.system(size: 12))
-                    .foregroundStyle(Color.black)
-                    .padding(.trailing, 5)
+                    .foregroundStyle(Color.primary)
+                    .padding(.trailing, 0)
                 }
             }
             

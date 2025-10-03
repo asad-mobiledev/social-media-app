@@ -17,15 +17,15 @@ struct TextComment: View {
                 .multilineTextAlignment(.leading)
                 .lineLimit(nil)
                 .font(.body)
-                .foregroundStyle(Color.primary)
+                .foregroundStyle(Color.black)
             
             if depth < 2 {
                 Button(AppText.reply) {
                     print("Reply Pressed")
                 }
                 .font(.system(size: 12))
-                .foregroundStyle(Color.black)
-                .padding(.trailing, 5)
+                .foregroundStyle(Color.primary)
+                .padding(.trailing, 0)
             }
         }
         

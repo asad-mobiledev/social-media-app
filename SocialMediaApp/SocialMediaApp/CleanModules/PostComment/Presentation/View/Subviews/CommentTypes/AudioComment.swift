@@ -27,8 +27,8 @@ struct AudioComment: View {
                     print("Reply Pressed")
                 }
                 .font(.system(size: 12))
-                .foregroundStyle(Color.black)
-                .padding(.trailing, 5)
+                .foregroundStyle(Color.primary)
+                .padding(.trailing, 0)
             }
         }
         .padding(.horizontal, 10)
