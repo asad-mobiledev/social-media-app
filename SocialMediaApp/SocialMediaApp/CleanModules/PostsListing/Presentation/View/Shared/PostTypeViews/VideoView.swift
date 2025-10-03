@@ -15,10 +15,6 @@ struct VideoView: View {
         appDIContainer.createVideoPlayerView(resourceName: videoName)
             .frame(height: 250)
             .clipShape(.rect())
-            .overlay(
-                Rectangle()
-                    .stroke(Color.secondary, lineWidth: 4)
-            )
     }
 }
 

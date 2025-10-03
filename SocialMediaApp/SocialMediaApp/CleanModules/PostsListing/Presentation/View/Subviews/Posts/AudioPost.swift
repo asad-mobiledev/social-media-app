@@ -17,14 +17,7 @@ struct AudioPost: View {
             appDIContainer.createAudioPlayerView(resourceName: post.mediaName)
                 .padding()
             
-            HStack {
-                Spacer()
-                CommentButton(post: post)
-                    .padding(.trailing, 5)
-            }
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(.gray)
+            appDIContainer.createCommentsCountAndButtonView(post:post)
         }
         .background(Color.secondary)
     }

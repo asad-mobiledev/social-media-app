@@ -71,6 +71,11 @@ class AppDIContainer {
     func createSendVideoView(videoURL: URL) -> some View {
         SendVideoView(videoURL: videoURL)
     }
+    
+    func createVideoView(videoName: String) -> some View {
+        VideoView(videoName: videoName)
+    }
+    
     func createPostCommentScreen(post: PostEntity) -> some View {
         let postCommentModule = PostCommentModule(apiDataTransferService: apiDataTransferService, databaseService: databaseService!, fileService: fileService!)
         return postCommentModule.generatePostCommentScreen(post: post)
@@ -85,6 +90,11 @@ class AppDIContainer {
         let sendImageViewModule = ImageViewModule(fileService: fileService!)
         return sendImageViewModule.generateNamedImageView(imageName: imageName)
     }
+    
+    func createCommentsCountAndButtonView(post: PostEntity) -> some View {
+        return CommentsCountAndButtonView(post: post)
+    }
+    
     func createTextCommentView(comment: CommentEntity, postCommentsViewModel: PostCommentsViewModel) -> some View {
         TextComment(postCommentsViewModel: postCommentsViewModel, comment: comment)
     }

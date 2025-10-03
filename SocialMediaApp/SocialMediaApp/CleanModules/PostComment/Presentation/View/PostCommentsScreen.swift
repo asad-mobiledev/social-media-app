@@ -14,7 +14,6 @@ struct PostCommentsScreen: View {
     @StateObject var postCommentsViewModel: PostCommentsViewModel
     @StateObject var commentMediaBottomSheetViewModel: ImportMediaBottomSheetViewModel
     
-    
     var body: some View {
         VStack(spacing: 0) {
             

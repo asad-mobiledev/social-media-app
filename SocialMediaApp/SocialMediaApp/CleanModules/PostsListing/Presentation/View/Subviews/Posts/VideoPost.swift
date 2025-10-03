@@ -8,19 +8,13 @@
 import SwiftUI
 
 struct VideoPost: View {
+    @Environment(\.appDIContainer) private var appDIContainer
     let post: PostEntity
     
     var body: some View {
         VStack {
-            VideoView(videoName: post.mediaName)
-            HStack {
-                Spacer()
-                CommentButton(post: post)
-                    .padding(.trailing, 5)
-            }
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(.gray)
+            appDIContainer.createVideoView(videoName: post.mediaName)
+            appDIContainer.createCommentsCountAndButtonView(post:post)
         }
         .background(Color.secondary)
     }
