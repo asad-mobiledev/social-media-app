@@ -9,7 +9,7 @@ import SwiftUI
 import AVKit
 
 struct VideoPlayerView: View {
-    @ObservedObject var videoViewModel: VideoPlayerViewModel
+    @StateObject var videoViewModel: VideoPlayerViewModel
     
     var body: some View {
         VideoPlayer(player: videoViewModel.player)

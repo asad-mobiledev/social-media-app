@@ -18,7 +18,7 @@ class PlayableModule {
         return SendAudioView(audioURL: audioURL)
     }
     func generateAudioPlayerView(resourceName: String? = nil, audioURL: URL? = nil) -> AudioPlayerView {
-        AudioPlayerView(audioViewModel: generateAudioViewModel(resourceName: resourceName, audioURL: audioURL))
+        AudioPlayerView(audioViewModel: self.generateAudioViewModel(resourceName: resourceName, audioURL: audioURL))
     }
     
     func generateVideoCommentView(resourceName: String, depth: Int) -> VideoComment {
@@ -30,7 +30,7 @@ class PlayableModule {
     }
     
     func generateVideoPlayerView(resourceName: String? = nil, videoURL: URL? = nil) -> VideoPlayerView {
-        VideoPlayerView(videoViewModel: generateVideoPlayerViewModel(resourceName: resourceName, videoURL: videoURL, playableUseCase: generatePlayableUseCase()))
+        VideoPlayerView(videoViewModel: self.generateVideoPlayerViewModel(resourceName: resourceName, videoURL: videoURL, playableUseCase: self.generatePlayableUseCase()))
     }
     
     

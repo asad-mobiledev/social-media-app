@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AudioPlayerView: View {
-    @ObservedObject var audioViewModel: AudioViewModel
+    @StateObject var audioViewModel: AudioViewModel
     private var audioProgressBinding: Binding<Double> {
         Binding(
             get: { audioViewModel.audioProgress },

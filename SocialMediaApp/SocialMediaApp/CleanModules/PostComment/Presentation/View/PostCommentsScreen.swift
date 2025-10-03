@@ -34,10 +34,10 @@ struct PostCommentsScreen: View {
                         )
                 case .audio:
                     appDIContainer.createAudioPlayerView(resourceName: postCommentsViewModel.post.mediaName)
-                        .overlay(
-                            Rectangle()
-                                .stroke(Color.secondary, lineWidth: 4)
-                        )
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 30)
+                        .background(Color.secondary)
+                        .clipped()
                 }
             }
             .padding(.bottom, 20)
