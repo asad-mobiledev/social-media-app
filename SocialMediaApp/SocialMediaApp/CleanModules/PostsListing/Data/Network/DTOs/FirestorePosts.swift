@@ -11,9 +11,10 @@ struct FirestorePostFields: Codable {
     var postType: FirestoreValue?
     var mediaName: FirestoreValue?
     var date: FirestoreValue?
+    var commentsCount: FirestoreValue?
     
     enum CodingKeys: String, CodingKey {
-        case id, postType, mediaName, date
+        case id, postType, mediaName, date, commentsCount
     }
     
     init(from decoder: Decoder) throws {
@@ -22,6 +23,7 @@ struct FirestorePostFields: Codable {
         self.postType = try container.decodeIfPresent(FirestoreValue.self, forKey: .postType)
         self.mediaName = try container.decodeIfPresent(FirestoreValue.self, forKey: .mediaName)
         self.date = try container.decodeIfPresent(FirestoreValue.self, forKey: .date)
+        self.commentsCount = try container.decodeIfPresent(FirestoreValue.self, forKey: .commentsCount)
     }
 }
 

@@ -12,6 +12,8 @@ struct AppConfiguration {
     struct APIEndPoint {
         static let fetchPosts = baseURL + ":runQuery"
         static let createPost = baseURL + "/posts"
+        static let fetchAPost = baseURL + "/posts/"
+        static let updatePost = baseURL + "/posts/"
         static let addComment = baseURL + "/comments"
         static let fetchComments = baseURL + ":runQuery"
         static let fetchAComment = baseURL + "/comments/"

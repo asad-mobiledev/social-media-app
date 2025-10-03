@@ -5,6 +5,8 @@
 //  Created by Asad Mehmood on 26/09/2025.
 //
 
+import Foundation
+
 protocol PostCommentUseCase {
     func addComment(postId: String, mediaAttachement: MediaAttachment?, commentText: String?, parentCommentId: String?, parentCommentDepth: String?) async throws -> CommentEntity
     func fetchComments(postId: String, limit: Int, startAt: String?, parentCommentId: String?) async throws -> [CommentEntity]
@@ -20,7 +22,11 @@ final class DefaultPostCommentUseCase: PostCommentUseCase {
     
     func addComment(postId: String, mediaAttachement: MediaAttachment?, commentText: String?, parentCommentId: String? = nil, parentCommentDepth: String? = nil) async throws -> CommentEntity {
         
-        let commentDTO = try await repository.addComment(postId: postId, mediaAttachement: mediaAttachement, commentText: commentText, parentCommentId: parentCommentId, parentCommentDepth: parentCommentDepth)
+        let (commentDTO, postDTO) = try await repository.addComment(postId: postId, mediaAttachement: mediaAttachement, commentText: commentText, parentCommentId: parentCommentId, parentCommentDepth: parentCommentDepth)
+        if let post = postDTO {
+            let postEntity = post.toEntity()
+            NotificationCenter.default.post(name: .updatedPost, object: postEntity)
+        }
         return commentDTO.toEntity()
     }
     

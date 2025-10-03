@@ -15,7 +15,16 @@ struct ImagePost: View {
         VStack {
             appDIContainer.createNamedImageView(imageName: post.mediaName)
             HStack {
+                let commentOrComments = post.commentsCount > 1 ? "comments": "comment"
+                let commentButtonText = "\(post.commentsCount) \(commentOrComments)"
+                Button(commentButtonText) {
+                    print("Comments Button Tapped")
+                }
+                .font(.system(size: 12))
+                .foregroundStyle(Color.black)
+
                 Spacer()
+                
                 CommentButton(post: post)
                     .padding(.trailing, 5)
                     .padding(.bottom, 5)

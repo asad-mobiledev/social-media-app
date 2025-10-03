@@ -21,7 +21,7 @@ class DefaultPostCommentRepository: PostCommentRepository {
         self.databaseService = databaseService
     }
     
-    func addComment(postId: String, mediaAttachement: MediaAttachment?, commentText: String?, parentCommentId: String? = nil, parentCommentDepth: String? = nil) async throws -> CommentDTO {
+    func addComment(postId: String, mediaAttachement: MediaAttachment?, commentText: String?, parentCommentId: String? = nil, parentCommentDepth: String? = nil) async throws -> (CommentDTO, PostDTO?) {
         var fileName: String? = nil
         if let url = mediaAttachement?.url {
             fileName = try filesRespository.save(mediaType: mediaAttachement!.mediaType, mediaURL: url)

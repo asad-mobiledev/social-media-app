@@ -30,6 +30,17 @@ class PostsListingViewModel: ObservableObject {
                 self?.posts.insert(newPost, at: 0)
             }
             .store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: .updatedPost)
+            .compactMap { $0.object as? PostEntity }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] updatedPost in
+                
+                if let index = self?.posts.firstIndex(where: { $0.id == updatedPost.id }) {
+                    self?.posts[index].commentsCount = updatedPost.commentsCount
+                }
+            }
+            .store(in: &cancellables)
     }
     
     func fetchPosts(isRefreshing: Bool = false) async {

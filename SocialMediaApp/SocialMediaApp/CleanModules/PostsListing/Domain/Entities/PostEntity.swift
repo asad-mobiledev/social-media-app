@@ -10,4 +10,5 @@ struct PostEntity: Identifiable, Equatable, Hashable {
     var postType: MediaType
     var mediaName: String
     var date: String
+    var commentsCount: Int
 }

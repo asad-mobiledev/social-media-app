@@ -13,11 +13,13 @@ final class PostModel {
     var postType: MediaType.RawValue
     var mediaName: String
     var date: String
+    var commentsCount: Int
     
-    init(id: String, postType: MediaType.RawValue, mediaName: String, date: String) {
+    init(id: String, postType: MediaType.RawValue, mediaName: String, date: String, commentsCount: Int) {
         self.id = id
         self.postType = postType
         self.mediaName = mediaName
         self.date = date
+        self.commentsCount = commentsCount
     }
 }

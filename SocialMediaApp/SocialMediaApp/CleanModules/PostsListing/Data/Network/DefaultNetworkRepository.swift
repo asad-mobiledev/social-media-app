@@ -49,7 +49,7 @@ class DefaultNetworkRepository: NetworkRepository {
     func createPost(mediaType: MediaType, mediaName: String) async throws -> PostDTO {
         let date = Utility.getISO8601Date()
         let documentName = UUID().uuidString
-        let post = PostDTO(id: documentName, postType: mediaType.rawValue, mediaName: mediaName, date: date)
+        let post = PostDTO(id: documentName, postType: mediaType.rawValue, mediaName: mediaName, date: date, commentsCount: "0")
         let body: [String: Any] = [
             "fields": [
                 "postType": [
@@ -60,6 +60,9 @@ class DefaultNetworkRepository: NetworkRepository {
                 ],
                 "date": [
                     "stringValue": post.date
+                ],
+                "commentsCount": [
+                    "stringValue": post.commentsCount
                 ]
             ]
         ]
@@ -68,7 +71,7 @@ class DefaultNetworkRepository: NetworkRepository {
         return post
     }
     
-    func addComment(postId: String, mediaAttachement: MediaAttachment?, fileName: String?, commentText: String?, parentCommentId: String? = nil, parentCommentDepth: String? = nil) async throws -> CommentDTO {
+    func addComment(postId: String, mediaAttachement: MediaAttachment?, fileName: String?, commentText: String?, parentCommentId: String? = nil, parentCommentDepth: String? = nil) async throws -> (CommentDTO, PostDTO?) {
         let comment = getCommentEntity(postId: postId, mediaAttachement: mediaAttachement, fileName: fileName, commentText: commentText, parentCommentId: parentCommentId, parentCommentDepth: parentCommentDepth)
         guard let commentEntity = comment else {
             throw CustomError.message(AppText.invalidComment)
@@ -110,7 +113,15 @@ class DefaultNetworkRepository: NetworkRepository {
                 print(error.localizedDescription)
             }
         }
-        return CommentDTO(id: commentEntity.id, postId: commentEntity.postId, parentCommentId: commentEntity.parentCommentId, text: commentEntity.text, type: commentEntity.type, mediaName: commentEntity.mediaName, createdAt: commentEntity.createdAt, replyCount: commentEntity.replyCount, depth: String(commentEntity.depth ?? 0), parentCommentDepth: commentEntity.parentCommentDepth)
+        var post: PostDTO?
+        do {
+            post = try await incrementPostCommentsCount(postId: commentEntity.postId)
+            
+        } catch {
+            print("Unable to update comment count of Post")
+        }
+        
+        return (CommentDTO(id: commentEntity.id, postId: commentEntity.postId, parentCommentId: commentEntity.parentCommentId, text: commentEntity.text, type: commentEntity.type, mediaName: commentEntity.mediaName, createdAt: commentEntity.createdAt, replyCount: commentEntity.replyCount, depth: String(commentEntity.depth ?? 0), parentCommentDepth: commentEntity.parentCommentDepth), post )
     }
     
     func getComments(postId: String, limit: Int, startAt: String?, parentCommentId: String?) async throws -> [CommentDTO] {
@@ -232,6 +243,34 @@ class DefaultNetworkRepository: NetworkRepository {
         }
     }
     
+    private func incrementPostCommentsCount(postId: String) async throws -> PostDTO {
+        var post = try await fetchPost(postId: postId)
+        var commentsCount = Int(post.commentsCount) ?? 0
+        commentsCount += 1
+        post.commentsCount = "\(commentsCount)"
+        
+        let body: [String: Any] = [
+            "fields": [
+                "postType": [
+                    "stringValue": post.postType
+                ],
+                "mediaName": [
+                    "stringValue": post.mediaName
+                ],
+                "date": [
+                    "stringValue": post.date
+                ],
+                "commentsCount": [
+                    "stringValue": post.commentsCount
+                ]
+            ]
+        ]
+        
+        let updatePostNetworkRequest = DefaultNetworkRequest(path: AppConfiguration.APIEndPoint.updatePost + "\(postId)", method: .patch, headerParameters: ["Authorization": "Bearer \(AppConfiguration.token)", "Content-Type": "application/json"], bodyParameters: body)
+        try await apiDataTransferService.request(request: updatePostNetworkRequest)
+        return post
+    }
+    
     private func fetchComment(commentId: String) async throws -> CommentDTO {
         let fetchCommentNetworkRequest = DefaultNetworkRequest(path: AppConfiguration.APIEndPoint.fetchAComment + "\(commentId)", method: .get, headerParameters: ["Authorization": "Bearer \(AppConfiguration.token)", "Content-Type": "application/json"])
         
@@ -239,6 +278,17 @@ class DefaultNetworkRepository: NetworkRepository {
         let commentDTO = CommentDTO(from: firestoreComment)
         if let comment = commentDTO {
             return comment
+        }
+        throw CustomError.message("Failed to fetch comment by comment ID")
+    }
+    
+    private func fetchPost(postId: String) async throws -> PostDTO {
+        let fetchPostNetworkRequest = DefaultNetworkRequest(path: AppConfiguration.APIEndPoint.fetchAPost + "\(postId)", method: .get, headerParameters: ["Authorization": "Bearer \(AppConfiguration.token)", "Content-Type": "application/json"])
+        
+        let firestorePost: FirestorePostDocument = try await apiDataTransferService.request(request: fetchPostNetworkRequest)
+        let postDTO = PostDTO(from: firestorePost)
+        if let post = postDTO {
+            return post
         }
         throw CustomError.message("Failed to fetch comment by comment ID")
     }
