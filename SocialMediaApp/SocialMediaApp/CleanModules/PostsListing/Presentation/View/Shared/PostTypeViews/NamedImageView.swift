@@ -17,8 +17,8 @@ struct NamedImageView: View {
             if let image = viewModel.image {
                 Image(uiImage: image)
                     .resizable()
-                    .scaledToFill()
-                    .frame(maxWidth: .infinity)
+                    .scaledToFit()
+                    .frame(maxWidth: .infinity, maxHeight: 250)
                     .clipShape(.rect())
                     .zoomable(minZoomScale: 0.5)
                     .clipped()
@@ -36,6 +36,7 @@ struct NamedImageView: View {
                 }
             }
         }
+        .background(.gray.opacity(0.1))
         .onAppear {
             viewModel.fetchImage(imageName: imageName)
         }

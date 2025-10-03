@@ -17,10 +17,13 @@ struct SendImageView: View {
             if let image = viewModel.image {
                 Image(uiImage: image)
                     .resizable()
+                    .scaledToFit()
                     .clipShape(RoundedRectangle(cornerRadius: 5))
-                    .frame(width: 150, height: 150)
+                    .frame(width: 150)
+                    .frame(maxHeight: 150)
                     .zoomable(minZoomScale: 0.5)
                     .clipped()
+                
             }
             else if let error = viewModel.errorMessage {
                 Text("Error: \(error)")
@@ -36,6 +39,7 @@ struct SendImageView: View {
                 }
             }
         }
+        .background(.gray.opacity(0.1))
         .onAppear {
             viewModel.fetchImage(localUrl: imageURL)
         }
