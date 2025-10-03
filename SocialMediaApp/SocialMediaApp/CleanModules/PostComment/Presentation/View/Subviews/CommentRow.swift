@@ -17,13 +17,13 @@ struct CommentRow: View {
             HStack {
                 switch comment.type {
                 case CommentType.text.rawValue:
-                    TextComment(text: comment.text ?? "", depth: comment.depth ?? 0)
+                    appDIContainer.createTextCommentView(comment: comment, postCommentsViewModel: postCommentsViewModel)
                 case CommentType.image.rawValue:
                     appDIContainer.createImageCommentView(comment: comment, postCommentsViewModel: postCommentsViewModel)
                 case CommentType.audio.rawValue:
-                    appDIContainer.createAudioCommentView(resourceName: comment.mediaName!, depth: comment.depth ?? 0)
+                    appDIContainer.createAudioCommentView(comment: comment, postCommentsViewModel: postCommentsViewModel)
                 case CommentType.video.rawValue:
-                    appDIContainer.createVideoCommentView(resourceName: comment.mediaName!, depth: comment.depth ?? 0)
+                    appDIContainer.createVideoCommentView(comment: comment, postCommentsViewModel: postCommentsViewModel)
                 default:
                     EmptyView()
                 }

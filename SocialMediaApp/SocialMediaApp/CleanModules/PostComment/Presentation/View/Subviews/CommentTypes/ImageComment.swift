@@ -10,7 +10,7 @@ import Zoomable
 
 struct ImageComment: View {
     @StateObject var viewModel: ImageViewModel
-    @StateObject var postCommentsViewModel: PostCommentsViewModel
+    @ObservedObject var postCommentsViewModel: PostCommentsViewModel
     let comment: CommentEntity
     
     var body: some View {
@@ -39,31 +39,7 @@ struct ImageComment: View {
                     }
                 }
             }
-            HStack {
-                if !comment.repliesLoaded {
-                    if let replyCount = Int(comment.replyCount ?? "0"), replyCount > 0 {
-                        Button("view \(replyCount) replies...") {
-                            Task {
-                                await postCommentsViewModel.fetchComments(parentCommentId: comment.id)
-                            }
-                        }
-                        .font(.system(size: 12))
-                        .foregroundStyle(Color.black)
-                        .padding(.trailing, 5)
-                    }
-                }
-                
-                if comment.depth! < 2 {
-                    Button(AppText.reply) {
-                        postCommentsViewModel.replyToComment = comment
-                    }
-                    .font(.system(size: 12))
-                    .foregroundStyle(Color.primary)
-                    .padding(.trailing, 0)
-                }
-            }
-            
-            
+            CommentsReplyView(postCommentsViewModel: postCommentsViewModel, comment: comment)
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 5)

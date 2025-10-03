@@ -8,34 +8,28 @@
 import SwiftUI
 
 struct TextComment: View {
-    let text: String
-    let depth: Int
+    @ObservedObject var postCommentsViewModel: PostCommentsViewModel
+    let comment: CommentEntity
     
     var body: some View {
-        VStack(alignment: .trailing) {
-            Text(text)
+        VStack(alignment: .leading) {
+            Text(comment.text!)
                 .multilineTextAlignment(.leading)
                 .lineLimit(nil)
                 .font(.body)
                 .foregroundStyle(Color.black)
             
-            if depth < 2 {
-                Button(AppText.reply) {
-                    print("Reply Pressed")
-                }
-                .font(.system(size: 12))
-                .foregroundStyle(Color.primary)
-                .padding(.trailing, 0)
-            }
+            CommentsReplyView(postCommentsViewModel: postCommentsViewModel, comment: comment)
         }
         
         .padding(.horizontal, 10)
         .padding(.vertical, 5)
         .background(Color.lightGray)
         .clipShape(RoundedRectangle(cornerRadius: 5))
+        .padding(.horizontal, 10)
     }
 }
 
 #Preview {
-    TextComment(text: "Test Comment ", depth: 1)
+//    TextComment(text: "Test Comment ", depth: 1)
 }

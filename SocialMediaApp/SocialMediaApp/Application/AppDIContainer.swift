@@ -85,20 +85,23 @@ class AppDIContainer {
         let sendImageViewModule = ImageViewModule(fileService: fileService!)
         return sendImageViewModule.generateNamedImageView(imageName: imageName)
     }
+    func createTextCommentView(comment: CommentEntity, postCommentsViewModel: PostCommentsViewModel) -> some View {
+        TextComment(postCommentsViewModel: postCommentsViewModel, comment: comment)
+    }
     
     func createImageCommentView(comment: CommentEntity, postCommentsViewModel: PostCommentsViewModel) -> some View {
         let imageViewModule = ImageViewModule(fileService: fileService!)
         return imageViewModule.generateImageCommentView(comment: comment, postCommentsViewModel: postCommentsViewModel)
     }
     
-    func createAudioCommentView(resourceName: String, depth: Int) -> some View {
+    func createAudioCommentView(comment: CommentEntity, postCommentsViewModel: PostCommentsViewModel) -> some View {
         let playableModule = PlayableModule(fileService: fileService!)
-        return playableModule.generateAudioCommentView(resourceName: resourceName, depth: depth)
+        return playableModule.generateAudioCommentView(comment: comment, postCommentsViewModel: postCommentsViewModel)
     }
     
-    func createVideoCommentView(resourceName: String, depth: Int) -> some View {
+    func createVideoCommentView(comment: CommentEntity, postCommentsViewModel: PostCommentsViewModel) -> some View {
         let playableModule = PlayableModule(fileService: fileService!)
-        return playableModule.generateVideoCommentView(resourceName: resourceName, depth: depth)
+        return playableModule.generateVideoCommentView(comment: comment, postCommentsViewModel: postCommentsViewModel)
     }
     
     func createAudioPlayerView(resourceName: String) -> some View {
