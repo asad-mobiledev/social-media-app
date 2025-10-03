@@ -113,9 +113,33 @@ class DefaultNetworkRepository: NetworkRepository {
         return CommentDTO(id: commentEntity.id, postId: commentEntity.postId, parentCommentId: commentEntity.parentCommentId, text: commentEntity.text, type: commentEntity.type, mediaName: commentEntity.mediaName, createdAt: commentEntity.createdAt, replyCount: commentEntity.replyCount, depth: String(commentEntity.depth ?? 0), parentCommentDepth: commentEntity.parentCommentDepth)
     }
     
-    func getComments(postId: String, limit: Int, startAt: String?) async throws -> [CommentDTO] {
+    func getComments(postId: String, limit: Int, startAt: String?, parentCommentId: String?) async throws -> [CommentDTO] {
+        if let parentCommentId = parentCommentId {
+            return try await getCommentReplies(postId: postId, parentCommentId: parentCommentId)
+        }
         var structuredQuery: [String: Any] = [
             "from": [["collectionId": "comments"]],
+            "where": [
+                "compositeFilter": [
+                    "op": "AND",
+                    "filters": [
+                        [
+                            "fieldFilter": [
+                                "field": ["fieldPath": "postId"],
+                                "op": "EQUAL",
+                                "value": ["stringValue": postId]
+                            ]
+                        ],
+                        [
+                            "fieldFilter": [
+                                "field": ["fieldPath": "depth"],
+                                "op": "EQUAL",
+                                "value": ["stringValue": "0"]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
             "orderBy": [[
                 "field": ["fieldPath": "createdAt"],
                 "direction": "DESCENDING"
@@ -137,10 +161,35 @@ class DefaultNetworkRepository: NetworkRepository {
         
         let firstoreComments: [FirestoreCommentssDocumentWrapper] = try await apiDataTransferService.request(request: fetchCommentsNetworkRequest)
         let comments = firstoreComments.compactMap { comment in
-            if comment.document.fields.postId?.stringValue == postId && comment.document.fields.parentCommentId == nil{
-                return CommentDTO(from: comment.document)
-            }
-            return nil
+            return CommentDTO(from: comment.document)
+        }
+        return comments
+    }
+    
+    private func getCommentReplies(postId: String, parentCommentId: String) async throws -> [CommentDTO] {
+        let structuredQuery: [String: Any] = [
+            "from": [["collectionId": "comments"]],
+            "where": [
+                "fieldFilter": [
+                    "field": [ "fieldPath": "parentCommentId" ],
+                    "op": "EQUAL",
+                    "value": [ "stringValue": parentCommentId]
+                ]
+            ],
+            "orderBy": [[
+                "field": ["fieldPath": "createdAt"],
+                "direction": "DESCENDING"
+            ]]
+        ]
+        let body: [String: Any] = [
+            "structuredQuery": structuredQuery
+        ]
+        
+        let fetchCommentsNetworkRequest = DefaultNetworkRequest(path: AppConfiguration.APIEndPoint.fetchComments, method: .post, headerParameters: ["Authorization": "Bearer \(AppConfiguration.token)", "Content-Type": "application/json"], bodyParameters: body)
+        
+        let firstoreComments: [FirestoreCommentssDocumentWrapper] = try await apiDataTransferService.request(request: fetchCommentsNetworkRequest)
+        let comments = firstoreComments.compactMap { comment in
+            return CommentDTO(from: comment.document)
         }
         return comments
     }

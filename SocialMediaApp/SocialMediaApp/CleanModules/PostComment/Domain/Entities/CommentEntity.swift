@@ -18,5 +18,6 @@ struct CommentEntity: Identifiable, Equatable {
     let replyCount: String?
     let parentCommentDepth: String?
     let depth: Int?
+    var repliesLoaded: Bool = false
 }
 

@@ -39,15 +39,31 @@ struct ImageComment: View {
                     }
                 }
             }
-            
-            if comment.depth! < 2 {
-                Button(AppText.reply) {
-                    postCommentsViewModel.replyToComment = comment
+            HStack {
+                if !comment.repliesLoaded {
+                    if let replyCount = Int(comment.replyCount ?? "0"), replyCount > 0 {
+                        Button("view \(replyCount) replies...") {
+                            Task {
+                                await postCommentsViewModel.fetchComments(parentCommentId: comment.id)
+                            }
+                        }
+                        .font(.system(size: 12))
+                        .foregroundStyle(Color.black)
+                        .padding(.trailing, 5)
+                    }
                 }
-                .font(.system(size: 12))
-                .foregroundStyle(Color.black)
-                .padding(.trailing, 5)
+                
+                if comment.depth! < 2 {
+                    Button(AppText.reply) {
+                        postCommentsViewModel.replyToComment = comment
+                    }
+                    .font(.system(size: 12))
+                    .foregroundStyle(Color.black)
+                    .padding(.trailing, 5)
+                }
             }
+            
+            
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 5)
@@ -58,5 +74,5 @@ struct ImageComment: View {
 }
 
 #Preview {
-//    ImageComment(imageName: "post-image", depth: 1)
+    //    ImageComment(imageName: "post-image", depth: 1)
 }

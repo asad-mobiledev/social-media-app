@@ -32,10 +32,10 @@ class DefaultPostCommentRepository: PostCommentRepository {
         return try await networkRepository.addComment(postId: postId, mediaAttachement: mediaAttachement, fileName: fileName, commentText: commentText, parentCommentId: parentCommentId, parentCommentDepth: parentCommentDepth)
     }
     
-    func getComments(postId: String, limit: Int, startAt: String?) async throws -> [CommentDTO] {
+    func getComments(postId: String, limit: Int, startAt: String?, parentCommentId: String?) async throws -> [CommentDTO] {
         var comments: [CommentDTO] = []
         do {
-            comments = try await networkRepository.getComments(postId: postId, limit: limit, startAt: startAt)
+            comments = try await networkRepository.getComments(postId: postId, limit: limit, startAt: startAt, parentCommentId: parentCommentId)
             do {
                 if startAt == nil {
                     do {

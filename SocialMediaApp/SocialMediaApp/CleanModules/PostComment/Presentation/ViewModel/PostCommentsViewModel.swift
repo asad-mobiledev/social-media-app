@@ -39,6 +39,7 @@ class PostCommentsViewModel: ObservableObject {
                 if let parentCommentId = self?.replyToComment?.id {
                     if let index = self?.comments.firstIndex(where: { $0.id == parentCommentId }) {
                         self?.comments.insert(newComment, at: index + 1)
+                        self?.replyToComment = nil
                     }
                 } else {
                     self?.comments.insert(newComment, at: 0)
@@ -74,8 +75,8 @@ class PostCommentsViewModel: ObservableObject {
         }
     }
     
-    func fetchComments(isRefreshing: Bool = false) async {
-        guard canHaveMoreComments() else { return }
+    func fetchComments(isRefreshing: Bool = false, parentCommentId: String? = nil) async {
+        guard canHaveMoreComments() || parentCommentId != nil else { return }
         guard !isLoading else { return }
         await MainActor.run {
             if !isRefreshing {
@@ -87,13 +88,23 @@ class PostCommentsViewModel: ObservableObject {
             if isRefreshing {
                 startIndex = nil
             }
-            let comments = try await postCommentUseCase.fetchComments(postId: post.id, limit: 5, startAt: startIndex)
-            lastFetchedCommentsCount = comments.count
+            
+            let comments = try await postCommentUseCase.fetchComments(postId: post.id, limit: 5, startAt: startIndex, parentCommentId: parentCommentId)
+            if parentCommentId == nil {
+                lastFetchedCommentsCount = comments.count
+            }
             await MainActor.run {
                 if isRefreshing {
                     self.comments = []
                 }
-                self.comments += comments
+                if let parentCommentId = parentCommentId {
+                    if let index = self.comments.firstIndex(where: { $0.id == parentCommentId }) {
+                        self.comments.insert(contentsOf: comments, at: index + 1)
+                        self.comments[index].repliesLoaded = true
+                    }
+                } else {
+                    self.comments += comments
+                }
             }
         } catch {
             await MainActor.run {
@@ -109,7 +120,7 @@ class PostCommentsViewModel: ObservableObject {
         await MainActor.run {
             errorMessage = ""
         }
-        await fetchComments(isRefreshing: true)
+        await fetchComments(isRefreshing: true, parentCommentId: nil)
     }
     
     private func canHaveMoreComments() -> Bool {
@@ -130,12 +141,5 @@ class PostCommentsViewModel: ObservableObject {
                 }
             }
         return nil
-    }
-    
-    func refreshPosts() async {
-        await MainActor.run {
-            errorMessage = ""
-        }
-        await fetchComments(isRefreshing: true)
     }
 }

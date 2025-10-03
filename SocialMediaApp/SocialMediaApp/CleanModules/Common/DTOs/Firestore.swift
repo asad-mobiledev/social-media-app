@@ -22,3 +22,14 @@ struct FirestoreArray: Codable {
 struct FirestoreMap: Codable {
     var fields: [String: FirestoreValue]?
 }
+
+// We can read error message in case of API failure of Firebase, we can devise some generic way to decode failed API.
+//struct FirestoreErrorWrapper: Codable {
+//    let error: FirestoreError
+//}
+//
+//struct FirestoreError: Codable {
+//    let code: Int
+//    let message: String
+//    let status: String
+//}

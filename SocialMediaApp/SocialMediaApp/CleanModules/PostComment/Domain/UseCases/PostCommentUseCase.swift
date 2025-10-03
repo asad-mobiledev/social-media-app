@@ -7,7 +7,7 @@
 
 protocol PostCommentUseCase {
     func addComment(postId: String, mediaAttachement: MediaAttachment?, commentText: String?, parentCommentId: String?, parentCommentDepth: String?) async throws -> CommentEntity
-    func fetchComments(postId: String, limit: Int, startAt: String?) async throws -> [CommentEntity]
+    func fetchComments(postId: String, limit: Int, startAt: String?, parentCommentId: String?) async throws -> [CommentEntity]
 }
 
 final class DefaultPostCommentUseCase: PostCommentUseCase {
@@ -24,8 +24,8 @@ final class DefaultPostCommentUseCase: PostCommentUseCase {
         return commentDTO.toEntity()
     }
     
-    func fetchComments(postId: String, limit: Int, startAt: String? = nil) async throws -> [CommentEntity] {
-        let commentDTOs = try await repository.getComments(postId: postId, limit: limit, startAt: startAt)
+    func fetchComments(postId: String, limit: Int, startAt: String? = nil, parentCommentId: String?) async throws -> [CommentEntity] {
+        let commentDTOs = try await repository.getComments(postId: postId, limit: limit, startAt: startAt, parentCommentId: parentCommentId)
         return commentDTOs.map { $0.toEntity() }
     }
 }

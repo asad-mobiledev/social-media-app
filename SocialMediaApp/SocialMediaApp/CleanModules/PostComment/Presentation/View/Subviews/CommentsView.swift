@@ -28,7 +28,7 @@ struct CommentsView: View {
         .refreshable {
             if !postCommentsViewModel.isLoading {
                 Task {
-                    await postCommentsViewModel.refreshPosts()
+                    await postCommentsViewModel.refreshComments()
                 }
             }
         }
