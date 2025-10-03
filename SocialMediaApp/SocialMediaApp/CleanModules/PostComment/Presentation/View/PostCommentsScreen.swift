@@ -12,7 +12,7 @@ struct PostCommentsScreen: View {
     @Environment(\.appDIContainer) private var appDIContainer
     @EnvironmentObject var router: Router
     @StateObject var postCommentsViewModel: PostCommentsViewModel
-    @ObservedObject var commentMediaBottomSheetViewModel: ImportMediaBottomSheetViewModel
+    @StateObject var commentMediaBottomSheetViewModel: ImportMediaBottomSheetViewModel
     
     
     var body: some View {
@@ -40,19 +40,39 @@ struct PostCommentsScreen: View {
                         .clipped()
                 }
             }
-            .padding(.bottom, 20)
-                
             ZStack {
-                CommentsView(postCommentsViewModel: postCommentsViewModel)
-                if postCommentsViewModel.isLoading {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: .black))
-                        .scaleEffect(1.5)
-                        .transition(.scale)
+                VStack(spacing: 0) {
+                    ZStack {
+                        CommentsView(postCommentsViewModel: postCommentsViewModel)
+                        if postCommentsViewModel.isLoading {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .black))
+                                .scaleEffect(1.5)
+                                .transition(.scale)
+                        }
+                    }
+                    appDIContainer.createAddCommentView(postCommentsViewModel: postCommentsViewModel, commentMediaBottomSheetViewModel: commentMediaBottomSheetViewModel)
+                        .layoutPriority(1)
                 }
+                .padding(.top, 20)
+                
+                .overlay(
+                    Group {
+                        if postCommentsViewModel.isSendCommentLoading {
+                            ZStack {
+                                Color.black.opacity(0.2)
+                                    .ignoresSafeArea()
+                                
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                    .scaleEffect(1.5)
+                                    .transition(.scale)
+                            }
+                            .transition(.opacity)
+                        }
+                    }
+                )
             }
-                appDIContainer.createAddCommentView(postCommentsViewModel: postCommentsViewModel, commentMediaBottomSheetViewModel: commentMediaBottomSheetViewModel)
-                    .layoutPriority(1)
         }
         .sheet(isPresented: Binding<Bool>(
             get: { router.activeSheet == .importMediaComment },
