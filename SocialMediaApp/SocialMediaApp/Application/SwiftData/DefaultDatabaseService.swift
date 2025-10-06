@@ -32,7 +32,7 @@ class DefaultDatabaseService: DatabaseService {
     }
 
     private init(isStoredInMemoryOnly: Bool) throws {
-        let schema = Schema([PostModel.self])
+        let schema = Schema([PostModel.self, PostCommentModel.self])
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: isStoredInMemoryOnly)
         self.container = try ModelContainer(for: schema, configurations: [config])
     }
@@ -49,18 +49,22 @@ class DefaultDatabaseService: DatabaseService {
         try context.save()
     }
 
-    func fetch<T: PersistentModel>(descriptor: FetchDescriptor<T>) throws -> [T] {
-        return try context.fetch(descriptor)
+    func fetch<T: PersistentModel>(descriptor: FetchDescriptor<T>?) throws -> [T] {
+        var fetchDescriptor: FetchDescriptor<T>
+        if let _ = descriptor {
+            fetchDescriptor = descriptor!
+        } else {
+            fetchDescriptor = FetchDescriptor<T>()
+        }
+        return try context.fetch(fetchDescriptor)
     }
     
-    func deleteAll<T: PersistentModel>(of type: T.Type) throws {
-        let descriptor = FetchDescriptor<T>()
-        let allItems = try context.fetch(descriptor)
-        
+    func deleteAll<T: PersistentModel>(of type: T.Type, descriptor: FetchDescriptor<T>?) throws {
+        let allItems = try fetch(descriptor: descriptor)
         for item in allItems {
             context.delete(item)
         }
-        
         try context.save()
     }
+    
 }

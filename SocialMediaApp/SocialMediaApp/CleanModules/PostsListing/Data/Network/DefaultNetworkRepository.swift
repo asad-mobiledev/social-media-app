@@ -71,7 +71,7 @@ class DefaultNetworkRepository: NetworkRepository {
         return post
     }
     
-    func addComment(postId: String, mediaAttachement: MediaAttachment?, fileName: String?, commentText: String?, parentCommentId: String? = nil, parentCommentDepth: String? = nil) async throws -> (CommentDTO, PostDTO?) {
+    func addComment(postId: String, mediaAttachement: MediaAttachment?, fileName: String?, commentText: String?, parentCommentId: String? = nil, parentCommentDepth: String? = nil) async throws -> CommentDTO {
         let comment = getCommentEntity(postId: postId, mediaAttachement: mediaAttachement, fileName: fileName, commentText: commentText, parentCommentId: parentCommentId, parentCommentDepth: parentCommentDepth)
         guard let commentEntity = comment else {
             throw CustomError.message(AppText.invalidComment)
@@ -106,22 +106,9 @@ class DefaultNetworkRepository: NetworkRepository {
         let addCommentNetworkRequest = DefaultNetworkRequest(path: AppConfiguration.APIEndPoint.addComment + "/\(String(describing: commentEntity.id))", method: .patch, headerParameters: ["Authorization": "Bearer \(AppConfiguration.token)", "Content-Type": "application/json"], bodyParameters: body)
         try await apiDataTransferService.request(request: addCommentNetworkRequest)
         
-        if commentEntity.parentCommentId != nil {
-            do {
-                try await updateParentCommentsReplyCounts(commentEntity.parentCommentId)
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
-        var post: PostDTO?
-        do {
-            post = try await incrementPostCommentsCount(postId: commentEntity.postId)
-            
-        } catch {
-            print("Unable to update comment count of Post")
-        }
         
-        return (CommentDTO(id: commentEntity.id, postId: commentEntity.postId, parentCommentId: commentEntity.parentCommentId, text: commentEntity.text, type: commentEntity.type, mediaName: commentEntity.mediaName, createdAt: commentEntity.createdAt, replyCount: commentEntity.replyCount, depth: String(commentEntity.depth ?? 0), parentCommentDepth: commentEntity.parentCommentDepth), post )
+        
+        return CommentDTO(id: commentEntity.id, postId: commentEntity.postId, parentCommentId: commentEntity.parentCommentId, text: commentEntity.text, type: commentEntity.type, mediaName: commentEntity.mediaName, createdAt: commentEntity.createdAt, replyCount: commentEntity.replyCount, depth: String(commentEntity.depth ?? 0), parentCommentDepth: commentEntity.parentCommentDepth)
     }
     
     func getComments(postId: String, limit: Int, startAt: String?, parentCommentId: String?) async throws -> [CommentDTO] {
@@ -205,45 +192,45 @@ class DefaultNetworkRepository: NetworkRepository {
         return comments
     }
     
-    private func updateParentCommentsReplyCounts(_ parentCommentId: String?) async throws {
-        if let id = parentCommentId {
-            let comment = try await fetchComment(commentId: id)
-            var replyCount = Int(comment.replyCount ?? "0") ?? 0
-            replyCount += 1
-            
-            var fields: [String: Any] = [
-                "type": ["stringValue": comment.type],
-                "createdAt": ["stringValue": comment.createdAt],
-                "postId": ["stringValue": comment.postId],
-                "replyCount": ["integerValue": "\(replyCount)"]
-            ]
-            
-            if let parentCommentId = comment.parentCommentId {
-                fields["parentCommentId"] = ["stringValue": parentCommentId]
-                if let parentCommentDepth = comment.parentCommentDepth {
-                    fields["parentCommentDepth"] = ["stringValue": parentCommentDepth]
-                }
+     func updateParentCommentsReplyCounts(_ parentCommentId: String) async throws -> CommentDTO {
+        var comment = try await fetchComment(commentId: parentCommentId)
+        var replyCount = Int(comment.replyCount ?? "0") ?? 0
+        replyCount += 1
+        
+        var fields: [String: Any] = [
+            "type": ["stringValue": comment.type],
+            "createdAt": ["stringValue": comment.createdAt],
+            "postId": ["stringValue": comment.postId],
+            "replyCount": ["integerValue": "\(replyCount)"]
+        ]
+        
+        if let parentCommentId = comment.parentCommentId {
+            fields["parentCommentId"] = ["stringValue": parentCommentId]
+            if let parentCommentDepth = comment.parentCommentDepth {
+                fields["parentCommentDepth"] = ["stringValue": parentCommentDepth]
             }
-            if let text = comment.text {
-                fields["text"] = ["stringValue": text]
-            }
-            
-            if let mediaName = comment.mediaName {
-                fields["mediaName"] = ["stringValue": mediaName]
-            }
-            
-            if let depth = comment.depth {
-                fields["depth"] = ["stringValue": depth]
-            }
-            
-            let body: [String: Any] = [ "fields": fields ]
-            
-            let updateCommentNetworkRequest = DefaultNetworkRequest(path: AppConfiguration.APIEndPoint.updateComment + "\(id)", method: .patch, headerParameters: ["Authorization": "Bearer \(AppConfiguration.token)", "Content-Type": "application/json"], bodyParameters: body)
-            try await apiDataTransferService.request(request: updateCommentNetworkRequest)
         }
+        if let text = comment.text {
+            fields["text"] = ["stringValue": text]
+        }
+        
+        if let mediaName = comment.mediaName {
+            fields["mediaName"] = ["stringValue": mediaName]
+        }
+        
+        if let depth = comment.depth {
+            fields["depth"] = ["stringValue": depth]
+        }
+        
+        let body: [String: Any] = [ "fields": fields ]
+        
+        let updateCommentNetworkRequest = DefaultNetworkRequest(path: AppConfiguration.APIEndPoint.updateComment + "\(parentCommentId)", method: .patch, headerParameters: ["Authorization": "Bearer \(AppConfiguration.token)", "Content-Type": "application/json"], bodyParameters: body)
+        try await apiDataTransferService.request(request: updateCommentNetworkRequest)
+        return CommentDTO(id: parentCommentId, postId: comment.postId, parentCommentId: comment.parentCommentId, text: comment.text, type: comment.type, mediaName: comment.mediaName, createdAt: comment.createdAt, replyCount: "\(replyCount)", depth: comment.depth, parentCommentDepth: comment.parentCommentDepth)
+        
     }
     
-    private func incrementPostCommentsCount(postId: String) async throws -> PostDTO {
+    func incrementPostCommentsCount(postId: String) async throws -> PostDTO {
         var post = try await fetchPost(postId: postId)
         var commentsCount = Int(post.commentsCount) ?? 0
         commentsCount += 1

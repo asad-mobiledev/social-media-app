@@ -40,7 +40,7 @@ extension DefaultPostsRepository: PostsListingRepository {
             do {
                 if startAt == nil {
                     do {
-                        try await databaseService.deleteAll(of: PostModel.self)
+                        try await databaseService.deleteAll(of: PostModel.self, descriptor: nil)
                     } catch {
                         print("Failed deleting Database records \(#function)")
                         return posts
