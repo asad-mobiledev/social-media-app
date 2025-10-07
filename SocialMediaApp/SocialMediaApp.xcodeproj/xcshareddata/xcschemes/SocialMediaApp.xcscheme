@@ -35,7 +35,7 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "69090D8D2E66C15500C46725"
+               BlueprintIdentifier = "69C6816C2E94D3E1004E8BD9"
                BuildableName = "SocialMediaAppTests.xctest"
                BlueprintName = "SocialMediaAppTests"
                ReferencedContainer = "container:SocialMediaApp.xcodeproj">
