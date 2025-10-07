@@ -77,16 +77,6 @@
 			path = SocialMediaApp;
 			sourceTree = "<group>";
 		};
-		69090D912E66C15500C46725 /* SocialMediaAppTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SocialMediaAppTests;
-			sourceTree = "<group>";
-		};
-		69090D9B2E66C15500C46725 /* SocialMediaAppUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SocialMediaAppUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,8 +132,6 @@
 			isa = PBXGroup;
 			children = (
 				69090D802E66C15300C46725 /* SocialMediaApp */,
-				69090D912E66C15500C46725 /* SocialMediaAppTests */,
-				69090D9B2E66C15500C46725 /* SocialMediaAppUITests */,
 				69090D7F2E66C15300C46725 /* Products */,
 				690E099C2E741E940015C0E3 /* Secrets.xcconfig */,
 			);
@@ -221,9 +209,6 @@
 			dependencies = (
 				69090D902E66C15500C46725 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				69090D912E66C15500C46725 /* SocialMediaAppTests */,
-			);
 			name = SocialMediaAppTests;
 			packageProductDependencies = (
 			);
@@ -243,9 +228,6 @@
 			);
 			dependencies = (
 				69090D9A2E66C15500C46725 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				69090D9B2E66C15500C46725 /* SocialMediaAppUITests */,
 			);
 			name = SocialMediaAppUITests;
 			packageProductDependencies = (
