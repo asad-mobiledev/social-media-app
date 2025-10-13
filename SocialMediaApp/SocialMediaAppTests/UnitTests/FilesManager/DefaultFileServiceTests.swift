@@ -68,7 +68,7 @@ struct DefaultFileServiceTests {
         // Given
         let directory = Directory.documents
         let service = DefaultFileService(directory: directory)
-        let sourceURL = FileServiceTestHelper.createTestImageFile(in: .documents)
+        let sourceURL = FileServiceTestHelper.createTestImageFile(fileName: "image.png", folderName: "images", directory: .documents)
         let folder = "images"
        
         // When
@@ -78,7 +78,7 @@ struct DefaultFileServiceTests {
         // Then
         #expect(fileName != nil)
         #expect(!fileName!.isEmpty)
-        #expect(fileName!.contains("jpg"))
+        #expect(fileName!.contains("png"))
     }
     
     @Test(.tags(.fileService, .unit))
@@ -90,13 +90,13 @@ struct DefaultFileServiceTests {
         // When & Then
         for directory in directories {
             let service = DefaultFileService(directory: directory)
-            let sourceURL = FileServiceTestHelper.createTestImageFile(in: .documents)
+            let sourceURL = FileServiceTestHelper.createTestImageFile(fileName: "image.png", folderName: "images", directory: .documents)
             #expect(sourceURL != nil)
             let fileName = try service.saveFileFrom(sourceURL: sourceURL!, folder: folder)
             
             #expect(fileName != nil)
             #expect(!fileName!.isEmpty)
-            #expect(fileName!.contains("jpg"))
+            #expect(fileName!.contains("png"))
         }
     }
     
@@ -120,7 +120,7 @@ struct DefaultFileServiceTests {
     
     @Test(.tags(.fileService, .unit))
     func testSaveSuccess() async throws {
-        let mediaURL = FileServiceTestHelper.createTestImageFile(in: .documents)
+        let mediaURL = FileServiceTestHelper.createTestImageFile(fileName: "image.png", folderName: "images", directory: .documents)
         let mediaType = MediaType.image
         let service = DefaultFileService(directory: .documents)
         
@@ -144,7 +144,7 @@ struct DefaultFileServiceTests {
     @Test(.tags(.fileService, .unit))
     func testGetDataOfSuccess() async throws {
         // Create file
-        let testImageURL = FileServiceTestHelper.createTestImageFile(in: .documents)
+        let testImageURL = FileServiceTestHelper.createTestImageFile(fileName: "test.jpg", folderName: "test", directory: .documents)
         
         let service = DefaultFileService(directory: .documents)
         let fileName = "test.jpg"
@@ -159,6 +159,7 @@ struct DefaultFileServiceTests {
     func testGetDataOfFailure() async throws {
         // When file is not saved
         let service = DefaultFileService(directory: .documents)
+        let testImageURL = FileServiceTestHelper.createTestImageFile(fileName: "test.jpg", folderName: "test", directory: .documents)
         let fileName = "test.jpg"
         let folder = "test"
         let data = try service.getDataOf(fileName: fileName, folder: folder)
@@ -191,7 +192,7 @@ struct DefaultFileServiceTests {
     @Test(.tags(.fileService, .unit))
     func testGetDataSuccess() async throws {
         let service = DefaultFileService(directory: .documents)
-        let imageURL = FileServiceTestHelper.createTestImageFile(in: .documents)
+        let imageURL = FileServiceTestHelper.createTestImageFile(fileName: "image.png", folderName: "images", directory: .documents)
         
         #expect(imageURL != nil)
         let data = try service.getData(from: imageURL!)
