@@ -22,7 +22,7 @@ class FileServiceTestHelper {
             try FileManager.default.createDirectory(at: testFolder, withIntermediateDirectories: true)
             
             // Create a simple test image (1x1 pixel JPEG)
-            let testImageData = createImageData()
+            let testImageData = createLargeImageData()
             try testImageData.write(to: testFile)
             
             return testFile
