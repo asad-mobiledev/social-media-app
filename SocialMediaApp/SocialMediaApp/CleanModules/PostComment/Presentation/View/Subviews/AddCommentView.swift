@@ -121,6 +121,11 @@ struct AddCommentView: View {
             }
         }
         .animation(.easeInOut, value: postCommentsViewModel.isSendCommentLoading)
+        .alert(AppText.error, isPresented: $postCommentsViewModel.showErrorAlert) {
+            Button(AppText.OK, role: .cancel) { }
+        } message: {
+            Text(postCommentsViewModel.errorMessage)
+        }
     }
 }
 

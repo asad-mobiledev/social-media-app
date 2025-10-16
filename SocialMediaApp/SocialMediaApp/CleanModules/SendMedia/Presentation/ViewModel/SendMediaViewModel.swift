@@ -12,6 +12,7 @@ import UIKit
 class SendMediaViewModel: ObservableObject {
     private let sendMediaUseCase: SendMediaUseCase
     @Published var errorMessage = ""
+    @Published var showErrorAlert = false
     @Published var isLoading = false
     private let router: Router
     
@@ -22,6 +23,13 @@ class SendMediaViewModel: ObservableObject {
     
     func post(mediaType: MediaType, mediaURL: URL?) {
         Task {
+            guard NetworkReachability.shared.isConnected else {
+                await MainActor.run {
+                    self.errorMessage = AppText.notConnectedToInternet
+                    self.showErrorAlert = true
+                }
+                return
+            }
             await MainActor.run { isLoading = true }
             do {
                 let postEntity = try await sendMediaUseCase.sendMedia(mediaType: mediaType, mediaURL: mediaURL)

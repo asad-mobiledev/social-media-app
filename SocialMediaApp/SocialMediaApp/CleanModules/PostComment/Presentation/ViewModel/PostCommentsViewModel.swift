@@ -20,6 +20,7 @@ class PostCommentsViewModel: ObservableObject {
     @Published var showBottomSheet = false
     @Published var commentMediaLoadState: LoadState = .unknown
     @Published var replyToComment: CommentEntity?
+    @Published var showErrorAlert = false
     
     private let paginationPolicy: PaginationPolicy
     var lastFetchedCommentsCount = -1
@@ -50,6 +51,13 @@ class PostCommentsViewModel: ObservableObject {
     
     func addComment(mediaAttachement: MediaAttachment?) async {
         guard !commentText.isEmpty || mediaAttachement?.url != nil else {
+            return
+        }
+        guard NetworkReachability.shared.isConnected else {
+            await MainActor.run {
+                self.errorMessage = AppText.notConnectedToInternet
+                self.showErrorAlert = true
+            }
             return
         }
         var parentCommentId: String? = nil

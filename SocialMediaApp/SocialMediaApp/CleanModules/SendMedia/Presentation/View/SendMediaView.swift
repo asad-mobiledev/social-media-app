@@ -80,6 +80,11 @@ struct SendMediaView: View {
                     .transition(.scale)
             }
         }
+        .alert(AppText.error, isPresented: $sendMediaViewModel.showErrorAlert) {
+            Button(AppText.OK, role: .cancel) { }
+        } message: {
+            Text(sendMediaViewModel.errorMessage)
+        }
     }
 }
 

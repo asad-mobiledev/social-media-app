@@ -35,6 +35,7 @@ struct RootView: View {
             }
         }
         .task {
+            _ = NetworkReachability.shared
             let databaseService = await MainActor.run {
                 DefaultDatabaseService.configure(isStoredInMemoryOnly: false)
                 return DefaultDatabaseService.shared

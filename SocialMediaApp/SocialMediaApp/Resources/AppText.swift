@@ -32,4 +32,5 @@ struct AppText {
     static let filesPermissionIssue = "Failed to access file: permission denied."
     static let failLoadDataAtGivenURL = "Could not load data for given resource url."
     static let invalidComment = "Invalid comment data."
+    static let notConnectedToInternet = "Not Connected to Internet"
 }
