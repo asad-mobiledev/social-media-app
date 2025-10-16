@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class AppDIContainer {
+open class AppDIContainer {
     
     private let router: Router?
     private let databaseService: DatabaseService?

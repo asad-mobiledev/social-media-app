@@ -40,6 +40,12 @@ class MockFileService: FileService {
         return FileServiceTestHelper.createTestImageFile(fileName: "test.png", folderName: "test", directory: .documents)
     }
     
+    func deleteFile(name: String, folder: String, directory: Directory = .documents) throws {
+        if name.isEmpty || folder.isEmpty {
+            throw CustomError.message("File name or folder name is empty")
+        }
+    }
+    
     func listFiles(folder: String) -> [URL] {
         [FileServiceTestHelper.createTestImageFile(fileName: "test.png", folderName: "test", directory: .documents)!]
     }

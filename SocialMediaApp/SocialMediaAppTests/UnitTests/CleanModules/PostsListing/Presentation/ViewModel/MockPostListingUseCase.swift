@@ -11,10 +11,13 @@ import Testing
 
 class MockPostListingUseCase: PostsListingUseCase {
     var errorToThrow: Error?
-    
+    var postsToReturn: [PostEntity] = []
     func fetchPosts(limit: Int, startAt: String?) async throws -> [PostEntity] {
         if let error = errorToThrow {
             throw error
+        }
+        if postsToReturn.count > 0 {
+            return postsToReturn
         }
         return [PostCommentsViewModelTestsHelper.createPostEntity()]
     }

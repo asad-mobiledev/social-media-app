@@ -32,17 +32,13 @@
 		690E09782E7039D50015C0E3 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 690E09772E7039D50015C0E3 /* FirebaseStorage */; };
 		690E097A2E7039D50015C0E3 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 690E09792E7039D50015C0E3 /* FirebaseStorageCombine-Community */; };
 		690E099D2E741E940015C0E3 /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 690E099C2E741E940015C0E3 /* Secrets.xcconfig */; };
+		69B9674F2E9FE596001DC41F /* InlineSnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 69B9674E2E9FE596001DC41F /* InlineSnapshotTesting */; };
+		69B967512E9FE596001DC41F /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 69B967502E9FE596001DC41F /* SnapshotTesting */; };
+		69B967532E9FE596001DC41F /* SnapshotTestingCustomDump in Frameworks */ = {isa = PBXBuildFile; productRef = 69B967522E9FE596001DC41F /* SnapshotTestingCustomDump */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		69C681712E94D3E1004E8BD9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 69090D762E66C15300C46725 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 69090D7D2E66C15300C46725;
-			remoteInfo = SocialMediaApp;
-		};
-		69C743C52E9E17DE00877100 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 69090D762E66C15300C46725 /* Project object */;
 			proxyType = 1;
@@ -55,7 +51,6 @@
 		69090D7E2E66C15300C46725 /* SocialMediaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SocialMediaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		690E099C2E741E940015C0E3 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		69C6816D2E94D3E1004E8BD9 /* SocialMediaAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SocialMediaAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		69C743BF2E9E17DE00877100 /* SocialMediaAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SocialMediaAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -80,11 +75,6 @@
 		69C6816E2E94D3E1004E8BD9 /* SocialMediaAppTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = SocialMediaAppTests;
-			sourceTree = "<group>";
-		};
-		69C743C02E9E17DE00877100 /* SocialMediaAppUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SocialMediaAppUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -125,13 +115,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		69C743BC2E9E17DE00877100 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				69B967532E9FE596001DC41F /* SnapshotTestingCustomDump in Frameworks */,
+				69B9674F2E9FE596001DC41F /* InlineSnapshotTesting in Frameworks */,
+				69B967512E9FE596001DC41F /* SnapshotTesting in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,7 +129,6 @@
 			children = (
 				69090D802E66C15300C46725 /* SocialMediaApp */,
 				69C6816E2E94D3E1004E8BD9 /* SocialMediaAppTests */,
-				69C743C02E9E17DE00877100 /* SocialMediaAppUITests */,
 				69090D7F2E66C15300C46725 /* Products */,
 				690E099C2E741E940015C0E3 /* Secrets.xcconfig */,
 			);
@@ -154,7 +139,6 @@
 			children = (
 				69090D7E2E66C15300C46725 /* SocialMediaApp.app */,
 				69C6816D2E94D3E1004E8BD9 /* SocialMediaAppTests.xctest */,
-				69C743BF2E9E17DE00877100 /* SocialMediaAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -226,33 +210,13 @@
 			);
 			name = SocialMediaAppTests;
 			packageProductDependencies = (
+				69B9674E2E9FE596001DC41F /* InlineSnapshotTesting */,
+				69B967502E9FE596001DC41F /* SnapshotTesting */,
+				69B967522E9FE596001DC41F /* SnapshotTestingCustomDump */,
 			);
 			productName = SocialMediaAppTests;
 			productReference = 69C6816D2E94D3E1004E8BD9 /* SocialMediaAppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		69C743BE2E9E17DE00877100 /* SocialMediaAppUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 69C743C72E9E17DE00877100 /* Build configuration list for PBXNativeTarget "SocialMediaAppUITests" */;
-			buildPhases = (
-				69C743BB2E9E17DE00877100 /* Sources */,
-				69C743BC2E9E17DE00877100 /* Frameworks */,
-				69C743BD2E9E17DE00877100 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				69C743C62E9E17DE00877100 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				69C743C02E9E17DE00877100 /* SocialMediaAppUITests */,
-			);
-			name = SocialMediaAppUITests;
-			packageProductDependencies = (
-			);
-			productName = SocialMediaAppUITests;
-			productReference = 69C743BF2E9E17DE00877100 /* SocialMediaAppUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -271,10 +235,6 @@
 						CreatedOnToolsVersion = 16.2;
 						TestTargetID = 69090D7D2E66C15300C46725;
 					};
-					69C743BE2E9E17DE00877100 = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = 69090D7D2E66C15300C46725;
-					};
 				};
 			};
 			buildConfigurationList = 69090D792E66C15300C46725 /* Build configuration list for PBXProject "SocialMediaApp" */;
@@ -289,6 +249,7 @@
 			packageReferences = (
 				69090DF32E671E5D00C46725 /* XCRemoteSwiftPackageReference "Zoomable" */,
 				690E094C2E7039D50015C0E3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				69C744072E9F7F9800877100 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 69090D7F2E66C15300C46725 /* Products */;
@@ -297,7 +258,6 @@
 			targets = (
 				69090D7D2E66C15300C46725 /* SocialMediaApp */,
 				69C6816C2E94D3E1004E8BD9 /* SocialMediaAppTests */,
-				69C743BE2E9E17DE00877100 /* SocialMediaAppUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -312,13 +272,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		69C6816B2E94D3E1004E8BD9 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		69C743BD2E9E17DE00877100 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -342,13 +295,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		69C743BB2E9E17DE00877100 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -356,11 +302,6 @@
 			isa = PBXTargetDependency;
 			target = 69090D7D2E66C15300C46725 /* SocialMediaApp */;
 			targetProxy = 69C681712E94D3E1004E8BD9 /* PBXContainerItemProxy */;
-		};
-		69C743C62E9E17DE00877100 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 69090D7D2E66C15300C46725 /* SocialMediaApp */;
-			targetProxy = 69C743C52E9E17DE00877100 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -590,40 +531,6 @@
 			};
 			name = Release;
 		};
-		69C743C82E9E17DE00877100 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = KX3K56GXBT;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.asad.mehmood.SocialMediaAppUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = SocialMediaApp;
-			};
-			name = Debug;
-		};
-		69C743C92E9E17DE00877100 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = KX3K56GXBT;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.asad.mehmood.SocialMediaAppUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = SocialMediaApp;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -654,15 +561,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		69C743C72E9E17DE00877100 /* Build configuration list for PBXNativeTarget "SocialMediaAppUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				69C743C82E9E17DE00877100 /* Debug */,
-				69C743C92E9E17DE00877100 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -680,6 +578,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 12.2.0;
+			};
+		};
+		69C744072E9F7F9800877100 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.18.7;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -804,6 +710,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 690E094C2E7039D50015C0E3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseStorageCombine-Community";
+		};
+		69B9674E2E9FE596001DC41F /* InlineSnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 69C744072E9F7F9800877100 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = InlineSnapshotTesting;
+		};
+		69B967502E9FE596001DC41F /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 69C744072E9F7F9800877100 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
+		};
+		69B967522E9FE596001DC41F /* SnapshotTestingCustomDump */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 69C744072E9F7F9800877100 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTestingCustomDump;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

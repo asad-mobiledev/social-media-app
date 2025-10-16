@@ -17,4 +17,5 @@ protocol FileService {
     func listFiles(folder: String) -> [URL]
     func saveFileFrom(sourceURL: URL, folder: String) throws -> String?
     func getData(from url: URL) throws -> Data
+    func deleteFile(name: String, folder: String, directory: Directory) throws 
 }

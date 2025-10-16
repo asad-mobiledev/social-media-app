@@ -70,6 +70,17 @@ class DefaultFileService: FileService {
         folderURL = folderURL?.appendingPathComponent(folder)
         return folderURL?.appendingPathComponent(name)
     }
+    func deleteFile(name: String, folder: String, directory: Directory = .documents) throws {
+        guard let url = getFileURL(name: name, folder: folder) else {
+            throw CustomError.message("Could not create url")
+        }
+        
+        if fileManager.fileExists(atPath: url.path) {
+            try fileManager.removeItem(at: url)
+        } else {
+            print("File does not exist")
+        }
+    }
     
     func listFiles(folder: String) -> [URL] {
         guard let folderURL = directory.url?.appendingPathComponent(folder) else { return [] }
@@ -109,6 +120,7 @@ class DefaultFileService: FileService {
         }
         return fullFileName
     }
+    
     
     func getData(from url: URL) throws -> Data {
         do {
