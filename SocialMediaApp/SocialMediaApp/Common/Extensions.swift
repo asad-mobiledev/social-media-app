@@ -1,0 +1,39 @@
+//
+//  Extensions.swift
+//  SocialMediaApp
+//
+//  Created by Asad Mehmood on 02/09/2025.
+//
+
+
+import SwiftUI
+
+extension Color {
+    static let primary = Color.purple
+    static let secondary = Color("Secondary")
+    static let lightGray = Color(hex: "#D3D3D3")
+    
+    init(hex: String) {
+        let hex = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        let scanner = Scanner(string: hex)
+
+        if hex.hasPrefix("#") {
+            scanner.currentIndex = hex.index(after: hex.startIndex)
+        }
+
+        var rgb: UInt64 = 0
+        scanner.scanHexInt64(&rgb)
+
+        let r = Double((rgb >> 16) & 0xFF) / 255.0
+        let g = Double((rgb >> 8) & 0xFF) / 255.0
+        let b = Double(rgb & 0xFF) / 255.0
+
+        self.init(red: r, green: g, blue: b)
+    }
+}
+
+extension Notification.Name {
+    static let didCreatePost = Notification.Name("didCreatePost")
+    static let newCommentAdded = Notification.Name("newCommentAdded")
+    static let updatedPost = Notification.Name("updatedPost")
+}
