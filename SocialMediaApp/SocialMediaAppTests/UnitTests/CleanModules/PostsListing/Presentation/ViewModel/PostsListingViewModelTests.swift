@@ -16,7 +16,7 @@ struct PostsListingViewModelTests {
         let postEntity = PostCommentsViewModelTestsHelper.createPostEntity()
         let mockPostListingUseCase = MockPostListingUseCase()
         let defaultPaginationPolicy = DefaultPaginationPolicy()
-        let viewModel = PostsListingViewModel(postsListingUseCase: mockPostListingUseCase, paginationPolicy: defaultPaginationPolicy)
+        let viewModel = PostsListingViewModel(postsListingUseCase: mockPostListingUseCase, paginationPolicy: defaultPaginationPolicy, notificationCenter: NotificationCenter())
         
         try await Task.sleep(nanoseconds: 1000_000_000)
         
@@ -32,9 +32,10 @@ struct PostsListingViewModelTests {
         let postEntity = PostCommentsViewModelTestsHelper.createPostEntity()
         let mockPostListingUseCase = MockPostListingUseCase()
         let defaultPaginationPolicy = DefaultPaginationPolicy()
-        let viewModel = PostsListingViewModel(postsListingUseCase: mockPostListingUseCase, paginationPolicy: defaultPaginationPolicy)
+        let notificationCenter = NotificationCenter()
+        let viewModel = PostsListingViewModel(postsListingUseCase: mockPostListingUseCase, paginationPolicy: defaultPaginationPolicy, notificationCenter: notificationCenter)
         
-        NotificationCenter.default.post(
+        notificationCenter.post(
             name: .didCreatePost,
             object: postEntity
         )
@@ -51,14 +52,15 @@ struct PostsListingViewModelTests {
         let postEntity = PostCommentsViewModelTestsHelper.createPostEntity()
         let mockPostListingUseCase = MockPostListingUseCase()
         let defaultPaginationPolicy = DefaultPaginationPolicy()
-        let viewModel = PostsListingViewModel(postsListingUseCase: mockPostListingUseCase, paginationPolicy: defaultPaginationPolicy)
+        let notificationCenter = NotificationCenter()
+        let viewModel = PostsListingViewModel(postsListingUseCase: mockPostListingUseCase, paginationPolicy: defaultPaginationPolicy, notificationCenter: notificationCenter)
         
-        NotificationCenter.default.post(
+        notificationCenter.post(
             name: .didCreatePost,
             object: postEntity
         )
         
-        NotificationCenter.default.post(
+        notificationCenter.post(
             name: .updatedPost,
             object: postEntity
         )
@@ -76,7 +78,7 @@ struct PostsListingViewModelTests {
         let postEntity = PostCommentsViewModelTestsHelper.createPostEntity()
         let mockPostListingUseCase = MockPostListingUseCase()
         let defaultPaginationPolicy = DefaultPaginationPolicy()
-        let viewModel = PostsListingViewModel(postsListingUseCase: mockPostListingUseCase, paginationPolicy: defaultPaginationPolicy)
+        let viewModel = PostsListingViewModel(postsListingUseCase: mockPostListingUseCase, paginationPolicy: defaultPaginationPolicy, notificationCenter: NotificationCenter())
         
         NotificationCenter.default.post(
             name: .didCreatePost,
@@ -97,7 +99,7 @@ struct PostsListingViewModelTests {
         // Given
         let mockPostListingUseCase = MockPostListingUseCase()
         let defaultPaginationPolicy = DefaultPaginationPolicy()
-        let viewModel = PostsListingViewModel(postsListingUseCase: mockPostListingUseCase, paginationPolicy: defaultPaginationPolicy)
+        let viewModel = PostsListingViewModel(postsListingUseCase: mockPostListingUseCase, paginationPolicy: defaultPaginationPolicy, notificationCenter: NotificationCenter())
         
         // When
         await viewModel.fetchPosts()
@@ -110,14 +112,15 @@ struct PostsListingViewModelTests {
     func testFetchPostsFailure() async throws {
         // Given
         let mockPostListingUseCase = MockPostListingUseCase()
+        mockPostListingUseCase.postsToReturn = []
         mockPostListingUseCase.errorToThrow = CustomError.message("mock error")
         let defaultPaginationPolicy = DefaultPaginationPolicy()
-        let viewModel = PostsListingViewModel(postsListingUseCase: mockPostListingUseCase, paginationPolicy: defaultPaginationPolicy)
+        let viewModel = PostsListingViewModel(postsListingUseCase: mockPostListingUseCase, paginationPolicy: defaultPaginationPolicy, notificationCenter: NotificationCenter())
+        viewModel.posts = []
         
         // When
-        viewModel.posts = []
         await viewModel.fetchPosts()
-        
+        viewModel.posts = []
         // Then
         #expect(viewModel.posts.count == 0)
         #expect(!viewModel.errorMessage.isEmpty)
@@ -128,7 +131,7 @@ struct PostsListingViewModelTests {
         // Given
         let mockPostListingUseCase = MockPostListingUseCase()
         let defaultPaginationPolicy = DefaultPaginationPolicy()
-        let viewModel = PostsListingViewModel(postsListingUseCase: mockPostListingUseCase, paginationPolicy: defaultPaginationPolicy)
+        let viewModel = PostsListingViewModel(postsListingUseCase: mockPostListingUseCase, paginationPolicy: defaultPaginationPolicy, notificationCenter: NotificationCenter())
         
         // When
         await viewModel.fetchPosts(isRefreshing: true)
@@ -143,7 +146,7 @@ struct PostsListingViewModelTests {
         let mockPostListingUseCase = MockPostListingUseCase()
         mockPostListingUseCase.errorToThrow = CustomError.message("mock error")
         let defaultPaginationPolicy = DefaultPaginationPolicy()
-        let viewModel = PostsListingViewModel(postsListingUseCase: mockPostListingUseCase, paginationPolicy: defaultPaginationPolicy)
+        let viewModel = PostsListingViewModel(postsListingUseCase: mockPostListingUseCase, paginationPolicy: defaultPaginationPolicy, notificationCenter: NotificationCenter())
         
         // When
         viewModel.posts = []

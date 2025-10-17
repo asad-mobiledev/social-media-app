@@ -26,7 +26,7 @@ final class PostsListingScreenSnapshotTests: XCTestCase {
         mockRouter = Router()
         fileService = DefaultFileService(directory: .documents)
         mockAppDIContainer = MockAppDIContainer(router: mockRouter, databaseService: nil, fileService: fileService)
-        viewModel = PostsListingViewModel(postsListingUseCase: mockUseCase, paginationPolicy: paginationPolicy)
+        viewModel = PostsListingViewModel(postsListingUseCase: mockUseCase, paginationPolicy: paginationPolicy, notificationCenter: NotificationCenter())
     }
     
     override func tearDown() async throws {

@@ -11,6 +11,8 @@ import Combine
 class PostsListingViewModel: ObservableObject {
     private let postsListingUseCase: PostsListingUseCase
     private let paginationPolicy: PaginationPolicy
+    private let notificationCenter: NotificationCenter
+    
     @Published var posts: [PostEntity] = []
     var lastFetchedPostsCount = -1
     @Published var errorMessage: String = ""
@@ -19,11 +21,12 @@ class PostsListingViewModel: ObservableObject {
     var refreshing = false
     private var cancellables = Set<AnyCancellable>()
     
-    init(postsListingUseCase: PostsListingUseCase, paginationPolicy: PaginationPolicy) {
+    init(postsListingUseCase: PostsListingUseCase, paginationPolicy: PaginationPolicy, notificationCenter: NotificationCenter = .default) {
         self.postsListingUseCase = postsListingUseCase
         self.paginationPolicy = paginationPolicy
+        self.notificationCenter = notificationCenter
         
-        NotificationCenter.default.publisher(for: .didCreatePost)
+        self.notificationCenter.publisher(for: .didCreatePost)
             .compactMap { $0.object as? PostEntity }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] newPost in
@@ -31,7 +34,7 @@ class PostsListingViewModel: ObservableObject {
             }
             .store(in: &cancellables)
         
-        NotificationCenter.default.publisher(for: .updatedPost)
+        self.notificationCenter.publisher(for: .updatedPost)
             .compactMap { $0.object as? PostEntity }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] updatedPost in
